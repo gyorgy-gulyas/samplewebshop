@@ -1,0 +1,29 @@
+domain Ordering {
+    
+    context OrderManagement {
+        aggregate OrderAggregate {
+
+            valueobject OrderItem {
+                productId:string
+                productName:string
+                quantity: number
+                UnitPrice:string
+                subTotalPrice:string
+            }
+            entity Order {
+                customerId:string
+                orderingDate:string
+                totalPrice:string
+            }
+        }    
+    }
+
+    context Cart {
+    }
+
+    context Tracking {
+    }
+
+    context Payment {
+    }
+}
