@@ -1,0 +1,104 @@
+domain Sales {
+    
+    context OrderManagement {
+        aggregate Order {
+
+            valueobject OrderItem {
+                productId:string
+                productName:string
+                quantity: number
+                UnitPrice:string
+                subTotalPrice:string
+            }
+
+            root entity OrderHeader {
+                customerId:string
+                orderingDate:string
+                totalPrice:string
+                items:list[OrderItem]
+            }
+        }
+
+        service OrderService {
+            getOrder( orderId: string ) : Order.OrderHeader
+            placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
+        }
+
+        interface OrderIF version 1 {
+            event OrderPlaced {
+                orderId:string
+            }
+
+            valueobject OrderItem {
+                productId:string
+                productName:string
+                quantity: number
+                UnitPrice:string
+                subTotalPrice:string
+            }
+
+            root entity OrderHeader {
+                customerId:string
+                orderingDate:string
+                totalPrice:string
+                items:list[OrderItem]
+            }
+
+            getOrder( orderId: string ) : OrderDTO
+            placeOrder( order: OrderDTO ) : OrderDTO
+        }
+    }
+
+    context Cart {
+    }
+
+    context Tracking {
+        enum TrackingStatuses
+        {
+            # Order has been placed but not yet processed
+            Pending,
+
+            # Order has been confirmed (e.g. payment received)
+            Confirmed,
+
+            # Order is being prepared in the warehouse
+            Processing,
+
+            # Package is ready and waiting for pickup by courier
+            ReadyForPickup,
+
+            # Package has been handed over to the shipping provider
+            Shipped,
+
+            # Package is in transit between locations
+            InTransit,
+
+            # Package is out for delivery to the customer
+            OutForDelivery,
+
+            # Package successfully delivered to the customer
+            Delivered,
+
+            # Delivery failed (e.g. customer was not available)
+            FailedDelivery,
+
+            # Package returned (by customer or shipping provider)
+            Returned,
+
+            # Order was cancelled (e.g. payment failed or user cancelled)
+            Cancelled
+        }
+
+        aggregate OrderTrackingEntry {
+
+            root entity TrackingEntry {
+                TrackingStatus:TrackingStatuses
+                statusDate:string
+                orderId:string
+            }
+        }
+    }
+
+    context Payment {
+    }
+}

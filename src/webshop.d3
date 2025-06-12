@@ -1,4 +1,4 @@
-import ordering
-import customer
+import Sales
+import CustomerManagement
 
 
