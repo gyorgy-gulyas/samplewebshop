@@ -8,7 +8,6 @@
 
 namespace Sales.Tracking
 {
-
 	public enum TrackingStatuses
 	{
 		/// Order has been placed but not yet processed

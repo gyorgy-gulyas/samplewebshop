@@ -25,7 +25,7 @@ domain Sales {
         }
 
         interface OrderIF version 1 {
-            event OrderPlaced {
+            event OrderPlaced version 1 {
                 orderId:string
             }
 
