@@ -29,7 +29,7 @@ domain Sales {
                 orderId:string
             }
 
-            valueobject OrderItem {
+            dto OrderItemDTO {
                 productId:string
                 productName:string
                 quantity: number
@@ -37,11 +37,11 @@ domain Sales {
                 subTotalPrice:string
             }
 
-            root entity OrderHeader {
+            dto OrderDTO {
                 customerId:string
                 orderingDate:string
                 totalPrice:string
-                items:list[OrderItem]
+                items:list[OrderItemDTO]
             }
 
             getOrder( orderId: string ) : OrderDTO

@@ -4,20 +4,17 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
-using System;
-using System.Collections.Generic;
-using PolyPersist.Net;
-using PolyPersist.Net.Core;
-using ServiceKit.Net;
+
 
 namespace Sales.OrderManagement
 {
+	using ServiceKit.Net;
 
 	public interface IOrderService
 	{
-		public Response<Order.OrderHeader> getOrder( CallingContext ctx, string orderId);
+		public Response<Order.OrderHeader> getOrder(CallingContext ctx, string orderId);
 
-		public Response<Order.OrderHeader> placeOrder( CallingContext ctx, Order.OrderHeader order);
+		public Response<Order.OrderHeader> placeOrder(CallingContext ctx, Order.OrderHeader order);
 
 	}
 }

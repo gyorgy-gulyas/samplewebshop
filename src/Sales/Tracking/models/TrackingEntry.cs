@@ -4,14 +4,12 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
-using System;
-using System.Collections.Generic;
-using PolyPersist.Net;
-using PolyPersist.Net.Core;
-using ServiceKit.Net;
+
 
 namespace Sales.Tracking.OrderTrackingEntry
 {
+	using PolyPersist.Net.Core;
+
 	public partial class TrackingEntry : Entity
 	{
 		public TrackingStatuses TrackingStatus { get; set; }

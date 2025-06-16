@@ -4,19 +4,17 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
-using System;
-using System.Collections.Generic;
-using PolyPersist.Net;
-using PolyPersist.Net.Core;
-using ServiceKit.Net;
+
 
 namespace Sales.OrderManagement.Order
 {
+	using PolyPersist.Net.Core;
+
 	public partial class OrderHeader : Entity
 	{
 		public string customerId { get; set; }
 		public string orderingDate { get; set; }
 		public string totalPrice { get; set; }
-		public System.Generic.List<OrderItem> items { get; set; }
+		public List<OrderItem> items { get; set; }
 	}
 }
