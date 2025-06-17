@@ -5,11 +5,10 @@
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
+using PolyPersist.Net.Core;
 
-namespace Sales.Tracking.OrderTrackingEntry
+namespace Sales.Tracking
 {
-	using PolyPersist.Net.Core;
-
 	public partial class TrackingEntry : Entity
 	{
 		public TrackingStatuses TrackingStatus { get; set; }
