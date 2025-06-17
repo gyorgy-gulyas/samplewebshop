@@ -7,18 +7,20 @@
 syntax = "proto3";
 
 option csharp_namespace = "Sales.OrderManagement";
+option java_outer_classname = "OrderService";
+option java_package = "com.OrderManagement";
+option java_multiple_files = true;
 
-package OrderServicePackage;
-
+package OrderManagementPackage;
+import "Sales/OrderManagement/Models/OrderHeader.proto";
 import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
-
 service OrderService {
-	rpc getOrder (getOrderRequest) returns (getOrderResponse);
-	rpc placeOrder (placeOrderRequest) returns (placeOrderResponse);
-
+	rpc getOrder(getOrderRequest) returns (getOrderResponse);
+	rpc placeOrder(placeOrderRequest) returns (placeOrderResponse);
 }
+
 message getOrderRequest {
 	string orderId = 1;
 }
@@ -40,3 +42,4 @@ message placeOrderResponse {
 		servicekit.protobuf.Error Error = 2;
 	}
 }
+

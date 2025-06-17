@@ -7,15 +7,16 @@
 syntax = "proto3";
 
 option csharp_namespace = "Sales.Tracking";
-option java_outer_classname = "{names[-1]}";
-option java_package = "com.{packageName}";
+option java_outer_classname = "TrackingEntry";
+option java_package = "com.Tracking";
 option java_multiple_files = true;
 
-package OrderTrackingEntryPackage;
-import "TrackingStatuses";
+package TrackingPackage;
+import "TrackingStatuses.proto";
 
 message TrackingEntry {
 	TrackingStatuses TrackingStatus = 1;
 	string statusDate = 2;
 	string orderId = 3;
 }
+

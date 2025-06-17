@@ -6,8 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">..\..\..\..\</SolutionDir>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Protobuf Include="protos\OrderService.proto" GrpcServices="Server" AdditionalImportDirs="..\..\..\..\..\SrvKit\src\protos\"/>
+    <Protobuf Include="protos\OrderService.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\protos\"/>
   </ItemGroup>
 
   <ItemGroup>

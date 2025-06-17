@@ -7,17 +7,17 @@
 syntax = "proto3";
 
 option csharp_namespace = "Sales.OrderManagement";
-option java_outer_classname = "OrderItem";
+option java_outer_classname = "OrderStatuses";
 option java_package = "com.OrderManagement";
 option java_multiple_files = true;
 
 package OrderManagementPackage;
 
-message OrderItem {
-	string productId = 1;
-	string productName = 2;
-	string quantity = 3;
-	string UnitPrice = 4;
-	string subTotalPrice = 5;
-}
 
+enum OrderStatuses
+{
+	Draft = 0;
+	Released = 1;
+	Finished = 2;
+	Canceled = 3;
+}

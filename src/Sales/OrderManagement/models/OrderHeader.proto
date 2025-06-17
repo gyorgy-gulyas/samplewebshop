@@ -7,16 +7,19 @@
 syntax = "proto3";
 
 option csharp_namespace = "Sales.OrderManagement";
-option java_outer_classname = "{names[-1]}";
-option java_package = "com.{packageName}";
+option java_outer_classname = "OrderHeader";
+option java_package = "com.OrderManagement";
 option java_multiple_files = true;
 
-package OrderPackage;
-import "OrderItem";
+package OrderManagementPackage;
+import "OrderItem.proto";
+import "OrderStatuses.proto";
 
 message OrderHeader {
 	string customerId = 1;
 	string orderingDate = 2;
-	string totalPrice = 3;
-	repeated OrderItem items = 4;
+	OrderStatuses status = 3;
+	string totalPrice = 4;
+	repeated OrderItem items = 5;
 }
+

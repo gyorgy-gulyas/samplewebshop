@@ -3,6 +3,13 @@ domain Sales {
     context OrderManagement {
         aggregate Order {
 
+            enum OrderStatuses {
+                Draft,
+                Released,
+                Finished,
+                Canceled
+            }
+
             valueobject OrderItem {
                 productId:string
                 productName:string
@@ -14,6 +21,7 @@ domain Sales {
             root entity OrderHeader {
                 customerId:string
                 orderingDate:string
+                status:OrderStatuses
                 totalPrice:string
                 items:list[OrderItem]
             }
