@@ -5,11 +5,11 @@
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
-using PolyPersist.Net.Core;
+using Sales.OrderManagement;
 
-namespace Sales.OrderManagement
+namespace Sales.OrderManagement.Order
 {
-	public partial class OrderHeader : Entity
+	public class OrderHeader
 	{
 		public string customerId { get; set; }
 		public string orderingDate { get; set; }

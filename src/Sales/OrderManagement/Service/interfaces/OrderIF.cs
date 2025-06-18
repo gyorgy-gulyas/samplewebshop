@@ -5,31 +5,32 @@
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
+using Sales.OrderManagement;
 using ServiceKit.Net;
 
 namespace Sales.OrderManagement
 {
 	public interface IOrderIF_v1
 	{
-		public Response<OrderDTO> getOrder(CallingContext ctx, string orderId);
+		public Task<Response<OrderDTO>> getOrder(CallingContext ctx, string orderId);
 
-		public Response<OrderDTO> placeOrder(CallingContext ctx, OrderDTO order);
+		public Task<Response<OrderDTO>> placeOrder(CallingContext ctx, OrderDTO order);
 
 
-		public class OrderItemDTO
-		{
-			public string productId { get; set; }
-			public string productName { get; set; }
-			public decimal quantity { get; set; }
-			public string UnitPrice { get; set; }
-			public string subTotalPrice { get; set; }
-		}
-		public class OrderDTO
-		{
-			public string customerId { get; set; }
-			public string orderingDate { get; set; }
-			public string totalPrice { get; set; }
-			public List<OrderItemDTO> items { get; set; }
-		}
+	public class OrderItemDTO
+	{
+		public string productId { get; set; }
+		public string productName { get; set; }
+		public decimal quantity { get; set; }
+		public string UnitPrice { get; set; }
+		public string subTotalPrice { get; set; }
+	}
+	public class OrderDTO
+	{
+		public string customerId { get; set; }
+		public string orderingDate { get; set; }
+		public string totalPrice { get; set; }
+		public List<OrderItemDTO> items { get; set; }
+	}
 	}
 }

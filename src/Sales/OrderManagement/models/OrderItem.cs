@@ -6,7 +6,7 @@
 // </auto-generated>
 
 
-namespace Sales.OrderManagement
+namespace Sales.OrderManagement.Order
 {
 	public class OrderItem
 	{

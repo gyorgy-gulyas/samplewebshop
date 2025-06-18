@@ -6,13 +6,14 @@
 // </auto-generated>
 syntax = "proto3";
 
-option csharp_namespace = "Sales.OrderManagement";
+option csharp_namespace = "Sales.OrderManagement.Protos";
 option java_outer_classname = "OrderService";
 option java_package = "com.OrderManagement";
 option java_multiple_files = true;
 
-package OrderManagementPackage;
-import "../../Models/OrderHeader.proto";
+package Sales.OrderManagement;
+
+import "Sales/OrderManagement/Models/Protos/OrderHeader.proto";
 import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
@@ -28,7 +29,7 @@ message getOrderRequest {
 message getOrderResponse {
 	oneof result {
 		Order.OrderHeader Value1 = 1;
-		servicekit.protobuf.Error Error = 2;
+		ServiceKit.Protos.Error Error = 2;
 	}
 }
 
@@ -39,7 +40,7 @@ message placeOrderRequest {
 message placeOrderResponse {
 	oneof result {
 		Order.OrderHeader Value1 = 1;
-		servicekit.protobuf.Error Error = 2;
+		ServiceKit.Protos.Error Error = 2;
 	}
 }
 

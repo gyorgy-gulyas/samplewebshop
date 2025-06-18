@@ -3,39 +3,28 @@
   "WorkspaceRootPath": "D:\\Projects.OWN\\samplewebshop\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\protos\\orderservice.proto||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\protos\\orderservice.proto||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{41500286-EC99-4144-8C50-FA625976875B}|NewFolder1{41500286-EC99-4144-8C50-FA625976875B}|D:\\Projects.OWN\\samplewebshop\\Directory.Build.props||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{41500286-EC99-4144-8C50-FA625976875B}|NewFolder1{41500286-EC99-4144-8C50-FA625976875B}|solutionrelative:Directory.Build.props||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects.OWN\\SrvKit\\src\\protos\\servicekit_error.proto||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\models\\ordermanagement.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|solutionrelative:src\\sales\\ordermanagement\\models\\ordermanagement.models.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\ordermanagement.service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\ordermanagement.service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\models\\orderstatuses.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|solutionrelative:src\\sales\\ordermanagement\\models\\orderstatuses.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|d3{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|D:\\Projects.OWN\\samplewebshop\\src\\Sales.d3||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|d3{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|solutionrelative:src\\Sales.d3||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\models\\orderstatuses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj|solutionrelative:src\\sales\\ordermanagement\\models\\orderstatuses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3CCA7CC0-DCF5-7335-9123-49856E17C744}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\controllers\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CCA7CC0-DCF5-7335-9123-49856E17C744}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\controllers\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\interfaces\\iorderif.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\interfaces\\iorderif.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderService.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D02DEE8C-3767-8B17-D9B0-CE767B24AACF}|src\\Sales\\OrderManagement\\Service\\OrderService.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\interfaces\\iorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagementModels.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagementModels.csproj|solutionrelative:src\\sales\\ordermanagement\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagementModels.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\models\\orderheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12D447E4-D47A-B8A3-BAE5-328DE1165EF3}|src\\Sales\\OrderManagement\\models\\OrderManagementModels.csproj|solutionrelative:src\\sales\\ordermanagement\\models\\orderheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3CCA7CC0-DCF5-7335-9123-49856E17C744}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|d:\\projects.own\\samplewebshop\\src\\sales\\ordermanagement\\service\\obj\\debug\\net8.0\\protos\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CCA7CC0-DCF5-7335-9123-49856E17C744}|src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj|solutionrelative:src\\sales\\ordermanagement\\service\\obj\\debug\\net8.0\\protos\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -45,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -53,119 +42,80 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "servicekit_error.proto",
-              "DocumentMoniker": "D:\\Projects.OWN\\SrvKit\\src\\protos\\servicekit_error.proto",
-              "RelativeDocumentMoniker": "..\\SrvKit\\src\\protos\\servicekit_error.proto",
-              "ToolTip": "D:\\Projects.OWN\\SrvKit\\src\\protos\\servicekit_error.proto",
-              "RelativeToolTip": "..\\SrvKit\\src\\protos\\servicekit_error.proto",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003853|",
-              "WhenOpened": "2025-06-13T14:54:15.719Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\Program.cs",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\Program.cs",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\Program.cs",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-13T14:10:49.194Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "OrderService.proto",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\protos\\OrderService.proto",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\protos\\OrderService.proto",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\protos\\OrderService.proto",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\protos\\OrderService.proto",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003853|",
-              "WhenOpened": "2025-06-13T14:07:08.324Z",
+              "Title": "Directory.Build.props",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\Directory.Build.props",
+              "RelativeDocumentMoniker": "Directory.Build.props",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\Directory.Build.props",
+              "RelativeToolTip": "Directory.Build.props",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-06-18T17:11:43.228Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IOrderIF.cs",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderIF.cs",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderIF.cs",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderIF.cs",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderIF.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-13T14:00:56.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "OrderItem.cs",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderItem.cs",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\models\\OrderItem.cs",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderItem.cs",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\models\\OrderItem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-13T13:57:32.39Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "OrderHeader.cs",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderHeader.cs",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\models\\OrderHeader.cs",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderHeader.cs",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\models\\OrderHeader.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-12T18:01:06.844Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "OrderService.csproj",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\OrderManagement.Service.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "OrderManagement.Models",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj",
+              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj",
+              "RelativeToolTip": "src\\Sales\\OrderManagement\\models\\OrderManagement.Models.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-12T17:57:14.857Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IOrderService.cs",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderService.cs",
-              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderService.cs",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderService.cs",
-              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\interfaces\\IOrderService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-12T17:56:29.081Z",
+              "WhenOpened": "2025-06-18T17:10:26.758Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Sales.d3",
-              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales.d3",
-              "RelativeDocumentMoniker": "src\\Sales.d3",
-              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales.d3",
-              "RelativeToolTip": "src\\Sales.d3",
+              "Title": "OrderStatuses.cs",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderStatuses.cs",
+              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\models\\OrderStatuses.cs",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderStatuses.cs",
+              "RelativeToolTip": "src\\Sales\\OrderManagement\\models\\OrderStatuses.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-06-12T17:51:22.136Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T17:10:23.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrderStatuses.g.cs",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderStatuses.g.cs",
+              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\models\\OrderStatuses.g.cs",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\models\\OrderStatuses.g.cs",
+              "RelativeToolTip": "src\\Sales\\OrderManagement\\models\\OrderStatuses.g.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T17:10:09.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\obj\\Debug\\net8.0\\Protos\\OrderService.cs",
+              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\obj\\Debug\\net8.0\\Protos\\OrderService.cs",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\obj\\Debug\\net8.0\\Protos\\OrderService.cs",
+              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\obj\\Debug\\net8.0\\Protos\\OrderService.cs",
+              "ViewState": "AgIAAPYAAAAAAAAAAAAwwBABAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T17:03:18.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\Controllers\\OrderService.cs",
+              "RelativeDocumentMoniker": "src\\Sales\\OrderManagement\\Service\\Controllers\\OrderService.cs",
+              "ToolTip": "D:\\Projects.OWN\\samplewebshop\\src\\Sales\\OrderManagement\\Service\\Controllers\\OrderService.cs",
+              "RelativeToolTip": "src\\Sales\\OrderManagement\\Service\\Controllers\\OrderService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAD4vyUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T17:01:08.138Z",
               "EditorCaption": ""
             }
           ]

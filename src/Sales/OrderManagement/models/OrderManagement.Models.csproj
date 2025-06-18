@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="*.proto" GrpcServices="Server" AdditionalImportDirs="..\..\..\..\..\SrvKit\src\protos\"/>
+    <Protobuf Include="Protos\*.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,4 +20,14 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="*.g.cs">
+      <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)'))</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+  
 </Project>

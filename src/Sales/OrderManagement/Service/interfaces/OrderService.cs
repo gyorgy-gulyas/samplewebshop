@@ -5,15 +5,16 @@
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
+using Sales.OrderManagement;
 using ServiceKit.Net;
 
 namespace Sales.OrderManagement
 {
 	public interface IOrderService
 	{
-		public Response<Order.OrderHeader> getOrder(CallingContext ctx, string orderId);
+		public Task<Response<Order.OrderHeader>> getOrder(CallingContext ctx, string orderId);
 
-		public Response<Order.OrderHeader> placeOrder(CallingContext ctx, Order.OrderHeader order);
+		public Task<Response<Order.OrderHeader>> placeOrder(CallingContext ctx, Order.OrderHeader order);
 
 
 	}

@@ -6,14 +6,15 @@
 // </auto-generated>
 syntax = "proto3";
 
-option csharp_namespace = "Sales.OrderManagement";
+option csharp_namespace = "Sales.OrderManagement.Protos";
 option java_outer_classname = "OrderIF";
 option java_package = "com.OrderManagement";
 option java_multiple_files = true;
 
-package OrderManagementPackage;
-import "../../Models/OrderDTO.proto";
-import "../../Models/OrderItemDTO.proto";
+package Sales.OrderManagement;
+
+import "Sales/OrderManagement/Models/Protos/OrderDTO.proto";
+import "Sales/OrderManagement/Models/Protos/OrderItemDTO.proto";
 import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
@@ -29,7 +30,7 @@ message getOrderRequest {
 message getOrderResponse {
 	oneof result {
 		OrderDTO Value1 = 1;
-		servicekit.protobuf.Error Error = 2;
+		ServiceKit.Protos.Error Error = 2;
 	}
 }
 
@@ -40,7 +41,7 @@ message placeOrderRequest {
 message placeOrderResponse {
 	oneof result {
 		OrderDTO Value1 = 1;
-		servicekit.protobuf.Error Error = 2;
+		ServiceKit.Protos.Error Error = 2;
 	}
 }
 
