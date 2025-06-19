@@ -21,6 +21,7 @@ message OrderHeader {
 	string orderingDate = 2;
 	OrderStatuses status = 3;
 	string totalPrice = 4;
-	repeated OrderItem items = 5;
+	repeated string datelist = 5;
+	repeated OrderItem items = 6;
 }
 

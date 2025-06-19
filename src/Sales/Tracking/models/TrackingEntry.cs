@@ -9,7 +9,7 @@ using Sales.Tracking;
 
 namespace Sales.Tracking.OrderTrackingEntry
 {
-	public class TrackingEntry
+	public partial class TrackingEntry
 	{
 		public TrackingStatuses TrackingStatus { get; set; }
 		public string statusDate { get; set; }

@@ -9,12 +9,13 @@ using Sales.OrderManagement;
 
 namespace Sales.OrderManagement.Order
 {
-	public class OrderHeader
+	public partial class OrderHeader
 	{
 		public string customerId { get; set; }
-		public string orderingDate { get; set; }
+		public DateOnly orderingDate { get; set; }
 		public OrderStatuses status { get; set; }
-		public string totalPrice { get; set; }
+		public decimal totalPrice { get; set; }
+		public List<DateOnly> datelist { get; set; }
 		public List<OrderItem> items { get; set; }
 	}
 }

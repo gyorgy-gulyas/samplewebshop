@@ -14,15 +14,16 @@ domain Sales {
                 productId:string
                 productName:string
                 quantity: number
-                UnitPrice:string
+                UnitPrice:number
                 subTotalPrice:string
             }
 
             root entity OrderHeader {
                 customerId:string
-                orderingDate:string
+                orderingDate:date
                 status:OrderStatuses
-                totalPrice:string
+                totalPrice:number
+                datelist:list[date]
                 items:list[OrderItem]
             }
         }
@@ -41,14 +42,14 @@ domain Sales {
                 productId:string
                 productName:string
                 quantity: number
-                UnitPrice:string
+                UnitPrice:number
                 subTotalPrice:string
             }
 
             dto OrderDTO {
                 customerId:string
                 orderingDate:string
-                totalPrice:string
+                totalPrice:number
                 items:list[OrderItemDTO]
             }
 

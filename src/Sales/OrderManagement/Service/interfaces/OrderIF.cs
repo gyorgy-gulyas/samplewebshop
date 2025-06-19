@@ -17,19 +17,19 @@ namespace Sales.OrderManagement
 		public Task<Response<OrderDTO>> placeOrder(CallingContext ctx, OrderDTO order);
 
 
-	public class OrderItemDTO
+	public partial class OrderItemDTO
 	{
 		public string productId { get; set; }
 		public string productName { get; set; }
 		public decimal quantity { get; set; }
-		public string UnitPrice { get; set; }
+		public decimal UnitPrice { get; set; }
 		public string subTotalPrice { get; set; }
 	}
-	public class OrderDTO
+	public partial class OrderDTO
 	{
 		public string customerId { get; set; }
 		public string orderingDate { get; set; }
-		public string totalPrice { get; set; }
+		public decimal totalPrice { get; set; }
 		public List<OrderItemDTO> items { get; set; }
 	}
 	}

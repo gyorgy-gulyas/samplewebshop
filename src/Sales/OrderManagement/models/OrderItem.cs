@@ -8,12 +8,12 @@
 
 namespace Sales.OrderManagement.Order
 {
-	public class OrderItem
+	public partial class OrderItem
 	{
 		public string productId { get; set; }
 		public string productName { get; set; }
 		public decimal quantity { get; set; }
-		public string UnitPrice { get; set; }
+		public decimal UnitPrice { get; set; }
 		public string subTotalPrice { get; set; }
 	}
 }
