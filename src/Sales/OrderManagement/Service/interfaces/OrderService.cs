@@ -10,7 +10,7 @@ using ServiceKit.Net;
 
 namespace Sales.OrderManagement
 {
-	public interface IOrderService
+	public partial interface IOrderService
 	{
 		public Task<Response<Order.OrderHeader>> getOrder(CallingContext ctx, string orderId);
 

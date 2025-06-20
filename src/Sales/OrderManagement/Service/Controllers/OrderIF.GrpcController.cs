@@ -13,20 +13,20 @@ using ServiceKit.Net;
 
 namespace Sales.OrderManagement
 {
-	public class OrderIFGrpcController : Sales.OrderManagement.Protos.OrderIF.OrderIFBase 
+	public class OrderIF_v1GrpcController : Sales.OrderManagement.Protos.OrderIF_v1.OrderIF_v1Base 
 	{
-		private readonly ILogger<OrderIFGrpcController> _logger;
-		private readonly IOrderIF _service;
+		private readonly ILogger<OrderIF_v1GrpcController> _logger;
+		private readonly IOrderIF_v1 _service;
 
-		public OrderIFGrpcController( ILogger<OrderIFGrpcController> logger, IOrderIF service )
+		public OrderIF_v1GrpcController( ILogger<OrderIF_v1GrpcController> logger, IOrderIF_v1 service )
 		{
 			_logger = logger; 
 			_service = service; 
 		}
 
-		public override async Task<getOrderResponse> getOrder( getOrderRequest request, ServerCallContext grpcContext)
+		public override async Task<OrderIF_v1_getOrderResponse> getOrder( OrderIF_v1_getOrderRequest request, ServerCallContext grpcContext)
 		{
-			using(LogContext.PushProperty( "Scope", "OrderIF.getOrder" ))
+			using(LogContext.PushProperty( "Scope", "OrderIF_v1.getOrder" ))
 			{
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
@@ -35,12 +35,12 @@ namespace Sales.OrderManagement
 					
 					if( response.HasValue1() == true )
 					{
-						return new getOrderResponse { Value1 = response.Value1 };
+						return new OrderIF_v1_getOrderResponse { Value1 = OrderDTO.ToGrpc( response.Value1 ) };
 					}
 					
 					if( response.IsSuccess() == false )
 					{
-						return new getOrderResponse {
+						return new OrderIF_v1_getOrderResponse {
 							Error = new () {
 								Status = response.Error.Status.ToGrpc(),
 								MessageText = response.Error.MessageText,
@@ -49,7 +49,7 @@ namespace Sales.OrderManagement
 						};
 					}
 					
-					return new getOrderResponse {
+					return new OrderIF_v1_getOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.NotImplemented,
 							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF.getOrder'",
@@ -59,7 +59,7 @@ namespace Sales.OrderManagement
 				}
 				catch(Exception ex)
 				{
-					return new getOrderResponse {
+					return new OrderIF_v1_getOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.InternalError,
 							MessageText = ex.Message,
@@ -74,9 +74,9 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		public override async Task<placeOrderResponse> placeOrder( placeOrderRequest request, ServerCallContext grpcContext)
+		public override async Task<OrderIF_v1_placeOrderResponse> placeOrder( OrderIF_v1_placeOrderRequest request, ServerCallContext grpcContext)
 		{
-			using(LogContext.PushProperty( "Scope", "OrderIF.placeOrder" ))
+			using(LogContext.PushProperty( "Scope", "OrderIF_v1.placeOrder" ))
 			{
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
@@ -85,12 +85,12 @@ namespace Sales.OrderManagement
 					
 					if( response.HasValue1() == true )
 					{
-						return new placeOrderResponse { Value1 = response.Value1 };
+						return new OrderIF_v1_placeOrderResponse { Value1 = response.Value1 };
 					}
 					
 					if( response.IsSuccess() == false )
 					{
-						return new placeOrderResponse {
+						return new OrderIF_v1_placeOrderResponse {
 							Error = new () {
 								Status = response.Error.Status.ToGrpc(),
 								MessageText = response.Error.MessageText,
@@ -99,7 +99,7 @@ namespace Sales.OrderManagement
 						};
 					}
 					
-					return new placeOrderResponse {
+					return new OrderIF_v1_placeOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.NotImplemented,
 							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF.placeOrder'",
@@ -109,7 +109,7 @@ namespace Sales.OrderManagement
 				}
 				catch(Exception ex)
 				{
-					return new placeOrderResponse {
+					return new OrderIF_v1_placeOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.InternalError,
 							MessageText = ex.Message,

@@ -10,13 +10,13 @@ namespace Sales.Tracking.OrderTrackingEntry
 {
 	public partial class TrackingEntry
 	{
-		public Protos.TrackingEntry ToGrpc()
+		public static Protos.TrackingEntry ToGrpc( TrackingEntry @this )
 		{
 			Protos.TrackingEntry result = new();
 
-			result.TrackingStatus = TrackingStatus.ToGrpc();
-			result.StatusDate = statusDate;
-			result.OrderId = orderId;
+			result.TrackingStatus = @this.TrackingStatus.ToGrpc();
+			result.StatusDate = @this.statusDate;
+			result.OrderId = @this.orderId;
 
 			return result;
 		}
@@ -24,7 +24,7 @@ namespace Sales.Tracking.OrderTrackingEntry
 		{
 			TrackingEntry result = new();
 
-			result.TrackingStatus = @from.TrackingStatus.ToDotnet();
+			result.TrackingStatus = @from.TrackingStatus.FromGrpc();
 			result.statusDate = @from.StatusDate;
 			result.orderId = @from.OrderId;
 

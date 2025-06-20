@@ -1,6 +1,11 @@
 domain Sales {
     
     context OrderManagement {
+        composite SalesDocument {
+            humanKey:string
+            partnerData:string
+        }
+
         aggregate Order {
 
             enum OrderStatuses {
@@ -8,6 +13,11 @@ domain Sales {
                 Released,
                 Finished,
                 Canceled
+            }
+
+            entity Base {
+                Id:string
+                partionKey:string
             }
 
             valueobject OrderItem {
@@ -18,13 +28,18 @@ domain Sales {
                 subTotalPrice:string
             }
 
-            root entity OrderHeader {
+            root entity OrderHeader inherits Base, SalesDocument {
                 customerId:string
                 orderingDate:date
                 status:OrderStatuses
                 totalPrice:number
                 datelist:list[date]
+                intlist:list[integer]
+                datemap:map[string,date]
+                intmap:map[string,integer]
+                itemmap:map[string,OrderItem]
                 items:list[OrderItem]
+                item:OrderItem
             }
         }
 

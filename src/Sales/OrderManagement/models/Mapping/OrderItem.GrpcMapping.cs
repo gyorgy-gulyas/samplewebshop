@@ -11,15 +11,15 @@ namespace Sales.OrderManagement.Order
 {
 	public partial class OrderItem
 	{
-		public Protos.OrderItem ToGrpc()
+		public static Protos.OrderItem ToGrpc( OrderItem @this )
 		{
 			Protos.OrderItem result = new();
 
-			result.ProductId = productId;
-			result.ProductName = productName;
-			result.Quantity = quantity.ToString(CultureInfo.InvariantCulture);
-			result.UnitPrice = UnitPrice.ToString(CultureInfo.InvariantCulture);
-			result.SubTotalPrice = subTotalPrice;
+			result.ProductId = @this.productId;
+			result.ProductName = @this.productName;
+			result.Quantity = @this.quantity.ToString(CultureInfo.InvariantCulture);
+			result.UnitPrice = @this.UnitPrice.ToString(CultureInfo.InvariantCulture);
+			result.SubTotalPrice = @this.subTotalPrice;
 
 			return result;
 		}

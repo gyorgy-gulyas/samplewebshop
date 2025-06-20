@@ -29,7 +29,7 @@ namespace Sales.Tracking
 			};
 		}
 
-		public static TrackingStatuses ToDotnet( this Protos.TrackingStatuses @this )
+		public static TrackingStatuses FromGrpc( this Protos.TrackingStatuses @this )
 		{
 			return @this switch
 			{

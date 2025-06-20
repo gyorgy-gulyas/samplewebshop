@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\OrderService.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
+    <Protobuf Include="Protos\OrderIF.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,9 +27,6 @@
   <ItemGroup>
     <Reference Include="SrvKit">
       <HintPath>..\..\..\..\..\SrvKit\src\dotnet\bin\Debug\net8.0\SrvKit.dll</HintPath>
-    </Reference>
-    <Reference Include="PolyPersist.Net">
-      <HintPath>..\..\..\..\..\PolyPersist\interfaces\dotnet\PolyPersist\bin\Debug\net8.0\PolyPersist.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -22,7 +22,7 @@ namespace Sales.OrderManagement.Order
 			};
 		}
 
-		public static OrderStatuses ToDotnet( this Protos.OrderStatuses @this )
+		public static OrderStatuses FromGrpc( this Protos.OrderStatuses @this )
 		{
 			return @this switch
 			{

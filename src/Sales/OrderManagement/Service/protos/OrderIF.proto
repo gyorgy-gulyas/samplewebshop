@@ -13,32 +13,29 @@ option java_multiple_files = true;
 
 package Sales.OrderManagement;
 
-import "Sales/OrderManagement/Models/Protos/OrderDTO.proto";
-import "Sales/OrderManagement/Models/Protos/OrderItemDTO.proto";
-import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
-service OrderIF {
-	rpc getOrder(getOrderRequest) returns (getOrderResponse);
-	rpc placeOrder(placeOrderRequest) returns (placeOrderResponse);
+service OrderIF_v1 {
+	rpc getOrder(OrderIF_v1_getOrderRequest) returns (OrderIF_v1_getOrderResponse);
+	rpc placeOrder(OrderIF_v1_placeOrderRequest) returns (OrderIF_v1_placeOrderResponse);
 }
 
-message getOrderRequest {
+message OrderIF_v1_getOrderRequest {
 	string orderId = 1;
 }
 
-message getOrderResponse {
+message OrderIF_v1_getOrderResponse {
 	oneof result {
 		OrderDTO Value1 = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }
 
-message placeOrderRequest {
+message OrderIF_v1_placeOrderRequest {
 	OrderDTO order = 1;
 }
 
-message placeOrderResponse {
+message OrderIF_v1_placeOrderResponse {
 	oneof result {
 		OrderDTO Value1 = 1;
 		ServiceKit.Protos.Error Error = 2;

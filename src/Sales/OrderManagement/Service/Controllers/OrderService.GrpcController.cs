@@ -24,7 +24,7 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
-		public override async Task<getOrderResponse> getOrder( getOrderRequest request, ServerCallContext grpcContext)
+		public override async Task<OrderService_getOrderResponse> getOrder( OrderService_getOrderRequest request, ServerCallContext grpcContext)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderService.getOrder" ))
 			{
@@ -35,12 +35,12 @@ namespace Sales.OrderManagement
 					
 					if( response.HasValue1() == true )
 					{
-						return new getOrderResponse { Value1 = response.Value1 };
+						return new OrderService_getOrderResponse { Value1 = response.Value1 };
 					}
 					
 					if( response.IsSuccess() == false )
 					{
-						return new getOrderResponse {
+						return new OrderService_getOrderResponse {
 							Error = new () {
 								Status = response.Error.Status.ToGrpc(),
 								MessageText = response.Error.MessageText,
@@ -49,7 +49,7 @@ namespace Sales.OrderManagement
 						};
 					}
 					
-					return new getOrderResponse {
+					return new OrderService_getOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.NotImplemented,
 							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderService.getOrder'",
@@ -59,7 +59,7 @@ namespace Sales.OrderManagement
 				}
 				catch(Exception ex)
 				{
-					return new getOrderResponse {
+					return new OrderService_getOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.InternalError,
 							MessageText = ex.Message,
@@ -74,7 +74,7 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		public override async Task<placeOrderResponse> placeOrder( placeOrderRequest request, ServerCallContext grpcContext)
+		public override async Task<OrderService_placeOrderResponse> placeOrder( OrderService_placeOrderRequest request, ServerCallContext grpcContext)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderService.placeOrder" ))
 			{
@@ -85,12 +85,12 @@ namespace Sales.OrderManagement
 					
 					if( response.HasValue1() == true )
 					{
-						return new placeOrderResponse { Value1 = response.Value1 };
+						return new OrderService_placeOrderResponse { Value1 = response.Value1 };
 					}
 					
 					if( response.IsSuccess() == false )
 					{
-						return new placeOrderResponse {
+						return new OrderService_placeOrderResponse {
 							Error = new () {
 								Status = response.Error.Status.ToGrpc(),
 								MessageText = response.Error.MessageText,
@@ -99,7 +99,7 @@ namespace Sales.OrderManagement
 						};
 					}
 					
-					return new placeOrderResponse {
+					return new OrderService_placeOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.NotImplemented,
 							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderService.placeOrder'",
@@ -109,7 +109,7 @@ namespace Sales.OrderManagement
 				}
 				catch(Exception ex)
 				{
-					return new placeOrderResponse {
+					return new OrderService_placeOrderResponse {
 						Error = new () {
 							Status = ServiceKit.Protos.Statuses.InternalError,
 							MessageText = ex.Message,

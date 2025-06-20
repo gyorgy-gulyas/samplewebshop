@@ -9,13 +9,23 @@ using Sales.OrderManagement;
 
 namespace Sales.OrderManagement.Order
 {
-	public partial class OrderHeader
+	public partial class OrderHeader : Base, ISalesDocument
 	{
+		#region ISalesDocument
+		public string humanKey { get; set; }
+		public string partnerData { get; set; }
+		#endregion ISalesDocument
+
 		public string customerId { get; set; }
 		public DateOnly orderingDate { get; set; }
 		public OrderStatuses status { get; set; }
 		public decimal totalPrice { get; set; }
 		public List<DateOnly> datelist { get; set; }
+		public List<int> intlist { get; set; }
+		public Dictionary<string,DateOnly> datemap { get; set; }
+		public Dictionary<string,int> intmap { get; set; }
+		public Dictionary<string,OrderItem> itemmap { get; set; }
 		public List<OrderItem> items { get; set; }
+		public OrderItem item { get; set; }
 	}
 }

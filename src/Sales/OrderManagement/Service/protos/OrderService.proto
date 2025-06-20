@@ -14,30 +14,29 @@ option java_multiple_files = true;
 package Sales.OrderManagement;
 
 import "Sales/OrderManagement/Models/Protos/OrderHeader.proto";
-import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
 service OrderService {
-	rpc getOrder(getOrderRequest) returns (getOrderResponse);
-	rpc placeOrder(placeOrderRequest) returns (placeOrderResponse);
+	rpc getOrder(OrderService_getOrderRequest) returns (OrderService_getOrderResponse);
+	rpc placeOrder(OrderService_placeOrderRequest) returns (OrderService_placeOrderResponse);
 }
 
-message getOrderRequest {
+message OrderService_getOrderRequest {
 	string orderId = 1;
 }
 
-message getOrderResponse {
+message OrderService_getOrderResponse {
 	oneof result {
 		Order.OrderHeader Value1 = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }
 
-message placeOrderRequest {
+message OrderService_placeOrderRequest {
 	Order.OrderHeader order = 1;
 }
 
-message placeOrderResponse {
+message OrderService_placeOrderResponse {
 	oneof result {
 		Order.OrderHeader Value1 = 1;
 		ServiceKit.Protos.Error Error = 2;

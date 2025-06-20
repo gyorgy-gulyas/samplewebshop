@@ -13,16 +13,31 @@ namespace Sales.OrderManagement.Order
 {
 	public partial class OrderHeader
 	{
-		public Protos.OrderHeader ToGrpc()
+		public static Protos.OrderHeader ToGrpc( OrderHeader @this )
 		{
 			Protos.OrderHeader result = new();
 
-			result.CustomerId = customerId;
-			result.OrderingDate = orderingDate.ToString(CultureInfo.InvariantCulture);
-			result.Status = status.ToGrpc();
-			result.TotalPrice = totalPrice.ToString(CultureInfo.InvariantCulture);
-			result.Datelist.AddRange( datelist.Select( v => v.ToString(CultureInfo.InvariantCulture) ));
-			result.Items.AddRange( items.Select( v => v.ToGrpc() ));
+			// unfold begin: SalesDocument
+			result.HumanKey = @this.humanKey;
+			result.PartnerData = @this.partnerData;
+			// unfold end SalesDocument
+
+			// unfold begin: Base
+			result.Id = @this.Id;
+			result.PartionKey = @this.partionKey;
+			// unfold end Base
+
+			result.CustomerId = @this.customerId;
+			result.OrderingDate = @this.orderingDate.ToString(CultureInfo.InvariantCulture);
+			result.Status = @this.status.ToGrpc();
+			result.TotalPrice = @this.totalPrice.ToString(CultureInfo.InvariantCulture);
+			result.Datelist.AddRange( @this.datelist.Select( v => v.ToString(CultureInfo.InvariantCulture) ));
+			result.Intlist.AddRange( @this.intlist);
+			result.Datemap.Add(@this.datemap.ToDictionary( kvp => kvp.Key, kvp => kvp.Value.ToString(CultureInfo.InvariantCulture)));
+			result.Intmap.Add(@this.intmap);
+			result.Itemmap.Add( @this.itemmap.ToDictionary( kvp => kvp.Key, kvp => OrderItem.ToGrpc( kvp.Value ) ));
+			result.Items.AddRange( @this.items.Select( v => OrderItem.ToGrpc( v ) ));
+			result.Item = @this.item != null ? OrderItem.ToGrpc( @this.item) : null;
 
 			return result;
 		}
@@ -32,10 +47,17 @@ namespace Sales.OrderManagement.Order
 
 			result.customerId = @from.CustomerId;
 			result.orderingDate = DateOnly.Parse(@from.OrderingDate, CultureInfo.InvariantCulture);
-			result.status = @from.Status.ToDotnet();
+			result.status = @from.Status.FromGrpc();
 			result.totalPrice = decimal.Parse(@from.TotalPrice, CultureInfo.InvariantCulture);
 			result.datelist.AddRange( @from.Datelist.Select( v => DateOnly.Parse(v, CultureInfo.InvariantCulture) ));
+			result.intlist.AddRange( @from.Intlist);
+			foreach( var kvp in @from.Datemap)
+				result.datemap[kvp.Key] = DateOnly.Parse(kvp.Value, CultureInfo.InvariantCulture);
+			foreach( var kvp in @from.Intmap)
+				result.intmap[kvp.Key] = kvp.Value;
+;
 			result.items.AddRange( @from.Items.Select( v => OrderItem.FromGrpc(v) ));
+			result.item = @from.Item != null ? OrderItem.FromGrpc( @from.Item) : null;
 
 			return result;
 		}

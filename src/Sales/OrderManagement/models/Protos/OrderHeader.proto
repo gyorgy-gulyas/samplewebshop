@@ -17,11 +17,26 @@ import "Sales/OrderManagement/Models/Protos/OrderItem.proto";
 import "Sales/OrderManagement/Models/Protos/OrderStatuses.proto";
 
 message OrderHeader {
-	string customerId = 1;
-	string orderingDate = 2;
-	OrderStatuses status = 3;
-	string totalPrice = 4;
-	repeated string datelist = 5;
-	repeated OrderItem items = 6;
+	// unfold begin: SalesDocument
+	string humanKey = 1;
+	string partnerData = 2;
+	// unfold end SalesDocument
+
+	// unfold begin: Base
+	string Id = 3;
+	string partionKey = 4;
+	// unfold end Base
+
+	string customerId = 5;
+	string orderingDate = 6;
+	OrderStatuses status = 7;
+	string totalPrice = 8;
+	repeated string datelist = 9;
+	repeated int32 intlist = 10;
+	map<string,string> datemap = 11;
+	map<string,int32> intmap = 12;
+	map<string,OrderItem> itemmap = 13;
+	repeated OrderItem items = 14;
+	OrderItem item = 15;
 }
 

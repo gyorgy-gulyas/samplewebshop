@@ -15,12 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="PolyPersist.Net">
-      <HintPath>..\..\..\..\..\PolyPersist\interfaces\dotnet\PolyPersist\bin\Debug\net8.0\PolyPersist.Net.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="*.g.cs">
       <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)'))</DependentUpon>
     </Compile>
