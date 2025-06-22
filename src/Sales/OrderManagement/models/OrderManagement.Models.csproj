@@ -19,9 +19,5 @@
       <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)'))</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mapping\" />
-  </ItemGroup>
   
 </Project>

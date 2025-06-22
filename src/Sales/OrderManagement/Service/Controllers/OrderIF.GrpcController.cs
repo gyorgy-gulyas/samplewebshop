@@ -7,6 +7,7 @@
 
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Sales.OrderManagement;
 using Sales.OrderManagement.Protos;
 using Serilog.Context;
 using ServiceKit.Net;
@@ -31,11 +32,17 @@ namespace Sales.OrderManagement
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
 				{
-					var response = await _service.getOrder(ctx, request.OrderId);
-					
+					string orderId;
+					orderId = request.OrderId;
+
+					// calling the service function itself
+					var response = await _service.getOrder( ctx , orderId );
+
 					if( response.HasValue1() == true )
 					{
-						return new OrderIF_v1_getOrderResponse { Value1 = OrderDTO.ToGrpc( response.Value1 ) };
+						var result = new OrderIF_v1_getOrderResponse();
+						result.Value1 = response.Value1 != null ? OrderDTO.ToGrpc( response.Value1) : null;
+						return result;
 					}
 					
 					if( response.IsSuccess() == false )
@@ -81,11 +88,17 @@ namespace Sales.OrderManagement
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
 				{
-					var response = await _service.placeOrder(ctx, request.Order);
-					
+					OrderDTO order;
+					order = request.Order != null ? OrderDTO.FromGrpc( request.Order) : null;
+
+					// calling the service function itself
+					var response = await _service.placeOrder( ctx , order );
+
 					if( response.HasValue1() == true )
 					{
-						return new OrderIF_v1_placeOrderResponse { Value1 = response.Value1 };
+						var result = new OrderIF_v1_placeOrderResponse();
+						result.Value1 = response.Value1 != null ? OrderDTO.ToGrpc( response.Value1) : null;
+						return result;
 					}
 					
 					if( response.IsSuccess() == false )
