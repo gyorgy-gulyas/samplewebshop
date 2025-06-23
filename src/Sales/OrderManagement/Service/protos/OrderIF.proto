@@ -6,8 +6,8 @@
 // </auto-generated>
 syntax = "proto3";
 
-option csharp_namespace = "Sales.OrderManagement.Protos";
-option java_outer_classname = "OrderIF";
+option csharp_namespace = "Sales.OrderManagement.Protos.OrderIF_v1";
+option java_outer_classname = "OrderIF_v1";
 option java_package = "com.OrderManagement";
 option java_multiple_files = true;
 
@@ -42,18 +42,39 @@ message OrderIF_v1_placeOrderResponse {
 	}
 }
 
+enum OrderStatuses {
+	Draft = 0;
+	Released = 1;
+	Finished = 2;
+	Canceled = 3;
+}
+
 message OrderItemDTO {
+
+	enum DeliveryStatuses {
+		NotDelivered = 0;
+		PartiallyDelivered = 1;
+		Delivered = 2;
+	}
+
 	string productId = 1;
 	string productName = 2;
 	string quantity = 3;
 	string UnitPrice = 4;
 	string subTotalPrice = 5;
+	DeliveryStatuses deliveryStatus = 6;
 }
 
 message OrderDTO {
-	string customerId = 1;
-	string orderingDate = 2;
+	message CustomerDataDTO {
+		string customerId = 1;
+		string customerName = 2;
+	}
+
+	string orderingDate = 1;
+	OrderStatuses orderStatus = 2;
 	string totalPrice = 3;
-	repeated OrderItemDTO items = 4;
+	CustomerDataDTO customerData = 4;
+	repeated OrderItemDTO items = 5;
 }
 

@@ -15,4 +15,5 @@ namespace Sales.Tracking.OrderTrackingEntry
 		public string statusDate { get; set; }
 		public string orderId { get; set; }
 	}
+
 }

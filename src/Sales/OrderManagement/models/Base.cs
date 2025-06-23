@@ -13,4 +13,5 @@ namespace Sales.OrderManagement.Order
 		public string Id { get; set; }
 		public string partionKey { get; set; }
 	}
+
 }

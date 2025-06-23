@@ -53,18 +53,38 @@ domain Sales {
                 orderId:string
             }
 
+            enum OrderStatuses {
+                Draft,
+                Released,
+                Finished,
+                Canceled
+            }
+
             dto OrderItemDTO {
+                enum DeliveryStatuses {
+                    NotDelivered,
+                    PartiallyDelivered,
+                    Delivered
+                }
+
                 productId:string
                 productName:string
                 quantity: number
                 UnitPrice:number
                 subTotalPrice:string
+                deliveryStatus:DeliveryStatuses
             }
 
             dto OrderDTO {
-                customerId:string
+                dto CustomerDataDTO {
+                    customerId:string
+                    customerName:string
+                }
+
                 orderingDate:string
+                orderStatus:OrderStatuses
                 totalPrice:number
+                customerData:CustomerDataDTO
                 items:list[OrderItemDTO]
             }
 

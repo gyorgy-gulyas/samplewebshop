@@ -11,8 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\OrderService.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
-    <Protobuf Include="Protos\OrderIF.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
+    <Protobuf Include="Protos\*.proto" GrpcServices="Server" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
   </ItemGroup>
 
   <ItemGroup>

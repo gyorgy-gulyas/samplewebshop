@@ -28,4 +28,5 @@ namespace Sales.OrderManagement.Order
 		public List<OrderItem> items { get; set; }
 		public OrderItem item { get; set; }
 	}
+
 }

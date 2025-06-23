@@ -16,4 +16,5 @@ namespace Sales.OrderManagement.Order
 		public decimal UnitPrice { get; set; }
 		public string subTotalPrice { get; set; }
 	}
+
 }
