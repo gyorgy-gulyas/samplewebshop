@@ -44,12 +44,58 @@ domain Sales {
         }
 
         service OrderService {
+            eventhandler handleOrderPlaced for event OrderIF.OrderPlaced version 1
+
             getOrder( orderId: string ) : Order.OrderHeader
             placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
         }
 
         interface OrderIF version 1 {
             event OrderPlaced version 1 {
+                orderId:string
+            }
+
+            enum OrderStatuses {
+                Draft,
+                Released,
+                Finished,
+                Canceled
+            }
+
+            dto OrderItemDTO {
+                enum DeliveryStatuses {
+                    NotDelivered,
+                    PartiallyDelivered,
+                    Delivered
+                }
+
+                productId:string
+                productName:string
+                quantity: number
+                UnitPrice:number
+                subTotalPrice:string
+                deliveryStatus:DeliveryStatuses
+            }
+
+            dto OrderDTO {
+                dto CustomerDataDTO {
+                    customerId:string
+                    customerName:string
+                }
+
+                orderingDate:string
+                orderStatus:OrderStatuses
+                totalPrice:number
+                customerData:CustomerDataDTO
+                items:list[OrderItemDTO]
+            }
+
+            getOrder( orderId: string ) : OrderDTO
+            placeOrder( order: OrderDTO ) : OrderDTO
+        }
+
+        interface OrderIF version 2 {
+            event OrderPlaced version 2 {
                 orderId:string
             }
 
