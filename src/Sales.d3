@@ -44,7 +44,7 @@ domain Sales {
         }
 
         service OrderService {
-            eventhandler handleOrderPlaced for event OrderIF.OrderPlaced version 1
+            eventhandler handleOrderPlaced for event OrderIF.v1.OrderPlaced.v1
 
             getOrder( orderId: string ) : Order.OrderHeader
             placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
@@ -95,6 +95,10 @@ domain Sales {
         }
 
         interface OrderIF version 2 {
+            event OrderPlaced version 1 {
+                orderId:string
+            }
+
             event OrderPlaced version 2 {
                 orderId:string
             }
