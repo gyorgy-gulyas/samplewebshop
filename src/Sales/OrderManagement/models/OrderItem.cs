@@ -15,6 +15,21 @@ namespace Sales.OrderManagement.Order
 		public decimal quantity { get; set; }
 		public decimal UnitPrice { get; set; }
 		public string subTotalPrice { get; set; }
+
+		#region Clone & Copy 
+		virtual public OrderItem Clone()
+		{
+			OrderItem clone = new();
+
+			clone.productId = new string(productId.ToCharArray());
+			clone.productName = new string(productName.ToCharArray());
+			clone.quantity = quantity;
+			clone.UnitPrice = UnitPrice;
+			clone.subTotalPrice = new string(subTotalPrice.ToCharArray());
+
+			return clone;
+		}
+		#endregion Clone & Copy 
 	}
 
 }

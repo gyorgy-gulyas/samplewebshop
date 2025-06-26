@@ -22,11 +22,33 @@ namespace Sales.OrderManagement
 		public partial class OrderPlaced_v1
 		{
 			public string orderId { get; set; }
+
+			#region Clone & Copy 
+			virtual public OrderPlaced_v1 Clone()
+			{
+				OrderPlaced_v1 clone = new();
+
+				clone.orderId = new string(orderId.ToCharArray());
+
+				return clone;
+			}
+			#endregion Clone & Copy 
 		}
 
 		public partial class OrderPlaced_v2
 		{
 			public string orderId { get; set; }
+
+			#region Clone & Copy 
+			virtual public OrderPlaced_v2 Clone()
+			{
+				OrderPlaced_v2 clone = new();
+
+				clone.orderId = new string(orderId.ToCharArray());
+
+				return clone;
+			}
+			#endregion Clone & Copy 
 		}
 
 		public enum OrderStatuses
@@ -107,6 +129,22 @@ namespace Sales.OrderManagement
 			public string subTotalPrice { get; set; }
 			public DeliveryStatuses deliveryStatus { get; set; }
 
+			#region Clone & Copy 
+			virtual public OrderItemDTO Clone()
+			{
+				OrderItemDTO clone = new();
+
+				clone.productId = new string(productId.ToCharArray());
+				clone.productName = new string(productName.ToCharArray());
+				clone.quantity = quantity;
+				clone.UnitPrice = UnitPrice;
+				clone.subTotalPrice = new string(subTotalPrice.ToCharArray());
+				clone.deliveryStatus = deliveryStatus;
+
+				return clone;
+			}
+			#endregion Clone & Copy 
+
 			#region GrpcMapping
 			public static Protos.OrderIF_v2.OrderItemDTO ToGrpc( Sales.OrderManagement.IOrderIF_v2.OrderItemDTO @this )
 			{
@@ -144,6 +182,18 @@ namespace Sales.OrderManagement
 				public string customerId { get; set; }
 				public string customerName { get; set; }
 
+				#region Clone & Copy 
+				virtual public CustomerDataDTO Clone()
+				{
+					CustomerDataDTO clone = new();
+
+					clone.customerId = new string(customerId.ToCharArray());
+					clone.customerName = new string(customerName.ToCharArray());
+
+					return clone;
+				}
+				#endregion Clone & Copy 
+
 				#region GrpcMapping
 				public static Protos.OrderIF_v2.OrderDTO.Types.CustomerDataDTO ToGrpc( Sales.OrderManagement.IOrderIF_v2.OrderDTO.CustomerDataDTO @this )
 				{
@@ -170,7 +220,22 @@ namespace Sales.OrderManagement
 			public OrderStatuses orderStatus { get; set; }
 			public decimal totalPrice { get; set; }
 			public CustomerDataDTO customerData { get; set; }
-			public List<OrderItemDTO> items { get; set; }
+			public List<OrderItemDTO> items { get; set; } = new();
+
+			#region Clone & Copy 
+			virtual public OrderDTO Clone()
+			{
+				OrderDTO clone = new();
+
+				clone.orderingDate = new string(orderingDate.ToCharArray());
+				clone.orderStatus = orderStatus;
+				clone.totalPrice = totalPrice;
+				clone.customerData = customerData?.Clone();
+				clone.items.AddRange( items.Select( v => v.Clone() ));
+
+				return clone;
+			}
+			#endregion Clone & Copy 
 
 			#region GrpcMapping
 			public static Protos.OrderIF_v2.OrderDTO ToGrpc( Sales.OrderManagement.IOrderIF_v2.OrderDTO @this )

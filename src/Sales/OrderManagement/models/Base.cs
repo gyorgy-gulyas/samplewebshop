@@ -12,6 +12,18 @@ namespace Sales.OrderManagement.Order
 	{
 		public string Id { get; set; }
 		public string partionKey { get; set; }
+
+		#region Clone & Copy 
+		virtual public Base Clone()
+		{
+			Base clone = new();
+
+			clone.Id = new string(Id.ToCharArray());
+			clone.partionKey = new string(partionKey.ToCharArray());
+
+			return clone;
+		}
+		#endregion Clone & Copy 
 	}
 
 }

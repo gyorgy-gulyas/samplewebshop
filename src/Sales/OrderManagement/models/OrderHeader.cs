@@ -20,13 +20,47 @@ namespace Sales.OrderManagement.Order
 		public DateOnly orderingDate { get; set; }
 		public OrderStatuses status { get; set; }
 		public decimal totalPrice { get; set; }
-		public List<DateOnly> datelist { get; set; }
-		public List<int> intlist { get; set; }
-		public Dictionary<string,DateOnly> datemap { get; set; }
-		public Dictionary<string,int> intmap { get; set; }
-		public Dictionary<string,OrderItem> itemmap { get; set; }
-		public List<OrderItem> items { get; set; }
+		public List<DateOnly> datelist { get; set; } = new();
+		public List<int> intlist { get; set; } = new();
+		public Dictionary<string,DateOnly> datemap { get; set; } = new();
+		public Dictionary<string,int> intmap { get; set; } = new();
+		public Dictionary<string,OrderItem> itemmap { get; set; } = new();
+		public List<OrderItem> items { get; set; } = new();
 		public OrderItem item { get; set; }
+
+		#region Clone & Copy 
+		override public OrderHeader Clone()
+		{
+			OrderHeader clone = new();
+
+			// unfold begin: Base
+			clone.Id = new string(Id.ToCharArray());
+			clone.partionKey = new string(partionKey.ToCharArray());
+			// unfold end Base
+
+			// unfold begin: SalesDocument
+			clone.humanKey = new string(humanKey.ToCharArray());
+			clone.partnerData = new string(partnerData.ToCharArray());
+			// unfold end SalesDocument
+
+			clone.customerId = new string(customerId.ToCharArray());
+			clone.orderingDate = orderingDate;
+			clone.status = status;
+			clone.totalPrice = totalPrice;
+			clone.datelist.AddRange( datelist.Select( v => v ));
+			clone.intlist.AddRange( intlist.Select( v => v ));
+			foreach( var kvp in datemap)
+				clone.datemap[kvp.Key] = kvp.Value;
+			foreach( var kvp in intmap)
+				clone.intmap[kvp.Key] = kvp.Value;
+			foreach( var kvp in itemmap)
+				clone.itemmap[kvp.Key] = kvp.Value?.Clone();
+			clone.items.AddRange( items.Select( v => v.Clone() ));
+			clone.item = item?.Clone();
+
+			return clone;
+		}
+		#endregion Clone & Copy 
 	}
 
 }

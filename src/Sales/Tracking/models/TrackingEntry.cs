@@ -14,6 +14,19 @@ namespace Sales.Tracking.OrderTrackingEntry
 		public TrackingStatuses TrackingStatus { get; set; }
 		public string statusDate { get; set; }
 		public string orderId { get; set; }
+
+		#region Clone & Copy 
+		virtual public TrackingEntry Clone()
+		{
+			TrackingEntry clone = new();
+
+			clone.TrackingStatus = TrackingStatus;
+			clone.statusDate = new string(statusDate.ToCharArray());
+			clone.orderId = new string(orderId.ToCharArray());
+
+			return clone;
+		}
+		#endregion Clone & Copy 
 	}
 
 }
