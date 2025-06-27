@@ -50,6 +50,7 @@ domain Sales {
             placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
         }
 
+        @publish(grpc,rest)
         interface OrderIF version 1 {
             event OrderPlaced version 1 {
                 orderId:string
@@ -94,6 +95,7 @@ domain Sales {
             placeOrder( order: OrderDTO ) : OrderDTO
         }
 
+        @publish(grpc,rest)
         interface OrderIF version 2 {
             event OrderPlaced version 1 {
                 orderId:string
