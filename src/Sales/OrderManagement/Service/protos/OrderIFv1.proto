@@ -13,11 +13,13 @@ option java_multiple_files = true;
 
 package Sales.OrderManagement;
 
+import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
 service OrderIF_v1 {
 	rpc getOrder(OrderIF_v1_getOrderRequest) returns (OrderIF_v1_getOrderResponse);
 	rpc placeOrder(OrderIF_v1_placeOrderRequest) returns (OrderIF_v1_placeOrderResponse);
+	rpc justOrder(OrderIF_v1_justOrderRequest) returns (OrderIF_v1_justOrderResponse);
 }
 
 message OrderIF_v1_getOrderRequest {
@@ -38,6 +40,17 @@ message OrderIF_v1_placeOrderRequest {
 message OrderIF_v1_placeOrderResponse {
 	oneof result {
 		OrderDTO Value1 = 1;
+		ServiceKit.Protos.Error Error = 2;
+	}
+}
+
+message OrderIF_v1_justOrderRequest {
+	string orderId = 1;
+}
+
+message OrderIF_v1_justOrderResponse {
+	oneof result {
+		google.protobuf.Empty Success = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }

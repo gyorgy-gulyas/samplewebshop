@@ -93,6 +93,7 @@ domain Sales {
 
             getOrder( orderId: string ) : OrderDTO
             placeOrder( order: OrderDTO ) : OrderDTO
+            justOrder( orderId: string )
         }
 
         @publish(grpc,rest)
@@ -142,6 +143,7 @@ domain Sales {
 
             getOrder( orderId: string ) : OrderDTO
             placeOrder( order: OrderDTO ) : OrderDTO
+            justOrder( orderId: string )
         }
     }
 

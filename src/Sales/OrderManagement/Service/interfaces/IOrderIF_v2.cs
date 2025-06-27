@@ -18,6 +18,8 @@ namespace Sales.OrderManagement
 
 		public Task<Response<OrderDTO>> placeOrder(CallingContext ctx, OrderDTO order);
 
+		public Task<Response> justOrder(CallingContext ctx, string orderId);
+
 
 		public partial class OrderPlaced_v1
 		{

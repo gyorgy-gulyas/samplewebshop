@@ -136,5 +136,54 @@ namespace Sales.OrderManagement
 				}
 			}
 		}
+
+		public override async Task<OrderIF_v1_justOrderResponse> justOrder( OrderIF_v1_justOrderRequest request, ServerCallContext grpcContext)
+		{
+			using(LogContext.PushProperty( "Scope", "OrderIF_v1.justOrder" ))
+			{
+				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
+				try
+				{
+					string orderId;
+					orderId = request.OrderId;
+
+					// calling the service function itself
+					var response = await _service.justOrder( ctx , orderId );
+
+					if( response.IsSuccess() == true )
+					{
+						return new OrderIF_v1_justOrderResponse {
+							Success = new Empty()
+						};
+					}
+					else
+					{
+						return new OrderIF_v1_justOrderResponse {
+							Error = new () {
+								Status = response.Error.Status.ToGrpc(),
+								MessageText = response.Error.MessageText,
+								AdditionalInformation = response.Error.AdditionalInformation
+							}
+						};
+					}
+					
+					
+				}
+				catch(Exception ex)
+				{
+					return new OrderIF_v1_justOrderResponse {
+						Error = new () {
+							Status = ServiceKit.Protos.Statuses.InternalError,
+							MessageText = ex.Message,
+							AdditionalInformation = ex.ToString()
+						}
+					};
+				}
+				finally
+				{
+					ctx.ReturnToPool();
+				}
+			}
+		}
 	}
 }

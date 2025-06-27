@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Sales.OrderManagement;
 using Serilog.Context;
 using ServiceKit.Net;
 
@@ -24,14 +25,20 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
-		public async Task<IActionResult> getOrder()
+		public async Task<IActionResult> getOrder(string orderId)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.getOrder" ))
 			{
 				CallingContext ctx = CallingContext.PoolFromHttpContext( HttpContext, _logger );
 				try
 				{
-					return StatusCode(StatusCodes.Status501NotImplemented, new { message = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.getOrder'" });
+					// calling the service function itself
+					var response = await _service.getOrder( ctx , orderId );
+
+					if( response.IsSuccess() == true )
+						 return Ok(response);
+					 else
+						 return BadRequest(response);
 				}
 				catch(Exception ex)
 				{
@@ -44,14 +51,46 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		public async Task<IActionResult> placeOrder()
+		public async Task<IActionResult> placeOrder(Sales.OrderManagement.IOrderIF_v2.OrderDTO order)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.placeOrder" ))
 			{
 				CallingContext ctx = CallingContext.PoolFromHttpContext( HttpContext, _logger );
 				try
 				{
-					return StatusCode(StatusCodes.Status501NotImplemented, new { message = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.placeOrder'" });
+					// calling the service function itself
+					var response = await _service.placeOrder( ctx , order );
+
+					if( response.IsSuccess() == true )
+						 return Ok(response);
+					 else
+						 return BadRequest(response);
+				}
+				catch(Exception ex)
+				{
+					return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+				}
+				finally
+				{
+					ctx.ReturnToPool();
+				}
+			}
+		}
+
+		public async Task<IActionResult> justOrder(string orderId)
+		{
+			using(LogContext.PushProperty( "Scope", "OrderIF_v2.justOrder" ))
+			{
+				CallingContext ctx = CallingContext.PoolFromHttpContext( HttpContext, _logger );
+				try
+				{
+					// calling the service function itself
+					var response = await _service.justOrder( ctx , orderId );
+
+					if( response.IsSuccess() == true )
+						 return Ok(response);
+					 else
+						 return BadRequest(response);
 				}
 				catch(Exception ex)
 				{
