@@ -12,9 +12,14 @@ using Microsoft.AspNetCore.RateLimiting;
 using Sales.OrderManagement;
 using Serilog.Context;
 using ServiceKit.Net;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Net.Mime;
 
 namespace Sales.OrderManagement
 {
+	[ApiController]
+	[Route( "[controller]" )]
 	public class OrderIF_v2_RestController : ControllerBase 
 	{
 		private readonly ILogger<OrderIF_v2_RestController> _logger;
@@ -25,7 +30,16 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
-		public async Task<IActionResult> getOrder(string orderId)
+		[HttpGet( "getorder/{orderId}" )] 
+		[Produces( MediaTypeNames.Application.Json )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v2.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		public async Task<IActionResult> getOrder( [FromRoute] string orderId)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.getOrder" ))
 			{
@@ -33,16 +47,27 @@ namespace Sales.OrderManagement
 				try
 				{
 					// calling the service function itself
-					var response = await _service.getOrder( ctx , orderId );
+					var response = await _service.getOrder( ctx, orderId );
 
 					if( response.IsSuccess() == true )
-						 return Ok(response);
-					 else
-						 return BadRequest(response);
+					{
+						if( response.HasValue() == true )
+						{
+							return Ok(response.Value);
+						}
+						else
+						{
+							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v2.getOrder'" );
+						}
+					}
+					else
+					{
+						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
 				}
 				finally
 				{
@@ -51,7 +76,16 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		public async Task<IActionResult> placeOrder(Sales.OrderManagement.IOrderIF_v2.OrderDTO order)
+		[HttpPost( "placeorder" )] 
+		[Produces( MediaTypeNames.Application.Json )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v2.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		public async Task<IActionResult> placeOrder( [FromBody] Sales.OrderManagement.IOrderIF_v2.OrderDTO order)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.placeOrder" ))
 			{
@@ -59,16 +93,27 @@ namespace Sales.OrderManagement
 				try
 				{
 					// calling the service function itself
-					var response = await _service.placeOrder( ctx , order );
+					var response = await _service.placeOrder( ctx, order );
 
 					if( response.IsSuccess() == true )
-						 return Ok(response);
-					 else
-						 return BadRequest(response);
+					{
+						if( response.HasValue() == true )
+						{
+							return Ok(response.Value);
+						}
+						else
+						{
+							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v2.placeOrder'" );
+						}
+					}
+					else
+					{
+						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
 				}
 				finally
 				{
@@ -77,7 +122,16 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		public async Task<IActionResult> justOrder(string orderId)
+		[HttpPost( "justorder/{orderId}" )] 
+		[Produces( MediaTypeNames.Application.Json )]
+		[SwaggerResponse( StatusCodes.Status200OK, "Ok" )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		public async Task<IActionResult> justOrder( [FromRoute] string orderId)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.justOrder" ))
 			{
@@ -85,16 +139,20 @@ namespace Sales.OrderManagement
 				try
 				{
 					// calling the service function itself
-					var response = await _service.justOrder( ctx , orderId );
+					var response = await _service.justOrder( ctx, orderId );
 
 					if( response.IsSuccess() == true )
-						 return Ok(response);
-					 else
-						 return BadRequest(response);
+					{
+						return Ok();
+					}
+					else
+					{
+						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
 				}
 				finally
 				{

@@ -12,10 +12,20 @@ using System.Globalization;
 
 namespace Sales.OrderManagement
 {
+	/// public interface for Orders
+	/// only for service-service communication
 	public partial interface IOrderIF_v1
 	{
+		/// <return>OrderDTO</return>
+		public Task<Response<OrderDTO>> multiPart(CallingContext ctx, OrderDTO order, OrderItemDTO orderitem);
+
+		/// <summary>
+		/// getting the order based on id
+		/// </summary>
+		/// <return>OrderDTO</return>
 		public Task<Response<OrderDTO>> getOrder(CallingContext ctx, string orderId);
 
+		/// <return>OrderDTO</return>
 		public Task<Response<OrderDTO>> placeOrder(CallingContext ctx, OrderDTO order);
 
 		public Task<Response> justOrder(CallingContext ctx, string orderId);

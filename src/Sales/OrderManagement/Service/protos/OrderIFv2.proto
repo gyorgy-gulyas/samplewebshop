@@ -28,7 +28,7 @@ message OrderIF_v2_getOrderRequest {
 
 message OrderIF_v2_getOrderResponse {
 	oneof result {
-		OrderDTO Value1 = 1;
+		OrderDTO Value = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }
@@ -39,7 +39,7 @@ message OrderIF_v2_placeOrderRequest {
 
 message OrderIF_v2_placeOrderResponse {
 	oneof result {
-		OrderDTO Value1 = 1;
+		OrderDTO Value = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }

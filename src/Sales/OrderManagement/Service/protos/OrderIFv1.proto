@@ -16,10 +16,26 @@ package Sales.OrderManagement;
 import "google/protobuf/empty.proto";
 import "servicekit_error.proto";
 
+/// public interface for Orders
+/// only for service-service communication
 service OrderIF_v1 {
+	rpc multiPart(OrderIF_v1_multiPartRequest) returns (OrderIF_v1_multiPartResponse);
+	///getting the order based on id
 	rpc getOrder(OrderIF_v1_getOrderRequest) returns (OrderIF_v1_getOrderResponse);
 	rpc placeOrder(OrderIF_v1_placeOrderRequest) returns (OrderIF_v1_placeOrderResponse);
 	rpc justOrder(OrderIF_v1_justOrderRequest) returns (OrderIF_v1_justOrderResponse);
+}
+
+message OrderIF_v1_multiPartRequest {
+	OrderDTO order = 1;
+	OrderItemDTO orderitem = 2;
+}
+
+message OrderIF_v1_multiPartResponse {
+	oneof result {
+		OrderDTO Value = 1;
+		ServiceKit.Protos.Error Error = 2;
+	}
 }
 
 message OrderIF_v1_getOrderRequest {
@@ -28,7 +44,7 @@ message OrderIF_v1_getOrderRequest {
 
 message OrderIF_v1_getOrderResponse {
 	oneof result {
-		OrderDTO Value1 = 1;
+		OrderDTO Value = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }
@@ -39,7 +55,7 @@ message OrderIF_v1_placeOrderRequest {
 
 message OrderIF_v1_placeOrderResponse {
 	oneof result {
-		OrderDTO Value1 = 1;
+		OrderDTO Value = 1;
 		ServiceKit.Protos.Error Error = 2;
 	}
 }

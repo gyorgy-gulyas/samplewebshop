@@ -14,8 +14,10 @@ namespace Sales.OrderManagement
 {
 	public partial interface IOrderIF_v2
 	{
+		/// <return>OrderDTO</return>
 		public Task<Response<OrderDTO>> getOrder(CallingContext ctx, string orderId);
 
+		/// <return>OrderDTO</return>
 		public Task<Response<OrderDTO>> placeOrder(CallingContext ctx, OrderDTO order);
 
 		public Task<Response> justOrder(CallingContext ctx, string orderId);

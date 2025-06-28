@@ -46,10 +46,12 @@ domain Sales {
         service OrderService {
             eventhandler handleOrderPlaced for event OrderIF.v1.OrderPlaced.v1
 
-            getOrder( orderId: string ) : Order.OrderHeader
-            placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
+            query getOrder( orderId: string ) : Order.OrderHeader
+            command placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
         }
 
+        # public interface for Orders
+        # only for service-service communication
         @publish(grpc,rest)
         interface OrderIF version 1 {
             event OrderPlaced version 1 {
@@ -91,9 +93,11 @@ domain Sales {
                 items:list[OrderItemDTO]
             }
 
-            getOrder( orderId: string ) : OrderDTO
-            placeOrder( order: OrderDTO ) : OrderDTO
-            justOrder( orderId: string )
+            command multiPart( order: OrderDTO, orderitem: OrderItemDTO ) : OrderDTO
+            #getting the order based on id
+            query getOrder( orderId: string ) : OrderDTO
+            command placeOrder( order: OrderDTO ) : OrderDTO
+            command justOrder( orderId: string )
         }
 
         @publish(grpc,rest)
@@ -141,9 +145,9 @@ domain Sales {
                 items:list[OrderItemDTO]
             }
 
-            getOrder( orderId: string ) : OrderDTO
-            placeOrder( order: OrderDTO ) : OrderDTO
-            justOrder( orderId: string )
+            query getOrder( orderId: string ) : OrderDTO
+            command placeOrder( order: OrderDTO ) : OrderDTO
+            command justOrder( orderId: string )
         }
     }
 

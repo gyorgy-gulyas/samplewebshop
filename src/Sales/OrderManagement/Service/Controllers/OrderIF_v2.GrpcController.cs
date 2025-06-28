@@ -38,14 +38,25 @@ namespace Sales.OrderManagement
 					// calling the service function itself
 					var response = await _service.getOrder( ctx , orderId );
 
-					if( response.HasValue1() == true )
+					if( response.IsSuccess() == true )
 					{
-						var result = new OrderIF_v2_getOrderResponse();
-						result.Value1 = response.Value1 != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value1) : null;
-						return result;
+						if( response.HasValue() == true )
+						{
+							var result = new OrderIF_v2_getOrderResponse();
+							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value) : null;
+							return result;
+						}
+						else
+						{
+							return new OrderIF_v2_getOrderResponse {
+								Error = new () {
+									Status = ServiceKit.Protos.Statuses.NotImplemented,
+									MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.getOrder'",
+								}
+							};
+						}
 					}
-					
-					if( response.IsSuccess() == false )
+					else
 					{
 						return new OrderIF_v2_getOrderResponse {
 							Error = new () {
@@ -55,14 +66,6 @@ namespace Sales.OrderManagement
 							}
 						};
 					}
-					
-					return new OrderIF_v2_getOrderResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.NotImplemented,
-							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.getOrder'",
-						}
-					};
-					
 				}
 				catch(Exception ex)
 				{
@@ -94,14 +97,25 @@ namespace Sales.OrderManagement
 					// calling the service function itself
 					var response = await _service.placeOrder( ctx , order );
 
-					if( response.HasValue1() == true )
+					if( response.IsSuccess() == true )
 					{
-						var result = new OrderIF_v2_placeOrderResponse();
-						result.Value1 = response.Value1 != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value1) : null;
-						return result;
+						if( response.HasValue() == true )
+						{
+							var result = new OrderIF_v2_placeOrderResponse();
+							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value) : null;
+							return result;
+						}
+						else
+						{
+							return new OrderIF_v2_placeOrderResponse {
+								Error = new () {
+									Status = ServiceKit.Protos.Statuses.NotImplemented,
+									MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.placeOrder'",
+								}
+							};
+						}
 					}
-					
-					if( response.IsSuccess() == false )
+					else
 					{
 						return new OrderIF_v2_placeOrderResponse {
 							Error = new () {
@@ -111,14 +125,6 @@ namespace Sales.OrderManagement
 							}
 						};
 					}
-					
-					return new OrderIF_v2_placeOrderResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.NotImplemented,
-							MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.placeOrder'",
-						}
-					};
-					
 				}
 				catch(Exception ex)
 				{
@@ -166,7 +172,6 @@ namespace Sales.OrderManagement
 							}
 						};
 					}
-					
 					
 				}
 				catch(Exception ex)

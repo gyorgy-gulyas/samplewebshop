@@ -12,8 +12,10 @@ namespace Sales.OrderManagement
 {
 	public partial interface IOrderService
 	{
+		/// <return>Order.OrderHeader</return>
 		public Task<Response<Order.OrderHeader>> getOrder(CallingContext ctx, string orderId);
 
+		/// <return>Order.OrderHeader</return>
 		public Task<Response<Order.OrderHeader>> placeOrder(CallingContext ctx, Order.OrderHeader order);
 
 		public Task<bool> handleOrderPlaced(CallingContext ctx, Sales.OrderManagement.IOrderIF_v1.OrderPlaced_v1 @event );
