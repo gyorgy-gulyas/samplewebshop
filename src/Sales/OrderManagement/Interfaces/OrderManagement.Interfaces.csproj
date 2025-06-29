@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">..\..\..\..\</SolutionDir>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Protobuf Include="Protos\*.proto" GrpcServices="Both" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SrvKit">
+      <HintPath>..\..\..\..\..\SrvKit\src\dotnet\bin\Debug\net8.0\SrvKit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

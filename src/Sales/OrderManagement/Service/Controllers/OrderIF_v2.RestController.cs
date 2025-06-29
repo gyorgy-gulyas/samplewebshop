@@ -19,7 +19,7 @@ using System.Net.Mime;
 namespace Sales.OrderManagement
 {
 	[ApiController]
-	[Route( "[controller]" )]
+	[Route( "sales/ordermanagement/orderif/v2" )]
 	public class OrderIF_v2_RestController : ControllerBase 
 	{
 		private readonly ILogger<OrderIF_v2_RestController> _logger;
@@ -32,7 +32,7 @@ namespace Sales.OrderManagement
 
 		[HttpGet( "getorder/{orderId}" )] 
 		[Produces( MediaTypeNames.Application.Json )]
-		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v2.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v2.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
@@ -78,14 +78,14 @@ namespace Sales.OrderManagement
 
 		[HttpPost( "placeorder" )] 
 		[Produces( MediaTypeNames.Application.Json )]
-		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v2.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v2.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
-		public async Task<IActionResult> placeOrder( [FromBody] Sales.OrderManagement.IOrderIF_v2.OrderDTO order)
+		public async Task<IActionResult> placeOrder( [FromBody] IOrderIF_v2.OrderDTO order)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v2.placeOrder" ))
 			{

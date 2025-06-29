@@ -11,6 +11,7 @@ using Sales.OrderManagement;
 using Sales.OrderManagement.Protos.OrderIF_v1;
 using Serilog.Context;
 using ServiceKit.Net;
+using System.Globalization;
 
 namespace Sales.OrderManagement
 {
@@ -27,6 +28,67 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
+		public override async Task<OrderIF_v1_setPriceResponse> setPrice( OrderIF_v1_setPriceRequest request, ServerCallContext grpcContext)
+		{
+			using(LogContext.PushProperty( "Scope", "OrderIF_v1.setPrice" ))
+			{
+				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
+				try
+				{
+					IOrderIF_v1.OrderItemDTO orderItem;
+					orderItem = request.OrderItem != null ? IOrderIF_v1.OrderItemDTO.FromGrpc( request.OrderItem ) : null;
+					decimal price;
+					price = decimal.Parse(request.Price, CultureInfo.InvariantCulture);
+
+					// calling the service function itself
+					var response = await _service.setPrice( ctx , orderItem, price );
+
+					if( response.IsSuccess() == true )
+					{
+						if( response.HasValue() == true )
+						{
+							var result = new OrderIF_v1_setPriceResponse();
+							result.Value = response.Value != null ? IOrderIF_v1.OrderItemDTO.ToGrpc( response.Value ) : null;
+							return result;
+						}
+						else
+						{
+							return new OrderIF_v1_setPriceResponse {
+								Error = new () {
+									Status = ServiceKit.Protos.Statuses.NotImplemented,
+									MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v1.setPrice'",
+								}
+							};
+						}
+					}
+					else
+					{
+						return new OrderIF_v1_setPriceResponse {
+							Error = new () {
+								Status = response.Error.Status.ToGrpc(),
+								MessageText = response.Error.MessageText,
+								AdditionalInformation = response.Error.AdditionalInformation
+							}
+						};
+					}
+				}
+				catch(Exception ex)
+				{
+					return new OrderIF_v1_setPriceResponse {
+						Error = new () {
+							Status = ServiceKit.Protos.Statuses.InternalError,
+							MessageText = ex.Message,
+							AdditionalInformation = ex.ToString()
+						}
+					};
+				}
+				finally
+				{
+					ctx.ReturnToPool();
+				}
+			}
+		}
+
 		public override async Task<OrderIF_v1_multiPartResponse> multiPart( OrderIF_v1_multiPartRequest request, ServerCallContext grpcContext)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.multiPart" ))
@@ -34,10 +96,10 @@ namespace Sales.OrderManagement
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
 				{
-					Sales.OrderManagement.IOrderIF_v1.OrderDTO order;
-					order = request.Order != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( request.Order) : null;
-					Sales.OrderManagement.IOrderIF_v1.OrderItemDTO orderitem;
-					orderitem = request.Orderitem != null ? Sales.OrderManagement.IOrderIF_v1.OrderItemDTO.FromGrpc( request.Orderitem) : null;
+					IOrderIF_v1.OrderDTO order;
+					order = request.Order != null ? IOrderIF_v1.OrderDTO.FromGrpc( request.Order ) : null;
+					IOrderIF_v1.OrderItemDTO orderitem;
+					orderitem = request.Orderitem != null ? IOrderIF_v1.OrderItemDTO.FromGrpc( request.Orderitem ) : null;
 
 					// calling the service function itself
 					var response = await _service.multiPart( ctx , order, orderitem );
@@ -47,7 +109,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v1_multiPartResponse();
-							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.ToGrpc( response.Value) : null;
+							result.Value = response.Value != null ? IOrderIF_v1.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
@@ -106,7 +168,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v1_getOrderResponse();
-							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.ToGrpc( response.Value) : null;
+							result.Value = response.Value != null ? IOrderIF_v1.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
@@ -154,8 +216,8 @@ namespace Sales.OrderManagement
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
 				{
-					Sales.OrderManagement.IOrderIF_v1.OrderDTO order;
-					order = request.Order != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( request.Order) : null;
+					IOrderIF_v1.OrderDTO order;
+					order = request.Order != null ? IOrderIF_v1.OrderDTO.FromGrpc( request.Order ) : null;
 
 					// calling the service function itself
 					var response = await _service.placeOrder( ctx , order );
@@ -165,7 +227,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v1_placeOrderResponse();
-							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.ToGrpc( response.Value) : null;
+							result.Value = response.Value != null ? IOrderIF_v1.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else

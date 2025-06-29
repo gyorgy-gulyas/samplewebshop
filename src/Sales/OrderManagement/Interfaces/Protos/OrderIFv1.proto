@@ -19,11 +19,24 @@ import "servicekit_error.proto";
 /// public interface for Orders
 /// only for service-service communication
 service OrderIF_v1 {
+	rpc setPrice(OrderIF_v1_setPriceRequest) returns (OrderIF_v1_setPriceResponse);
 	rpc multiPart(OrderIF_v1_multiPartRequest) returns (OrderIF_v1_multiPartResponse);
 	///getting the order based on id
 	rpc getOrder(OrderIF_v1_getOrderRequest) returns (OrderIF_v1_getOrderResponse);
 	rpc placeOrder(OrderIF_v1_placeOrderRequest) returns (OrderIF_v1_placeOrderResponse);
 	rpc justOrder(OrderIF_v1_justOrderRequest) returns (OrderIF_v1_justOrderResponse);
+}
+
+message OrderIF_v1_setPriceRequest {
+	OrderItemDTO orderItem = 1;
+	string price = 2;
+}
+
+message OrderIF_v1_setPriceResponse {
+	oneof result {
+		OrderItemDTO Value = 1;
+		ServiceKit.Protos.Error Error = 2;
+	}
 }
 
 message OrderIF_v1_multiPartRequest {

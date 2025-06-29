@@ -22,7 +22,7 @@ namespace Sales.OrderManagement
 	/// public interface for Orders
 	/// only for service-service communication
 	[ApiController]
-	[Route( "[controller]" )]
+	[Route( "sales/ordermanagement/orderif/v1" )]
 	[SwaggerTag( "public interface for Orders only for service-service communication" )]
 	public class OrderIF_v1_RestController : ControllerBase 
 	{
@@ -34,27 +34,73 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
-		[HttpPost( "multipart" )] 
+		[HttpPost( "setprice" )] 
 		[Produces( MediaTypeNames.Application.Json )]
-		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v1.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderItemDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
-		public async Task<IActionResult> multiPart( [FromForm] IFormFile _file_order,  [FromForm] IFormFile _file_orderitem)
+		public async Task<IActionResult> setPrice( [FromBody] IOrderIF_v1.OrderItemDTO orderItem,  [FromQuery] decimal price)
+		{
+			using(LogContext.PushProperty( "Scope", "OrderIF_v1.setPrice" ))
+			{
+				CallingContext ctx = CallingContext.PoolFromHttpContext( HttpContext, _logger );
+				try
+				{
+					// calling the service function itself
+					var response = await _service.setPrice( ctx, orderItem, price );
+
+					if( response.IsSuccess() == true )
+					{
+						if( response.HasValue() == true )
+						{
+							return Ok(response.Value);
+						}
+						else
+						{
+							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v1.setPrice'" );
+						}
+					}
+					else
+					{
+						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+					}
+				}
+				catch(Exception ex)
+				{
+					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
+				}
+				finally
+				{
+					ctx.ReturnToPool();
+				}
+			}
+		}
+
+		[HttpPost( "multipart" )] 
+		[Produces( MediaTypeNames.Application.Json )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		public async Task<IActionResult> multiPart( [FromForm] IFormFile _json_order,  [FromForm] IFormFile _json_orderitem)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.multiPart" ))
 			{
 				CallingContext ctx = CallingContext.PoolFromHttpContext( HttpContext, _logger );
 				try
 				{
-					string json_order = await new StreamReader( _file_order.OpenReadStream() ).ReadToEndAsync();
-					Sales.OrderManagement.IOrderIF_v1.OrderDTO order = JsonSerializer.Deserialize<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( json_order );
+					string json_order = await new StreamReader( _json_order.OpenReadStream() ).ReadToEndAsync();
+					IOrderIF_v1.OrderDTO order = JsonSerializer.Deserialize<IOrderIF_v1.OrderDTO>( json_order );
 
-					string json_orderitem = await new StreamReader( _file_orderitem.OpenReadStream() ).ReadToEndAsync();
-					Sales.OrderManagement.IOrderIF_v1.OrderItemDTO orderitem = JsonSerializer.Deserialize<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>( json_orderitem );
+					string json_orderitem = await new StreamReader( _json_orderitem.OpenReadStream() ).ReadToEndAsync();
+					IOrderIF_v1.OrderItemDTO orderitem = JsonSerializer.Deserialize<IOrderIF_v1.OrderItemDTO>( json_orderitem );
 
 					// calling the service function itself
 					var response = await _service.multiPart( ctx, order, orderitem );
@@ -90,7 +136,7 @@ namespace Sales.OrderManagement
 		[HttpGet( "getorder/{orderId}" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerOperation( "getting the order based on id" )]
-		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v1.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
@@ -136,14 +182,14 @@ namespace Sales.OrderManagement
 
 		[HttpPost( "placeorder" )] 
 		[Produces( MediaTypeNames.Application.Json )]
-		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(Sales.OrderManagement.IOrderIF_v1.OrderDTO) )]
+		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
-		public async Task<IActionResult> placeOrder( [FromBody] Sales.OrderManagement.IOrderIF_v1.OrderDTO order)
+		public async Task<IActionResult> placeOrder( [FromBody] IOrderIF_v1.OrderDTO order)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.placeOrder" ))
 			{

@@ -93,6 +93,7 @@ domain Sales {
                 items:list[OrderItemDTO]
             }
 
+            command setPrice( orderItem: OrderItemDTO, price: number ) : OrderItemDTO
             command multiPart( order: OrderDTO, orderitem: OrderItemDTO ) : OrderDTO
             #getting the order based on id
             query getOrder( orderId: string ) : OrderDTO

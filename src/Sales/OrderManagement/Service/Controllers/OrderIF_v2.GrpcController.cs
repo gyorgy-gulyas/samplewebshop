@@ -43,7 +43,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v2_getOrderResponse();
-							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value) : null;
+							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
@@ -91,8 +91,8 @@ namespace Sales.OrderManagement
 				CallingContext ctx = CallingContext.PoolFromGrpcContext( grpcContext, _logger );
 				try
 				{
-					Sales.OrderManagement.IOrderIF_v2.OrderDTO order;
-					order = request.Order != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.FromGrpc( request.Order) : null;
+					IOrderIF_v2.OrderDTO order;
+					order = request.Order != null ? IOrderIF_v2.OrderDTO.FromGrpc( request.Order ) : null;
 
 					// calling the service function itself
 					var response = await _service.placeOrder( ctx , order );
@@ -102,7 +102,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v2_placeOrderResponse();
-							result.Value = response.Value != null ? Sales.OrderManagement.IOrderIF_v2.OrderDTO.ToGrpc( response.Value) : null;
+							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
