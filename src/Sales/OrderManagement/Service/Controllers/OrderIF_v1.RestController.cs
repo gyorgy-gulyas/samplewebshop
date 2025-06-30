@@ -82,6 +82,7 @@ namespace Sales.OrderManagement
 
 		[HttpPost( "multipart" )] 
 		[Produces( MediaTypeNames.Application.Json )]
+		[Consumes( "multipart/form-data" )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
 		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]

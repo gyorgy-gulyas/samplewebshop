@@ -11,7 +11,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Protobuf Include="Protos\*.proto" GrpcServices="Both" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\protos\" />
+    <Protobuf Include="Protos\*.proto" GrpcServices="Both" AdditionalImportDirs="$(SolutionDir)src;..\..\..\..\..\SrvKit\src\dotnet\SrvKit.General\Protos\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,9 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SrvKit">
-      <HintPath>..\..\..\..\..\SrvKit\src\dotnet\bin\Debug\net8.0\SrvKit.dll</HintPath>
+    <Reference Include="SrvKit.General">
+      <HintPath>..\..\..\..\..\SrvKit\src\dotnet\SrvKit.General\bin\Debug\net8.0\SrvKit.General.dll</HintPath>
+    </Reference>
+    <Reference Include="SrvKit.Service">
+      <HintPath>..\..\..\..\..\SrvKit\src\dotnet\SrvKit.Service\bin\Debug\net8.0\SrvKit.Service.dll</HintPath>
     </Reference>
   </ItemGroup>
+
 
 </Project>

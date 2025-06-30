@@ -1,4 +1,4 @@
-using SrvKit;
+using SrvKit.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthorization();
