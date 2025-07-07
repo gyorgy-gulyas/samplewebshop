@@ -250,7 +250,7 @@ namespace Sales.OrderManagement
 				result.OrderStatus = IOrderIF_v2.OrderStatusesMappings.ToGrpc( @this.orderStatus );
 				result.TotalPrice = @this.totalPrice.ToString(CultureInfo.InvariantCulture);
 				result.CustomerData = @this.customerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.ToGrpc( @this.customerData ) : null;
-				result.Items.AddRange( @this.items.Select( v => OrderItemDTO.ToGrpc( v ) ));
+				result.Items.AddRange( @this.items.Select( v => IOrderIF_v2.OrderItemDTO.ToGrpc( v ) ));
 
 				return result;
 			}
@@ -262,7 +262,7 @@ namespace Sales.OrderManagement
 				result.orderStatus = IOrderIF_v2.OrderStatusesMappings.FromGrpc( @from.OrderStatus) ;
 				result.totalPrice = decimal.Parse(@from.TotalPrice, CultureInfo.InvariantCulture);
 				result.customerData = @from.CustomerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.FromGrpc( @from.CustomerData ) : null;
-				result.items.AddRange( @from.Items.Select( v => OrderItemDTO.FromGrpc(v) ));
+				result.items.AddRange( @from.Items.Select( v => IOrderIF_v2.OrderItemDTO.FromGrpc(v) ));
 
 				return result;
 			}

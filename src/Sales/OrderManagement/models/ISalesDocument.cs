@@ -9,7 +9,7 @@
 namespace Sales.OrderManagement
 {
 
-	public interface ISalesDocument
+	public partial interface ISalesDocument
 	{
 		public string humanKey { get; set; }
 		public string partnerData { get; set; }

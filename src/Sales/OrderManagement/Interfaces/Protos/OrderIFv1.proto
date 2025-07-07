@@ -85,18 +85,18 @@ message OrderIF_v1_justOrderResponse {
 }
 
 enum OrderStatuses {
-	Draft = 0;
-	Released = 1;
-	Finished = 2;
-	Canceled = 3;
+	OrderStatuses_Draft = 0;
+	OrderStatuses_Released = 1;
+	OrderStatuses_Finished = 2;
+	OrderStatuses_Canceled = 3;
 }
 
 message OrderItemDTO {
 
 	enum DeliveryStatuses {
-		NotDelivered = 0;
-		PartiallyDelivered = 1;
-		Delivered = 2;
+		DeliveryStatuses_NotDelivered = 0;
+		DeliveryStatuses_PartiallyDelivered = 1;
+		DeliveryStatuses_Delivered = 2;
 	}
 
 	string productId = 1;
