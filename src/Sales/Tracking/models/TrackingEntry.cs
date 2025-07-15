@@ -9,14 +9,14 @@ using Sales.Tracking;
 
 namespace Sales.Tracking.OrderTrackingEntry
 {
-	public partial class TrackingEntry
+	public partial class TrackingEntry : IEquatable<TrackingEntry>
 	{
 		public TrackingStatuses TrackingStatus { get; set; }
 		public string statusDate { get; set; }
 		public string orderId { get; set; }
 
-		#region Clone & Copy 
-		virtual public TrackingEntry Clone()
+		#region Clone 
+		public virtual TrackingEntry Clone()
 		{
 			TrackingEntry clone = new();
 
@@ -26,7 +26,32 @@ namespace Sales.Tracking.OrderTrackingEntry
 
 			return clone;
 		}
-		#endregion Clone & Copy 
+		#endregion Clone 
+
+		#region Equals & HashCode 
+		public bool Equals( TrackingEntry other )
+		{
+			if (other is null) return false;
+
+			if(TrackingStatus != other.TrackingStatus) return false;
+			if(statusDate != other.statusDate) return false;
+			if(orderId != other.orderId) return false;
+
+			return true;
+		}
+
+		public override bool Equals(object obj) => Equals(obj as TrackingEntry);
+
+		public override int GetHashCode()
+		{
+			var hash = new HashCode();
+			hash.Add(TrackingStatus);
+			hash.Add(statusDate);
+			hash.Add(orderId);
+
+			return hash.ToHashCode();
+		}
+		#endregion Equals & HashCode 
 	}
 
 }

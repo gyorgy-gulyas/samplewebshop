@@ -37,7 +37,7 @@ namespace Sales.OrderManagement
 				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
 
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?{price}={price.ToString(CultureInfo.InvariantCulture)}" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "setPrice" );
 
 				// build content

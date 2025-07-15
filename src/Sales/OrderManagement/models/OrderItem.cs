@@ -8,7 +8,7 @@
 
 namespace Sales.OrderManagement.Order
 {
-	public partial class OrderItem
+	public partial class OrderItem : IEquatable<OrderItem>
 	{
 		public string productId { get; set; }
 		public string productName { get; set; }
@@ -16,8 +16,8 @@ namespace Sales.OrderManagement.Order
 		public decimal UnitPrice { get; set; }
 		public string subTotalPrice { get; set; }
 
-		#region Clone & Copy 
-		virtual public OrderItem Clone()
+		#region Clone 
+		public virtual OrderItem Clone()
 		{
 			OrderItem clone = new();
 
@@ -29,7 +29,36 @@ namespace Sales.OrderManagement.Order
 
 			return clone;
 		}
-		#endregion Clone & Copy 
+		#endregion Clone 
+
+		#region Equals & HashCode 
+		public bool Equals( OrderItem other )
+		{
+			if (other is null) return false;
+
+			if(productId != other.productId) return false;
+			if(productName != other.productName) return false;
+			if(quantity != other.quantity) return false;
+			if(UnitPrice != other.UnitPrice) return false;
+			if(subTotalPrice != other.subTotalPrice) return false;
+
+			return true;
+		}
+
+		public override bool Equals(object obj) => Equals(obj as OrderItem);
+
+		public override int GetHashCode()
+		{
+			var hash = new HashCode();
+			hash.Add(productId);
+			hash.Add(productName);
+			hash.Add(quantity);
+			hash.Add(UnitPrice);
+			hash.Add(subTotalPrice);
+
+			return hash.ToHashCode();
+		}
+		#endregion Equals & HashCode 
 	}
 
 }

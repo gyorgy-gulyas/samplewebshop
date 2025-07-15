@@ -8,13 +8,13 @@
 
 namespace Sales.OrderManagement.Order
 {
-	public partial class Base
+	public partial class Base : IEquatable<Base>
 	{
 		public string Id { get; set; }
 		public string partionKey { get; set; }
 
-		#region Clone & Copy 
-		virtual public Base Clone()
+		#region Clone 
+		public virtual Base Clone()
 		{
 			Base clone = new();
 
@@ -23,7 +23,30 @@ namespace Sales.OrderManagement.Order
 
 			return clone;
 		}
-		#endregion Clone & Copy 
+		#endregion Clone 
+
+		#region Equals & HashCode 
+		public bool Equals( Base other )
+		{
+			if (other is null) return false;
+
+			if(Id != other.Id) return false;
+			if(partionKey != other.partionKey) return false;
+
+			return true;
+		}
+
+		public override bool Equals(object obj) => Equals(obj as Base);
+
+		public override int GetHashCode()
+		{
+			var hash = new HashCode();
+			hash.Add(Id);
+			hash.Add(partionKey);
+
+			return hash.ToHashCode();
+		}
+		#endregion Equals & HashCode 
 	}
 
 }

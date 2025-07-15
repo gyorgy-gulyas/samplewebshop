@@ -9,7 +9,7 @@ using Sales.OrderManagement;
 
 namespace Sales.OrderManagement.Order
 {
-	public partial class OrderHeader : Base, ISalesDocument
+	public partial class OrderHeader : Base, ISalesDocument, IEquatable<OrderHeader>
 	{
 		#region ISalesDocument
 		public string humanKey { get; set; }
@@ -28,39 +28,173 @@ namespace Sales.OrderManagement.Order
 		public List<OrderItem> items { get; set; } = new();
 		public OrderItem item { get; set; }
 
-		#region Clone & Copy 
-		override public OrderHeader Clone()
+		#region Clone 
+		public override OrderHeader Clone()
 		{
 			OrderHeader clone = new();
 
-			// unfold begin: Base
+			// begin: Base
 			clone.Id = new string(Id.ToCharArray());
 			clone.partionKey = new string(partionKey.ToCharArray());
-			// unfold end Base
+			// end: Base
 
-			// unfold begin: SalesDocument
+			// begin: SalesDocument
 			clone.humanKey = new string(humanKey.ToCharArray());
 			clone.partnerData = new string(partnerData.ToCharArray());
-			// unfold end SalesDocument
+			// end: SalesDocument
 
 			clone.customerId = new string(customerId.ToCharArray());
 			clone.orderingDate = orderingDate;
 			clone.status = status;
 			clone.totalPrice = totalPrice;
+
+			// clone of datelist
 			clone.datelist.AddRange( datelist.Select( v => v ));
+
+			// clone of intlist
 			clone.intlist.AddRange( intlist.Select( v => v ));
+
+			// clone of datemap
 			foreach( var kvp in datemap)
 				clone.datemap[kvp.Key] = kvp.Value;
+
+			// clone of intmap
 			foreach( var kvp in intmap)
 				clone.intmap[kvp.Key] = kvp.Value;
+
+			// clone of itemmap
 			foreach( var kvp in itemmap)
 				clone.itemmap[kvp.Key] = kvp.Value?.Clone();
+
+			// clone of items
 			clone.items.AddRange( items.Select( v => v.Clone() ));
+
+			// clone of item
 			clone.item = item?.Clone();
 
 			return clone;
 		}
-		#endregion Clone & Copy 
+		#endregion Clone 
+
+		#region Equals & HashCode 
+		public bool Equals( OrderHeader other )
+		{
+			if (other is null) return false;
+
+			// begin: Base
+			if(Id != other.Id) return false;
+			if(partionKey != other.partionKey) return false;
+			// end: Base
+
+			// begin: SalesDocument
+			if(humanKey != other.humanKey) return false;
+			if(partnerData != other.partnerData) return false;
+			// end: SalesDocument
+
+			if(customerId != other.customerId) return false;
+			if(orderingDate != other.orderingDate) return false;
+			if(status != other.status) return false;
+			if(totalPrice != other.totalPrice) return false;
+
+			// equals of datelist
+			if(datelist.SequenceEqual(other.datelist) == false ) return false;
+
+			// equals of intlist
+			if(intlist.SequenceEqual(other.intlist) == false ) return false;
+
+			// equals of datemap
+			if(datemap.Count != other.datemap.Count ) return false;
+			foreach( var kvp_datemap in datemap)
+			{
+				if(other.datemap.TryGetValue(kvp_datemap.Key, out var otherValue) == false ) return false;
+				if(kvp_datemap.Value.Equals(otherValue) == false ) return false;
+			}
+
+			// equals of intmap
+			if(intmap.Count != other.intmap.Count ) return false;
+			foreach( var kvp_intmap in intmap)
+			{
+				if(other.intmap.TryGetValue(kvp_intmap.Key, out var otherValue) == false ) return false;
+				if(kvp_intmap.Value.Equals(otherValue) == false ) return false;
+			}
+
+			// equals of itemmap
+			if(itemmap.Count != other.itemmap.Count ) return false;
+			foreach( var kvp_itemmap in itemmap)
+			{
+				if(other.itemmap.TryGetValue(kvp_itemmap.Key, out var otherValue) == false ) return false;
+				if(kvp_itemmap.Value.Equals(otherValue) == false ) return false;
+			}
+
+			// equals of items
+			if(items.SequenceEqual(other.items) == false ) return false;
+
+			// equals of item
+			if(item == null && other.item != null ) return false;
+			if(item != null && item.Equals(other.item) == false ) return false;
+
+			return true;
+		}
+
+		public override bool Equals(object obj) => Equals(obj as OrderHeader);
+
+		public override int GetHashCode()
+		{
+			var hash = new HashCode();
+			// begin: Base
+			hash.Add(Id);
+			hash.Add(partionKey);
+			// end: Base
+
+			// begin: SalesDocument
+			hash.Add(humanKey);
+			hash.Add(partnerData);
+			// end: SalesDocument
+
+			hash.Add(customerId);
+			hash.Add(orderingDate);
+			hash.Add(status);
+			hash.Add(totalPrice);
+
+			// hash of datelist
+			foreach( var element_datelist in datelist)
+				hash.Add(element_datelist);
+
+			// hash of intlist
+			foreach( var element_intlist in intlist)
+				hash.Add(element_intlist);
+
+			// hash of datemap
+			foreach( var kvp_datemap in datemap)
+			{
+				hash.Add(kvp_datemap.Key);
+				hash.Add(kvp_datemap.Value);
+			}
+
+			// hash of intmap
+			foreach( var kvp_intmap in intmap)
+			{
+				hash.Add(kvp_intmap.Key);
+				hash.Add(kvp_intmap.Value);
+			}
+
+			// hash of itemmap
+			foreach( var kvp_itemmap in itemmap)
+			{
+				hash.Add(kvp_itemmap.Key);
+				hash.Add(kvp_itemmap.Value);
+			}
+
+			// hash of items
+			foreach( var element_items in items)
+				hash.Add(element_items);
+
+			// hash of item
+			if(item != null ) hash.Add(item);
+
+			return hash.ToHashCode();
+		}
+		#endregion Equals & HashCode 
 	}
 
 }
