@@ -33,9 +33,6 @@ namespace Sales.OrderManagement
 		{
 			try
 			{
-				_httpClient.DefaultRequestHeaders.Remove("x-request-id");
-				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
-
 				// build request
 				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "setPrice" );
@@ -60,7 +57,7 @@ namespace Sales.OrderManagement
 				{
 					return Response<IOrderIF_v1.OrderItemDTO>.Failure( new ServiceKit.Net.Error() {
 						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_setPrice'",
+						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v1_setPrice'",
 					} );
 				}
 			}
@@ -87,9 +84,6 @@ namespace Sales.OrderManagement
 		{
 			try
 			{
-				_httpClient.DefaultRequestHeaders.Remove("x-request-id");
-				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
-
 				// build request
 				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/multipart" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "multiPart" );
@@ -117,7 +111,7 @@ namespace Sales.OrderManagement
 				{
 					return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
 						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_multiPart'",
+						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v1_multiPart'",
 					} );
 				}
 			}
@@ -144,9 +138,6 @@ namespace Sales.OrderManagement
 		{
 			try
 			{
-				_httpClient.DefaultRequestHeaders.Remove("x-request-id");
-				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
-
 				// build request
 				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/getorder/{orderId}" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "getOrder" );
@@ -168,7 +159,7 @@ namespace Sales.OrderManagement
 				{
 					return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
 						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_getOrder'",
+						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v1_getOrder'",
 					} );
 				}
 			}
@@ -195,9 +186,6 @@ namespace Sales.OrderManagement
 		{
 			try
 			{
-				_httpClient.DefaultRequestHeaders.Remove("x-request-id");
-				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
-
 				// build request
 				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/placeorder" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "placeOrder" );
@@ -222,7 +210,7 @@ namespace Sales.OrderManagement
 				{
 					return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
 						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_placeOrder'",
+						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v1_placeOrder'",
 					} );
 				}
 			}
@@ -249,9 +237,6 @@ namespace Sales.OrderManagement
 		{
 			try
 			{
-				_httpClient.DefaultRequestHeaders.Remove("x-request-id");
-				_httpClient.DefaultRequestHeaders.Add("x-request-id", Guid.NewGuid().ToString());
-
 				// build request
 				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/justorder/{orderId}" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "justOrder" );
@@ -272,7 +257,7 @@ namespace Sales.OrderManagement
 				{
 					return Response.Failure( new ServiceKit.Net.Error() {
 						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_justOrder'",
+						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v1_justOrder'",
 					} );
 				}
 			}

@@ -5,10 +5,8 @@
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
-using Google.Protobuf.Collections;
 using Sales.OrderManagement;
 using ServiceKit.Net;
-using System.Globalization;
 
 namespace Sales.OrderManagement
 {
@@ -104,35 +102,6 @@ namespace Sales.OrderManagement
 			Finished,
 			Canceled,
 		}
-		#region GrpcMapping
-		public static class OrderStatusesMappings
-		{
-			public static Protos.OrderIF_v2.OrderStatuses ToGrpc( IOrderIF_v2.OrderStatuses @this )
-			{
-				return @this switch
-				{
-					IOrderIF_v2.OrderStatuses.Draft => Protos.OrderIF_v2.OrderStatuses.Draft,
-					IOrderIF_v2.OrderStatuses.Released => Protos.OrderIF_v2.OrderStatuses.Released,
-					IOrderIF_v2.OrderStatuses.Finished => Protos.OrderIF_v2.OrderStatuses.Finished,
-					IOrderIF_v2.OrderStatuses.Canceled => Protos.OrderIF_v2.OrderStatuses.Canceled,
-					_ => throw new NotImplementedException(), 
-				};
-			}
-
-			public static IOrderIF_v2.OrderStatuses FromGrpc( Protos.OrderIF_v2.OrderStatuses @this )
-			{
-				return @this switch
-				{
-					Protos.OrderIF_v2.OrderStatuses.Draft => IOrderIF_v2.OrderStatuses.Draft,
-					Protos.OrderIF_v2.OrderStatuses.Released => IOrderIF_v2.OrderStatuses.Released,
-					Protos.OrderIF_v2.OrderStatuses.Finished => IOrderIF_v2.OrderStatuses.Finished,
-					Protos.OrderIF_v2.OrderStatuses.Canceled => IOrderIF_v2.OrderStatuses.Canceled,
-					_ => throw new NotImplementedException(), 
-				};
-			}
-
-		}
-		#endregion GrpcMapping
 		public partial class OrderItemDTO : IEquatable<OrderItemDTO>
 		{
 			public enum DeliveryStatuses
@@ -141,33 +110,6 @@ namespace Sales.OrderManagement
 				PartiallyDelivered,
 				Delivered,
 			}
-			#region GrpcMapping
-			public static class DeliveryStatusesMappings
-			{
-				public static Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses ToGrpc( IOrderIF_v2.OrderItemDTO.DeliveryStatuses @this )
-				{
-					return @this switch
-					{
-						IOrderIF_v2.OrderItemDTO.DeliveryStatuses.NotDelivered => Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.NotDelivered,
-						IOrderIF_v2.OrderItemDTO.DeliveryStatuses.PartiallyDelivered => Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.PartiallyDelivered,
-						IOrderIF_v2.OrderItemDTO.DeliveryStatuses.Delivered => Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.Delivered,
-						_ => throw new NotImplementedException(), 
-					};
-				}
-
-				public static IOrderIF_v2.OrderItemDTO.DeliveryStatuses FromGrpc( Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses @this )
-				{
-					return @this switch
-					{
-						Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.NotDelivered => IOrderIF_v2.OrderItemDTO.DeliveryStatuses.NotDelivered,
-						Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.PartiallyDelivered => IOrderIF_v2.OrderItemDTO.DeliveryStatuses.PartiallyDelivered,
-						Protos.OrderIF_v2.OrderItemDTO.Types.DeliveryStatuses.Delivered => IOrderIF_v2.OrderItemDTO.DeliveryStatuses.Delivered,
-						_ => throw new NotImplementedException(), 
-					};
-				}
-
-			}
-			#endregion GrpcMapping
 			public string productId { get; set; }
 			public string productName { get; set; }
 			public decimal quantity { get; set; }
@@ -221,35 +163,6 @@ namespace Sales.OrderManagement
 				return hash.ToHashCode();
 			}
 			#endregion Equals & HashCode 
-
-			#region GrpcMapping
-			public static Protos.OrderIF_v2.OrderItemDTO ToGrpc( IOrderIF_v2.OrderItemDTO @this )
-			{
-				Protos.OrderIF_v2.OrderItemDTO result = new();
-
-				result.ProductId = @this.productId;
-				result.ProductName = @this.productName;
-				result.Quantity = @this.quantity.ToString(CultureInfo.InvariantCulture);
-				result.UnitPrice = @this.UnitPrice.ToString(CultureInfo.InvariantCulture);
-				result.SubTotalPrice = @this.subTotalPrice;
-				result.DeliveryStatus = IOrderIF_v2.OrderItemDTO.DeliveryStatusesMappings.ToGrpc( @this.deliveryStatus );
-
-				return result;
-			}
-			public static IOrderIF_v2.OrderItemDTO FromGrpc( Protos.OrderIF_v2.OrderItemDTO @from )
-			{
-				IOrderIF_v2.OrderItemDTO result = new();
-
-				result.productId = @from.ProductId;
-				result.productName = @from.ProductName;
-				result.quantity = decimal.Parse(@from.Quantity, CultureInfo.InvariantCulture);
-				result.UnitPrice = decimal.Parse(@from.UnitPrice, CultureInfo.InvariantCulture);
-				result.subTotalPrice = @from.SubTotalPrice;
-				result.deliveryStatus = IOrderIF_v2.OrderItemDTO.DeliveryStatusesMappings.FromGrpc( @from.DeliveryStatus) ;
-
-				return result;
-			}
-			#endregion GrpcMapping
 		}
 
 		public partial class OrderDTO : IEquatable<OrderDTO>
@@ -293,27 +206,6 @@ namespace Sales.OrderManagement
 					return hash.ToHashCode();
 				}
 				#endregion Equals & HashCode 
-
-				#region GrpcMapping
-				public static Protos.OrderIF_v2.OrderDTO.Types.CustomerDataDTO ToGrpc( IOrderIF_v2.OrderDTO.CustomerDataDTO @this )
-				{
-					Protos.OrderIF_v2.OrderDTO.Types.CustomerDataDTO result = new();
-
-					result.CustomerId = @this.customerId;
-					result.CustomerName = @this.customerName;
-
-					return result;
-				}
-				public static IOrderIF_v2.OrderDTO.CustomerDataDTO FromGrpc( Protos.OrderIF_v2.OrderDTO.Types.CustomerDataDTO @from )
-				{
-					IOrderIF_v2.OrderDTO.CustomerDataDTO result = new();
-
-					result.customerId = @from.CustomerId;
-					result.customerName = @from.CustomerName;
-
-					return result;
-				}
-				#endregion GrpcMapping
 			}
 
 			public string orderingDate { get; set; }
@@ -379,33 +271,6 @@ namespace Sales.OrderManagement
 				return hash.ToHashCode();
 			}
 			#endregion Equals & HashCode 
-
-			#region GrpcMapping
-			public static Protos.OrderIF_v2.OrderDTO ToGrpc( IOrderIF_v2.OrderDTO @this )
-			{
-				Protos.OrderIF_v2.OrderDTO result = new();
-
-				result.OrderingDate = @this.orderingDate;
-				result.OrderStatus = IOrderIF_v2.OrderStatusesMappings.ToGrpc( @this.orderStatus );
-				result.TotalPrice = @this.totalPrice.ToString(CultureInfo.InvariantCulture);
-				result.CustomerData = @this.customerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.ToGrpc( @this.customerData ) : null;
-				result.Items.AddRange( @this.items.Select( v => IOrderIF_v2.OrderItemDTO.ToGrpc( v ) ));
-
-				return result;
-			}
-			public static IOrderIF_v2.OrderDTO FromGrpc( Protos.OrderIF_v2.OrderDTO @from )
-			{
-				IOrderIF_v2.OrderDTO result = new();
-
-				result.orderingDate = @from.OrderingDate;
-				result.orderStatus = IOrderIF_v2.OrderStatusesMappings.FromGrpc( @from.OrderStatus) ;
-				result.totalPrice = decimal.Parse(@from.TotalPrice, CultureInfo.InvariantCulture);
-				result.customerData = @from.CustomerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.FromGrpc( @from.CustomerData ) : null;
-				result.items.AddRange( @from.Items.Select( v => IOrderIF_v2.OrderItemDTO.FromGrpc(v) ));
-
-				return result;
-			}
-			#endregion GrpcMapping
 		}
 
 	}

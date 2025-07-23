@@ -39,7 +39,7 @@ namespace Sales.OrderManagement
 				request.Price = price.ToString(CultureInfo.InvariantCulture);
 
 				// calling grpc client
-				var grpc_response = await _client.setPriceAsync( request, new CallOptions(ctx.ToGrpcMetadata( "SalesOrderManagementOrderIF_v1", "setPrice" ))).ResponseAsync;
+				var grpc_response = await _client.setPriceAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "setPrice" ))).ResponseAsync;
 
 				// fill response
 				switch( grpc_response.ResultCase )
@@ -93,7 +93,7 @@ namespace Sales.OrderManagement
 				request.Orderitem = orderitem != null ? IOrderIF_v1.OrderItemDTO.ToGrpc( orderitem ) : null;
 
 				// calling grpc client
-				var grpc_response = await _client.multiPartAsync( request, new CallOptions(ctx.ToGrpcMetadata( "SalesOrderManagementOrderIF_v1", "multiPart" ))).ResponseAsync;
+				var grpc_response = await _client.multiPartAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "multiPart" ))).ResponseAsync;
 
 				// fill response
 				switch( grpc_response.ResultCase )
@@ -146,7 +146,7 @@ namespace Sales.OrderManagement
 				request.OrderId = orderId;
 
 				// calling grpc client
-				var grpc_response = await _client.getOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "SalesOrderManagementOrderIF_v1", "getOrder" ))).ResponseAsync;
+				var grpc_response = await _client.getOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "getOrder" ))).ResponseAsync;
 
 				// fill response
 				switch( grpc_response.ResultCase )
@@ -199,7 +199,7 @@ namespace Sales.OrderManagement
 				request.Order = order != null ? IOrderIF_v1.OrderDTO.ToGrpc( order ) : null;
 
 				// calling grpc client
-				var grpc_response = await _client.placeOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "SalesOrderManagementOrderIF_v1", "placeOrder" ))).ResponseAsync;
+				var grpc_response = await _client.placeOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "placeOrder" ))).ResponseAsync;
 
 				// fill response
 				switch( grpc_response.ResultCase )
@@ -252,7 +252,7 @@ namespace Sales.OrderManagement
 				request.OrderId = orderId;
 
 				// calling grpc client
-				var grpc_response = await _client.justOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "SalesOrderManagementOrderIF_v1", "justOrder" ))).ResponseAsync;
+				var grpc_response = await _client.justOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "justOrder" ))).ResponseAsync;
 
 				// fill response
 				switch( grpc_response.ResultCase )
