@@ -34,7 +34,7 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
-		[HttpPost( "setprice" )] 
+		[HttpPost( "None" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderItemDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
@@ -80,7 +80,7 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		[HttpPost( "multipart" )] 
+		[HttpPost( "None" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[Consumes( "multipart/form-data" )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
@@ -181,7 +181,7 @@ namespace Sales.OrderManagement
 			}
 		}
 
-		[HttpPost( "placeorder" )] 
+		[HttpPost( "None" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
 		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]

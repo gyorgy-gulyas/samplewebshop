@@ -30,7 +30,7 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
 
 						// build content
 						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>( orderItem ));
@@ -79,7 +79,7 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/multipart" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None" ) );
 
 						// build multi part content
 						MultipartFormDataContent multipartContent = new();
@@ -178,7 +178,7 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/placeorder" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None" ) );
 
 						// build content
 						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( order ));

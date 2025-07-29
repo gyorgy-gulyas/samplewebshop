@@ -34,7 +34,7 @@ namespace Sales.OrderManagement
 			try
 			{
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "setPrice" );
 
 				// build content
@@ -85,7 +85,7 @@ namespace Sales.OrderManagement
 			try
 			{
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/multipart" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "multiPart" );
 
 				// build multi part content
@@ -187,7 +187,7 @@ namespace Sales.OrderManagement
 			try
 			{
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/placeorder" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/None" ) );
 				ctx.FillHttpRequest( request, "SalesOrderManagementOrderIF_v1", "placeOrder" );
 
 				// build content
