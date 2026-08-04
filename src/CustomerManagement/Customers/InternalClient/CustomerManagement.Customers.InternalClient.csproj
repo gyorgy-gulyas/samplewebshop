@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="Grpc.Net.Client" />
+    <PackageReference Include="ServiceKit.Net.General" />
+    <PackageReference Include="ServiceKit.Net.Service" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Interfaces\CustomerManagement.Customers.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

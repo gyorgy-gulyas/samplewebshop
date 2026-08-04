@@ -1,7 +1,20 @@
 <Project>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Authors>György Gulyás</Authors>
+    <Description>MicronIQ sample web shop — the platform's own test bed</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1604,NU1602,CS8981</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Update="*.g.cs">
       <DependentUpon>$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)'))</DependentUpon>
     </Compile>
   </ItemGroup>
+
 </Project>

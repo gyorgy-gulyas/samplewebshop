@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="PolyPersist.Net" />
+    <PackageReference Include="PolyPersist.Net.DocumentStore.Memory" />
+    <PackageReference Include="PolyPersist.Net.DocumentStore.MongoDB" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="ServiceKit.Net.General" />
+    <PackageReference Include="ServiceKit.Net.Service" />
+    <PackageReference Include="ServiceKit.Net.ServiceHost" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrderManagement\Context\Sales.OrderManagement.Context.csproj" />
+    <ProjectReference Include="..\OrderManagement\Interfaces\Sales.OrderManagement.Interfaces.csproj" />
+    <ProjectReference Include="..\OrderManagement\Models\Sales.OrderManagement.Models.csproj" />
+    <ProjectReference Include="..\Tracking\Models\Sales.Tracking.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+domain Core {
+
+    context Base {
+
+        # Every stored entity inherits this. The three fields are infrastructure, not business:
+        # PolyPersist needs them on IEntity, so they are marked @system_field and the emitter keeps
+        # them out of the business surface.
+        composite BaseEntity {
+            @system_field
+            id:string
+            @system_field
+            etag:string
+            @system_field
+            LastUpdate:datetime
+        }
+    }
+}

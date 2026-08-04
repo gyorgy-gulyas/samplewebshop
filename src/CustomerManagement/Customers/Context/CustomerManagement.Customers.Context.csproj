@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="PolyPersist.Net" />
+    <PackageReference Include="PolyPersist.Net.Transactions" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="ServiceKit.Net.General" />
+    <PackageReference Include="ServiceKit.Net.Service" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\CustomerManagement.Customers.Models.csproj" />
+    <ProjectReference Include="..\Interfaces\CustomerManagement.Customers.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

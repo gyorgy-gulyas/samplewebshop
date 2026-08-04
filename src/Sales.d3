@@ -1,6 +1,9 @@
 domain Sales {
-    
+
     context OrderManagement {
+
+        # A reusable field group: everything that is a sales document carries these, so the fields
+        # are declared once and inherited rather than repeated.
         composite SalesDocument {
             humanKey:string
             partnerData:string
@@ -15,44 +18,36 @@ domain Sales {
                 Canceled
             }
 
-            entity Base {
-                Id:string
-                partionKey:string
-            }
-
             valueobject OrderItem {
                 productId:string
                 productName:string
-                quantity: number
-                UnitPrice:number
-                subTotalPrice:string
+                quantity:number validate value > 0
+                unitPrice:number validate value >= 0
+                subTotalPrice:number validate value >= 0
             }
 
-            root entity OrderHeader inherits Base, SalesDocument {
-                customerId:string
+            root entity OrderHeader inherits Core.Base.BaseEntity, SalesDocument {
+                # Another aggregate is referenced by identity, never embedded. The .NET emitter turns
+                # this into a typed EntityId, so handing over an order id where a customer id belongs
+                # stops being a runtime mystery and becomes a compile error.
+                customer:ref CustomerManagement.Customers.Customer
+
                 orderingDate:date
                 status:OrderStatuses
-                totalPrice:number
-                datelist:list[date]
-                intlist:list[integer]
-                datemap:map[string,date]
-                intmap:map[string,integer]
-                itemmap:map[string,OrderItem]
+                totalPrice:number validate value >= 0
                 items:list[OrderItem]
-                item:OrderItem
             }
         }
 
         service OrderService {
             eventhandler handleOrderPlaced for event OrderIF.v1.OrderPlaced.v1
 
-            query getOrder( orderId: string ) : Order.OrderHeader
-            command placeOrder( order: Order.OrderHeader ) : Order.OrderHeader
+            query getOrder( orderId:string ) : Order.OrderHeader
+            command placeOrder( order:Order.OrderHeader ) : Order.OrderHeader
         }
 
-        # public interface for Orders
-        # only for service-service communication
-        @internal_api(grpc,rest)
+        # The published surface of orders: DTOs only, no domain type ever reaches the wire.
+        @internal_api(grpc, rest)
         @public_api(grpc, rest, collection="BFF")
         interface OrderIF version 1 {
             event OrderPlaced version 1 {
@@ -75,9 +70,9 @@ domain Sales {
 
                 productId:string
                 productName:string
-                quantity: number
-                UnitPrice:number
-                subTotalPrice:string
+                quantity:number validate value > 0
+                unitPrice:number validate value >= 0
+                subTotalPrice:number
                 deliveryStatus:DeliveryStatuses
             }
 
@@ -87,6 +82,8 @@ domain Sales {
                     customerName:string
                 }
 
+                @system_field id:string
+
                 orderingDate:string
                 orderStatus:OrderStatuses
                 totalPrice:number
@@ -94,22 +91,20 @@ domain Sales {
                 items:list[OrderItemDTO]
             }
 
-            command setPrice( orderItem: OrderItemDTO, price: number ) : OrderItemDTO
-            command multiPart( order: OrderDTO, orderitem: OrderItemDTO ) : OrderDTO
-            #getting the order based on id
-            query getOrder( orderId: string ) : OrderDTO
-            command placeOrder( order: OrderDTO ) : OrderDTO
-            command justOrder( orderId: string )
+            query getOrder( orderId:string ) : OrderDTO
+            command placeOrder( order:OrderDTO ) : OrderDTO
+            command setPrice( orderItem:OrderItemDTO, price:number ) : OrderItemDTO
+            command justOrder( orderId:string )
         }
 
-        @publish(grpc,rest)
+        # The second version lives next to the first on purpose: this is how a published interface is
+        # carried forward without breaking the callers still on v1.
+        @internal_api(grpc, rest)
+        @public_api(grpc, rest, collection="BFF")
         interface OrderIF version 2 {
-            event OrderPlaced version 1 {
-                orderId:string
-            }
-
             event OrderPlaced version 2 {
                 orderId:string
+                customerId:string
             }
 
             enum OrderStatuses {
@@ -128,9 +123,9 @@ domain Sales {
 
                 productId:string
                 productName:string
-                quantity: number
-                UnitPrice:number
-                subTotalPrice:string
+                quantity:number validate value > 0
+                unitPrice:number validate value >= 0
+                subTotalPrice:number
                 deliveryStatus:DeliveryStatuses
             }
 
@@ -140,23 +135,27 @@ domain Sales {
                     customerName:string
                 }
 
+                @system_field id:string
+
                 orderingDate:string
                 orderStatus:OrderStatuses
                 totalPrice:number
                 customerData:CustomerDataDTO
                 items:list[OrderItemDTO]
+
+                # v2 addition: where the parcel is going
+                @optional
+                shippingCity:string
             }
 
-            query getOrder( orderId: string ) : OrderDTO
-            command placeOrder( order: OrderDTO ) : OrderDTO
-            command justOrder( orderId: string )
+            query getOrder( orderId:string ) : OrderDTO
+            command placeOrder( order:OrderDTO ) : OrderDTO
+            command justOrder( orderId:string )
         }
     }
 
-    context Cart {
-    }
-
     context Tracking {
+
         enum TrackingStatuses
         {
             # Order has been placed but not yet processed
@@ -195,14 +194,11 @@ domain Sales {
 
         aggregate OrderTrackingEntry {
 
-            root entity TrackingEntry {
-                TrackingStatus:TrackingStatuses
-                statusDate:string
-                orderId:string
+            root entity TrackingEntry inherits Core.Base.BaseEntity {
+                order:ref Sales.OrderManagement.Order
+                trackingStatus:TrackingStatuses
+                statusDate:datetime
             }
         }
-    }
-
-    context Payment {
     }
 }

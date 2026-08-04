@@ -1,0 +1,77 @@
+domain CustomerManagement {
+
+    context Customers {
+
+        aggregate Customer {
+
+            enum CustomerStatuses {
+                # Registered but the e-mail address has not been confirmed yet
+                Pending,
+                # Ordinary, active customer
+                Active,
+                # Temporarily barred from ordering
+                Suspended,
+                # Left, kept only for the orders already placed
+                Closed
+            }
+
+            # A postal address is a value: two addresses with the same fields are the same address,
+            # so it has no identity of its own and is embedded rather than referenced.
+            valueobject PostalAddress {
+                country:string validate len(value) == 2
+                postalCode:string validate len(value) > 0
+                city:string validate len(value) > 0
+                street:string validate len(value) > 0
+            }
+
+            root entity CustomerAccount inherits Core.Base.BaseEntity {
+                @gdpr
+                name:string validate len(name) > 1
+
+                @gdpr
+                email:string validate matches(email, "[^@ ]+@[^@ ]+\\.[^@ ]+")
+
+                @gdpr
+                @optional
+                phone:string
+
+                status:CustomerStatuses
+
+                @gdpr
+                billingAddress:PostalAddress
+
+                @gdpr
+                @optional
+                shippingAddress:PostalAddress
+            }
+        }
+
+        service CustomerService {
+            query getCustomer( customerId:string ) : Customer.CustomerAccount
+            command registerCustomer( name:string, email:string ) : Customer.CustomerAccount
+        }
+
+        @internal_api(grpc, rest)
+        @public_api(rest, collection="BFF")
+        interface CustomerIF version 1 {
+
+            enum CustomerStatuses {
+                Pending,
+                Active,
+                Suspended,
+                Closed
+            }
+
+            dto CustomerDTO {
+                @system_field id:string
+
+                name:string
+                email:string
+                status:CustomerStatuses
+            }
+
+            query getCustomer( customerId:string ) : CustomerDTO
+            command registerCustomer( name:string, email:string ) : CustomerDTO
+        }
+    }
+}

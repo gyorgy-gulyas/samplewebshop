@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\</SolutionDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\*.proto" GrpcServices="Both" AdditionalImportDirs="$(SolutionDir)src;$(ServiceKitNetProtoRoot)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="PolyPersist.Net" />
+    <PackageReference Include="ServiceKit.Net.General" />
+    <PackageReference Include="ServiceKit.Net.Service" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\CustomerManagement.Customers.Models.csproj" />
+  </ItemGroup>
+
+</Project>

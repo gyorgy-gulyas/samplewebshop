@@ -1,0 +1,30 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MicronIQ platform packages, built from the sibling repositories into the local dev feed -->
+    <PackageVersion Include="PolyPersist.Net" Version="1.0.18" />
+    <PackageVersion Include="PolyPersist.Net.Transactions" Version="1.0.18" />
+    <PackageVersion Include="PolyPersist.Net.DocumentStore.Memory" Version="1.0.18" />
+    <PackageVersion Include="PolyPersist.Net.DocumentStore.MongoDB" Version="1.0.18" />
+    <PackageVersion Include="PolyPersist.Net.BlobStore.Memory" Version="1.0.18" />
+    <PackageVersion Include="PolyPersist.Net.ColumnStore.Memory" Version="1.0.18" />
+    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.7" />
+    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.7" />
+    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Grpc.AspNetCore" Version="2.57.0" />
+    <PackageVersion Include="Grpc.Net.Client" Version="2.57.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.17" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Serilog" Version="4.3.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.1" />
+  </ItemGroup>
+
+</Project>
