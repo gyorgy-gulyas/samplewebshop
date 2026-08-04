@@ -9,6 +9,7 @@
     <PackageReference Include="Serilog" />
     <PackageReference Include="ServiceKit.Net.General" />
     <PackageReference Include="ServiceKit.Net.Service" />
+    <PackageReference Include="ServiceKit.Net.Workflow" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
   </ItemGroup>

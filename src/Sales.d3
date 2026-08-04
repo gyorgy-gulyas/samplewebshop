@@ -46,6 +46,39 @@ domain Sales {
             command placeOrder( order:Order.OrderHeader ) : Order.OrderHeader
         }
 
+        # Fulfilling an order is long running and it can fail halfway: the stock is reserved, then
+        # the card is charged, then the parcel ships. The model declares WHICH steps exist and what
+        # undoes each one - it deliberately does not declare their order, because a set of steps is
+        # all a model can honestly say. The developer writes the sequence; the generated step facade
+        # records every compensation and rolls them back in reverse when something throws.
+        @retry( 3 )
+        @timeout( "10m" )
+        workflow FulfilOrder {
+
+            @start
+            command fulfil( order:ref Order, sku:string, quantity:number, amount:number, shippingAddress:string ) : string
+
+            # No return value, so the caller cannot be answered: this is a signal.
+            command cancel( reason:string )
+
+            # A query is read-only and synchronous - it may not await anything.
+            query status() : string
+
+            step reserveStock( order:ref Order, sku:string, quantity:number ) : string compensate releaseStock
+            step releaseStock( order:ref Order, sku:string, reservationId:string )
+
+            # A card charge is not idempotent, so one attempt only - and the money must not be left
+            # in limbo, hence the short deadline. Both are business properties, so both are modelled.
+            @retry( 1 )
+            @timeout( "30s" )
+            step chargeCard( order:ref Order, amount:number ) : string compensate refundCard
+            step refundCard( order:ref Order, chargeId:string )
+
+            # Nothing compensates shipping: once the parcel is gone, it is gone. The absence of a
+            # compensate is itself the statement.
+            step shipOrder( order:ref Order, shippingAddress:string ) : string
+        }
+
         # The published surface of orders: DTOs only, no domain type ever reaches the wire.
         @internal_api(grpc, rest)
         @public_api(grpc, rest, collection="BFF")

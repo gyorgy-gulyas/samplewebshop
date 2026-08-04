@@ -34,6 +34,31 @@ public class SalesServiceHost : BaseServiceHost
         services.AddSingleton<IOrderIF_v2, OrderIF_v2>();
         // the application service behind them
         services.AddSingleton<IOrderService, OrderService>();
+
+        _AddWorkflows(services);
+    }
+
+    // The order fulfilment saga needs a Temporal server, and the point of this sample is that it
+    // runs with nothing installed - so the worker only starts once Temporal:TargetHost is
+    // configured. The workflow, its activities and the generated registration are compiled either
+    // way, so the saga cannot rot unnoticed while the worker is switched off.
+    private void _AddWorkflows(IServiceCollection services)
+    {
+        var temporalHost = _builder.Configuration["Temporal:TargetHost"];
+        if (string.IsNullOrWhiteSpace(temporalHost) == true)
+            return;
+
+        // The activity implementation is resolved from the container by the worker, so it has to be
+        // registered against the GENERATED interface.
+        services.AddSingleton<IFulfilOrderActivities, FulfilOrderActivities>();
+
+        services.UseWorkflows(
+            registry => FulfilOrderRegistration.Register(registry),
+            options =>
+            {
+                options.TargetHost = temporalHost;
+                options.Namespace = _builder.Configuration["Temporal:Namespace"] ?? "default";
+            });
     }
 
     protected override void _BeforeBuild(WebApplication app, Options options)
