@@ -35,29 +35,24 @@ namespace BFF.ApiClientKit
 						}
 						else if( response.Content != null )
 						{
-							var error = await response.Content.ReadFromJsonAsync<Error>();
-							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( error );
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
 						{
-							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-								Status = response.StatusCode.FromHttp(),
-								MessageText = "Not handled reponse in REST client when calling 'CustomerIF_v1_getCustomer'",
-							} );
+							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), "Not handled reponse in REST client when calling 'CustomerIF_v1_getCustomer'" );
 						}
 					}
 					catch (HttpRequestException ex)
 					{
-						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError,
+						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError, new ServiceKit.Net.Error() {
 							MessageText = ex.Message,
 							AdditionalInformation = ex.ToString(),
 						} );
 					}
 					catch (Exception ex)
 					{
-						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = Statuses.InternalError,
+						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 							MessageText = ex.Message,
 							AdditionalInformation = ex.ToString(),
 						} );
@@ -81,29 +76,24 @@ namespace BFF.ApiClientKit
 						}
 						else if( response.Content != null )
 						{
-							var error = await response.Content.ReadFromJsonAsync<Error>();
-							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( error );
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
 						{
-							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-								Status = response.StatusCode.FromHttp(),
-								MessageText = "Not handled reponse in REST client when calling 'CustomerIF_v1_registerCustomer'",
-							} );
+							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), "Not handled reponse in REST client when calling 'CustomerIF_v1_registerCustomer'" );
 						}
 					}
 					catch (HttpRequestException ex)
 					{
-						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError,
+						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError, new ServiceKit.Net.Error() {
 							MessageText = ex.Message,
 							AdditionalInformation = ex.ToString(),
 						} );
 					}
 					catch (Exception ex)
 					{
-						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = Statuses.InternalError,
+						return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 							MessageText = ex.Message,
 							AdditionalInformation = ex.ToString(),
 						} );

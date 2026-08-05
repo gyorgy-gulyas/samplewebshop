@@ -1,0 +1,17 @@
+{
+    "name": "samplewebshop-bff",
+    "version": "1.0.0",
+    "private": true,
+    "description": "The generated TypeScript client for the sample web shop, plus the hand-written rest client it calls into.",
+    "type": "module",
+    "scripts": {
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "axios": "^1.7.7",
+        "decimal.js": "^10.4.3"
+    },
+    "devDependencies": {
+        "typescript": "^5.6.3"
+    }
+}

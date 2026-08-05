@@ -13,7 +13,6 @@ option java_multiple_files = true;
 
 package Sales.OrderManagement;
 
-import "google/protobuf/empty.proto";
 import "servicekit/error.proto";
 
 /// The second version lives next to the first on purpose: this is how a published interface is
@@ -29,9 +28,10 @@ message OrderIF_v2_getOrderRequest {
 }
 
 message OrderIF_v2_getOrderResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		OrderDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		OrderDTO Value = 3;
 	}
 }
 
@@ -40,9 +40,10 @@ message OrderIF_v2_placeOrderRequest {
 }
 
 message OrderIF_v2_placeOrderResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		OrderDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		OrderDTO Value = 3;
 	}
 }
 
@@ -51,10 +52,8 @@ message OrderIF_v2_justOrderRequest {
 }
 
 message OrderIF_v2_justOrderResponse {
-	oneof result {
-		google.protobuf.Empty Success = 1;
-		ServiceKit.Protos.Error Error = 2;
-	}
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 }
 
 enum OrderStatuses {

@@ -16,7 +16,7 @@ namespace CustomerManagement.Customers.Context.Implementations
         {
             var found = await _service.getCustomer(ctx, customerId).ConfigureAwait(false);
             if (found.IsFailed())
-                return new(found.Error);
+                return new(found);
 
             return new(ToDto(found.Value));
         }
@@ -25,7 +25,7 @@ namespace CustomerManagement.Customers.Context.Implementations
         {
             var created = await _service.registerCustomer(ctx, name, email).ConfigureAwait(false);
             if (created.IsFailed())
-                return new(created.Error);
+                return new(created);
 
             return new(ToDto(created.Value));
         }

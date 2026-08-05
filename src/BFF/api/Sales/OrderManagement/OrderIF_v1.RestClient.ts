@@ -6,9 +6,9 @@
 // </auto-generated>
 
 import * as OrderIF_v1 from "../../../types/Sales/OrderManagement/OrderIF_v1";
-import { BFFRestClient } from "../../../api/BFFRestClient";
-import { AxiosError } from 'axios';
 import Decimal from "decimal.js";
+import { AxiosError } from 'axios';
+import { BFFRestClient } from "../../../api/BFFRestClient";
 
 const rest = BFFRestClient.getInstance()
 
@@ -52,7 +52,7 @@ export const OrderIF = {
 				const extraHeaders = rest.getRequestHeaders("Sales.OrderManagement.setPrice");
 
 				const response = await rest.axios.post<OrderIF_v1.OrderItemDTO>(
-					`/sales/ordermanagement/orderif/v1/setprice?price=${$price.toString()}`,
+					`/sales/ordermanagement/orderif/v1/setprice?price=${price.toString()}`,
 					orderItem,
 					{ headers: { ...extraHeaders, 'Content-Type': 'application/json' } }
 				);

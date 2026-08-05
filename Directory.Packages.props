@@ -5,16 +5,16 @@
 
   <ItemGroup>
     <!-- MicronIQ platform packages, built from the sibling repositories into the local dev feed -->
-    <PackageVersion Include="PolyPersist.Net" Version="1.0.18" />
-    <PackageVersion Include="PolyPersist.Net.Transactions" Version="1.0.18" />
-    <PackageVersion Include="PolyPersist.Net.DocumentStore.Memory" Version="1.0.18" />
-    <PackageVersion Include="PolyPersist.Net.DocumentStore.MongoDB" Version="1.0.18" />
-    <PackageVersion Include="PolyPersist.Net.BlobStore.Memory" Version="1.0.18" />
-    <PackageVersion Include="PolyPersist.Net.ColumnStore.Memory" Version="1.0.18" />
-    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.7" />
-    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.7" />
-    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.7" />
-    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.7" />
+    <PackageVersion Include="PolyPersist.Net" Version="1.0.19" />
+    <PackageVersion Include="PolyPersist.Net.Transactions" Version="1.0.19" />
+    <PackageVersion Include="PolyPersist.Net.DocumentStore.Memory" Version="1.0.19" />
+    <PackageVersion Include="PolyPersist.Net.DocumentStore.MongoDB" Version="1.0.19" />
+    <PackageVersion Include="PolyPersist.Net.BlobStore.Memory" Version="1.0.19" />
+    <PackageVersion Include="PolyPersist.Net.ColumnStore.Memory" Version="1.0.19" />
+    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.8" />
+    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.8" />
+    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.8" />
+    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.8" />
   </ItemGroup>
 
   <ItemGroup>

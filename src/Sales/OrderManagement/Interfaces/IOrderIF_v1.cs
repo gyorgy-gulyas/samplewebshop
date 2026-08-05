@@ -195,14 +195,17 @@ namespace Sales.OrderManagement
 			public virtual bool Validate( IList<IValidationError> errors )
 			{
 				int before = errors.Count;
+				ValidateInto( errors, string.Empty );
+				return errors.Count == before;
+			}
 
+			public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
+			{
 				if (quantity <= 0)
-					errors.Add( new ValidationError { TypeOfEntity = "OrderItemDTO", MemberOfEntity = "quantity", ErrorText = "quantity must satisfy: value > 0" } );
+					errors.Add( new ValidationError { TypeOfEntity = "OrderItemDTO", MemberOfEntity = "quantity", Path = pathPrefix + "quantity", ErrorText = "quantity must satisfy: value > 0" } );
 
 				if (unitPrice < 0)
-					errors.Add( new ValidationError { TypeOfEntity = "OrderItemDTO", MemberOfEntity = "unitPrice", ErrorText = "unitPrice must satisfy: value >= 0" } );
-
-				return errors.Count == before;
+					errors.Add( new ValidationError { TypeOfEntity = "OrderItemDTO", MemberOfEntity = "unitPrice", Path = pathPrefix + "unitPrice", ErrorText = "unitPrice must satisfy: value >= 0" } );
 			}
 			#endregion Validation
 
@@ -236,7 +239,7 @@ namespace Sales.OrderManagement
 			#endregion GrpcMapping
 		}
 
-		public partial class OrderDTO : IEquatable<OrderDTO>
+		public partial class OrderDTO : IEquatable<OrderDTO>, IValidable
 		{
 			public partial class CustomerDataDTO : IEquatable<CustomerDataDTO>
 			{
@@ -365,6 +368,24 @@ namespace Sales.OrderManagement
 				return hash.ToHashCode();
 			}
 			#endregion Equals & HashCode 
+
+			#region Validation
+			public virtual bool Validate( IList<IValidationError> errors )
+			{
+				int before = errors.Count;
+				ValidateInto( errors, string.Empty );
+				return errors.Count == before;
+			}
+
+			public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
+			{
+				if (items != null)
+				{
+					for (int index = 0; index < items.Count; index++)
+						items[index]?.ValidateInto( errors, $"{pathPrefix}items[{index}]." );
+				}
+			}
+			#endregion Validation
 
 			#region GrpcMapping
 			public static Protos.OrderIF_v1.OrderDTO ToGrpc( IOrderIF_v1.OrderDTO @this )

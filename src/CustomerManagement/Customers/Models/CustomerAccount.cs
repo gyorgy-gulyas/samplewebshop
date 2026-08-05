@@ -104,14 +104,21 @@ namespace CustomerManagement.Customers.Customer
 		public virtual bool Validate( IList<IValidationError> errors )
 		{
 			int before = errors.Count;
+			ValidateInto( errors, string.Empty );
+			return errors.Count == before;
+		}
 
+		public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
+		{
 			if (name.Length <= 1)
-				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "name", ErrorText = "name must satisfy: len(name) > 1" } );
+				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "name", Path = pathPrefix + "name", ErrorText = "name must satisfy: len(name) > 1" } );
 
 			if (!Regex.IsMatch(email, "[^@ ]+@[^@ ]+\\.[^@ ]+"))
-				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "email", ErrorText = "email must satisfy: matches(email, \"[^@ ]+@[^@ ]+\\\\.[^@ ]+\")" } );
+				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "email", Path = pathPrefix + "email", ErrorText = "email must satisfy: matches(email, \"[^@ ]+@[^@ ]+\\\\.[^@ ]+\")" } );
 
-			return errors.Count == before;
+			billingAddress?.ValidateInto( errors, pathPrefix + "billingAddress." );
+
+			shippingAddress?.ValidateInto( errors, pathPrefix + "shippingAddress." );
 		}
 		#endregion Validation
 	}

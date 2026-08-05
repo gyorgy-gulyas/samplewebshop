@@ -23,26 +23,17 @@ namespace Sales.OrderManagement.Context.Implementations
         {
             var order = await _context.Orders.Find(orderId, orderId).ConfigureAwait(false);
             if (order == null)
-                return new(new Error() { Status = Statuses.NotFound, MessageText = $"Order '{orderId}' does not exist" });
+                return new(Statuses.NotFound, $"Order '{orderId}' does not exist");
 
             return new(order);
         }
 
         async Task<Response<OrderHeader>> IOrderService.placeOrder(CallingContext ctx, OrderHeader order)
         {
-            // The model's own rules decide, not this method: quantity > 0 and the prices are declared
-            // in the .d3 as validate rules, and the generated Validate is what enforces them.
-            var errors = new List<PolyPersist.IValidationError>();
-            if (order.Validate(errors) == false)
-            {
-                return new(new Error()
-                {
-                    Status = Statuses.BadRequest,
-                    MessageText = "The order is not valid",
-                    AdditionalInformation = string.Join("; ", errors.Select(error => error.ErrorText)),
-                });
-            }
-
+            // No hand-written validation here: the store validates before it writes, and the generated
+            // controller turns the resulting ValidationExeption into a 400 carrying every broken field
+            // with its path. Checking it here as well would only produce a second, poorer answer -
+            // one sentence instead of a list a form can bind to.
             order.id = string.IsNullOrEmpty(order.id) ? Guid.NewGuid().ToString() : order.id;
             order.status = OrderStatuses.Released;
 

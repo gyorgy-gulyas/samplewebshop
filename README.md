@@ -45,7 +45,13 @@ overwritten on every run. After changing a `.d3`:
     python -m d3i -i <repo>/src/webshop.d3 -e typescript:client -o <repo>/src
 
 Hand-written code lives in `Context/Implementations` and `Service`, plus the `*.Custom.cs` partials
-that bind the aggregates to storage. The emitter never writes those.
+that bind the aggregates to storage. On the client side it is `src/BFF/api/BFFRestClient.ts` and
+`src/BFF/api/ApiError.ts`. The emitter never writes those.
+
+The generated TypeScript is checked the same way the generated C# is compiled — nothing had ever
+type-checked it, which is how three separate pieces of broken codegen went unnoticed:
+
+    cd src/BFF && npm install && npm run typecheck
 
 ## What is still missing
 

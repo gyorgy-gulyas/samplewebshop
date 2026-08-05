@@ -13,7 +13,6 @@ option java_multiple_files = true;
 
 package Sales.OrderManagement;
 
-import "google/protobuf/empty.proto";
 import "servicekit/error.proto";
 
 /// The published surface of orders: DTOs only, no domain type ever reaches the wire.
@@ -29,9 +28,10 @@ message OrderIF_v1_getOrderRequest {
 }
 
 message OrderIF_v1_getOrderResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		OrderDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		OrderDTO Value = 3;
 	}
 }
 
@@ -40,9 +40,10 @@ message OrderIF_v1_placeOrderRequest {
 }
 
 message OrderIF_v1_placeOrderResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		OrderDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		OrderDTO Value = 3;
 	}
 }
 
@@ -52,9 +53,10 @@ message OrderIF_v1_setPriceRequest {
 }
 
 message OrderIF_v1_setPriceResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		OrderItemDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		OrderItemDTO Value = 3;
 	}
 }
 
@@ -63,10 +65,8 @@ message OrderIF_v1_justOrderRequest {
 }
 
 message OrderIF_v1_justOrderResponse {
-	oneof result {
-		google.protobuf.Empty Success = 1;
-		ServiceKit.Protos.Error Error = 2;
-	}
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 }
 
 enum OrderStatuses {

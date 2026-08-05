@@ -11,6 +11,7 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using ServiceKit.Net;
+using System.Linq;
 
 namespace CustomerManagement.Customers
 {
@@ -23,6 +24,28 @@ namespace CustomerManagement.Customers
 		{
 			_logger = logger; 
 			_service = service; 
+		}
+
+		private static (Statuses Status, IList<ServiceKit.Net.Error> Errors) _MapFailure( Exception ex )
+		{
+			// a broken field is the caller's to fix, and every rule that failed is worth reporting
+			if( ex is PolyPersist.Net.Common.ValidationExeption validationExeption )
+				return (Statuses.BadRequest, validationExeption.ValidationErrors.Select( validationError => new ServiceKit.Net.Error() {
+					Path = validationError.Path,
+					MessageText = validationError.ErrorText,
+					AdditionalInformation = $"{validationError.TypeOfEntity}.{validationError.MemberOfEntity}",
+				} ).ToList<ServiceKit.Net.Error>());
+
+			if( ex is PolyPersist.Net.Common.NotFoundException )
+				return (Statuses.NotFound, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			if( ex is PolyPersist.Net.Common.DuplicateKeyException
+				|| ex is PolyPersist.Net.Common.ConcurrencyConflictException
+				|| ex is PolyPersist.Net.Common.InvalidRequestException )
+				return (Statuses.BadRequest, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			// anything else really is ours: the caller can do nothing about it, so say so plainly
+			return (Statuses.InternalError, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message, AdditionalInformation = ex.ToString() } });
 		}
 
 		public override async Task<CustomerIF_v1_getCustomerResponse> getCustomer( CustomerIF_v1_getCustomerRequest request, ServerCallContext grpcContext)
@@ -42,42 +65,38 @@ namespace CustomerManagement.Customers
 					{
 						if( response.HasValue() == true )
 						{
-							var result = new CustomerIF_v1_getCustomerResponse();
+							var result = new CustomerIF_v1_getCustomerResponse() { Status = ServiceKit.Protos.Statuses.Ok };
 							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
 						{
-							return new CustomerIF_v1_getCustomerResponse {
-								Error = new () {
-									Status = ServiceKit.Protos.Statuses.NotImplemented,
-									MessageText = "Not handled reponse in GRPC Controller when calling 'CustomerIF_v1.getCustomer'",
-								}
-							};
+							return _GrpcFailure_getCustomer( Statuses.NotImplemented, new [] { new ServiceKit.Net.Error() { MessageText = "Not handled reponse in GRPC Controller when calling 'CustomerIF_v1.getCustomer'" } } );
 						}
 					}
 					else
 					{
-						return new CustomerIF_v1_getCustomerResponse {
-							Error = new () {
-								Status = response.Error.Status.ToGrpc(),
-								MessageText = response.Error.MessageText,
-								AdditionalInformation = response.Error.AdditionalInformation
-							}
-						};
+						return _GrpcFailure_getCustomer( response.Status, response.Errors );
 					}
 				}
 				catch(Exception ex)
 				{
-					return new CustomerIF_v1_getCustomerResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.InternalError,
-							MessageText = ex.Message,
-							AdditionalInformation = ex.ToString()
-						}
-					};
+					var failure = _MapFailure( ex );
+					return _GrpcFailure_getCustomer( failure.Status, failure.Errors );
 				}
 			}
+		}
+
+		private static CustomerIF_v1_getCustomerResponse _GrpcFailure_getCustomer( Statuses status, IEnumerable<ServiceKit.Net.Error> errors )
+		{
+			var failure = new CustomerIF_v1_getCustomerResponse() { Status = status.ToGrpc() };
+			foreach( var error in errors )
+				failure.Errors.Add( new ServiceKit.Protos.Error() {
+					Path = error.Path ?? string.Empty,
+					MessageText = error.MessageText ?? string.Empty,
+					AdditionalInformation = error.AdditionalInformation ?? string.Empty,
+				} );
+			return failure;
 		}
 
 		public override async Task<CustomerIF_v1_registerCustomerResponse> registerCustomer( CustomerIF_v1_registerCustomerRequest request, ServerCallContext grpcContext)
@@ -99,42 +118,38 @@ namespace CustomerManagement.Customers
 					{
 						if( response.HasValue() == true )
 						{
-							var result = new CustomerIF_v1_registerCustomerResponse();
+							var result = new CustomerIF_v1_registerCustomerResponse() { Status = ServiceKit.Protos.Statuses.Ok };
 							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
 						{
-							return new CustomerIF_v1_registerCustomerResponse {
-								Error = new () {
-									Status = ServiceKit.Protos.Statuses.NotImplemented,
-									MessageText = "Not handled reponse in GRPC Controller when calling 'CustomerIF_v1.registerCustomer'",
-								}
-							};
+							return _GrpcFailure_registerCustomer( Statuses.NotImplemented, new [] { new ServiceKit.Net.Error() { MessageText = "Not handled reponse in GRPC Controller when calling 'CustomerIF_v1.registerCustomer'" } } );
 						}
 					}
 					else
 					{
-						return new CustomerIF_v1_registerCustomerResponse {
-							Error = new () {
-								Status = response.Error.Status.ToGrpc(),
-								MessageText = response.Error.MessageText,
-								AdditionalInformation = response.Error.AdditionalInformation
-							}
-						};
+						return _GrpcFailure_registerCustomer( response.Status, response.Errors );
 					}
 				}
 				catch(Exception ex)
 				{
-					return new CustomerIF_v1_registerCustomerResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.InternalError,
-							MessageText = ex.Message,
-							AdditionalInformation = ex.ToString()
-						}
-					};
+					var failure = _MapFailure( ex );
+					return _GrpcFailure_registerCustomer( failure.Status, failure.Errors );
 				}
 			}
+		}
+
+		private static CustomerIF_v1_registerCustomerResponse _GrpcFailure_registerCustomer( Statuses status, IEnumerable<ServiceKit.Net.Error> errors )
+		{
+			var failure = new CustomerIF_v1_registerCustomerResponse() { Status = status.ToGrpc() };
+			foreach( var error in errors )
+				failure.Errors.Add( new ServiceKit.Protos.Error() {
+					Path = error.Path ?? string.Empty,
+					MessageText = error.MessageText ?? string.Empty,
+					AdditionalInformation = error.AdditionalInformation ?? string.Empty,
+				} );
+			return failure;
 		}
 	}
 }

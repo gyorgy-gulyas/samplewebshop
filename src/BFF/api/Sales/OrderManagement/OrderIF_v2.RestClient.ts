@@ -5,9 +5,9 @@
 // Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
 
-import { BFFRestClient } from "../../../api/BFFRestClient";
 import * as OrderIF_v2 from "../../../types/Sales/OrderManagement/OrderIF_v2";
 import { AxiosError } from 'axios';
+import { BFFRestClient } from "../../../api/BFFRestClient";
 
 const rest = BFFRestClient.getInstance()
 

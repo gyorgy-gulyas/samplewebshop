@@ -15,6 +15,7 @@ using Serilog.Context;
 using ServiceKit.Net;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Linq;
 using System.Net.Mime;
 
 namespace Sales.OrderManagement
@@ -33,15 +34,37 @@ namespace Sales.OrderManagement
 			_service = service; 
 		}
 
+		private static (Statuses Status, IList<ServiceKit.Net.Error> Errors) _MapFailure( Exception ex )
+		{
+			// a broken field is the caller's to fix, and every rule that failed is worth reporting
+			if( ex is PolyPersist.Net.Common.ValidationExeption validationExeption )
+				return (Statuses.BadRequest, validationExeption.ValidationErrors.Select( validationError => new ServiceKit.Net.Error() {
+					Path = validationError.Path,
+					MessageText = validationError.ErrorText,
+					AdditionalInformation = $"{validationError.TypeOfEntity}.{validationError.MemberOfEntity}",
+				} ).ToList<ServiceKit.Net.Error>());
+
+			if( ex is PolyPersist.Net.Common.NotFoundException )
+				return (Statuses.NotFound, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			if( ex is PolyPersist.Net.Common.DuplicateKeyException
+				|| ex is PolyPersist.Net.Common.ConcurrencyConflictException
+				|| ex is PolyPersist.Net.Common.InvalidRequestException )
+				return (Statuses.BadRequest, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			// anything else really is ours: the caller can do nothing about it, so say so plainly
+			return (Statuses.InternalError, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message, AdditionalInformation = ex.ToString() } });
+		}
+
 		[HttpGet( "getorder/{orderId}" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
-		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(IList<ServiceKit.Net.Error>) )]
 		public async Task<IActionResult> getOrder( [FromRoute] string orderId)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.getOrder" ))
@@ -60,17 +83,18 @@ namespace Sales.OrderManagement
 						}
 						else
 						{
-							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v1.getOrder'" );
+							return StatusCode(Statuses.NotImplemented.ToHttp(), new List<ServiceKit.Net.Error>() { new() { MessageText = "Not handled reponse in REST Controller when calling 'OrderIF_v1.getOrder'" } } );
 						}
 					}
 					else
 					{
-						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+						return StatusCode(response.Status.ToHttp(), response.Errors);
 					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
+					var failure = _MapFailure( ex );
+					return StatusCode(failure.Status.ToHttp(), failure.Errors);
 				}
 			}
 		}
@@ -78,12 +102,12 @@ namespace Sales.OrderManagement
 		[HttpPost( "placeorder" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderDTO) )]
-		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(IList<ServiceKit.Net.Error>) )]
 		public async Task<IActionResult> placeOrder( [FromBody] IOrderIF_v1.OrderDTO order)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.placeOrder" ))
@@ -102,17 +126,18 @@ namespace Sales.OrderManagement
 						}
 						else
 						{
-							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v1.placeOrder'" );
+							return StatusCode(Statuses.NotImplemented.ToHttp(), new List<ServiceKit.Net.Error>() { new() { MessageText = "Not handled reponse in REST Controller when calling 'OrderIF_v1.placeOrder'" } } );
 						}
 					}
 					else
 					{
-						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+						return StatusCode(response.Status.ToHttp(), response.Errors);
 					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
+					var failure = _MapFailure( ex );
+					return StatusCode(failure.Status.ToHttp(), failure.Errors);
 				}
 			}
 		}
@@ -120,12 +145,12 @@ namespace Sales.OrderManagement
 		[HttpPost( "setprice" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "", typeof(IOrderIF_v1.OrderItemDTO) )]
-		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(IList<ServiceKit.Net.Error>) )]
 		public async Task<IActionResult> setPrice( [FromBody] IOrderIF_v1.OrderItemDTO orderItem,  [FromQuery] decimal price)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.setPrice" ))
@@ -144,17 +169,18 @@ namespace Sales.OrderManagement
 						}
 						else
 						{
-							return StatusCode(StatusCodes.Status501NotImplemented, "Not handled reponse in REST Controller when calling 'OrderIF_v1.setPrice'" );
+							return StatusCode(Statuses.NotImplemented.ToHttp(), new List<ServiceKit.Net.Error>() { new() { MessageText = "Not handled reponse in REST Controller when calling 'OrderIF_v1.setPrice'" } } );
 						}
 					}
 					else
 					{
-						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+						return StatusCode(response.Status.ToHttp(), response.Errors);
 					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
+					var failure = _MapFailure( ex );
+					return StatusCode(failure.Status.ToHttp(), failure.Errors);
 				}
 			}
 		}
@@ -162,12 +188,12 @@ namespace Sales.OrderManagement
 		[HttpPost( "justorder/{orderId}" )] 
 		[Produces( MediaTypeNames.Application.Json )]
 		[SwaggerResponse( StatusCodes.Status200OK, "Ok" )]
-		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(ServiceKit.Net.Error) )]
-		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(ServiceKit.Net.Error) )]
+		[SwaggerResponse( StatusCodes.Status400BadRequest, nameof(StatusCodes.Status400BadRequest), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status408RequestTimeout, nameof(StatusCodes.Status408RequestTimeout), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status404NotFound, nameof(StatusCodes.Status404NotFound), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status401Unauthorized, nameof(StatusCodes.Status401Unauthorized), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status501NotImplemented, nameof(StatusCodes.Status501NotImplemented), typeof(IList<ServiceKit.Net.Error>) )]
+		[SwaggerResponse( StatusCodes.Status500InternalServerError, nameof(StatusCodes.Status500InternalServerError), typeof(IList<ServiceKit.Net.Error>) )]
 		public async Task<IActionResult> justOrder( [FromRoute] string orderId)
 		{
 			using(LogContext.PushProperty( "Scope", "OrderIF_v1.justOrder" ))
@@ -184,12 +210,13 @@ namespace Sales.OrderManagement
 					}
 					else
 					{
-						return StatusCode(response.Error.Status.ToHttp(), response.Error);
+						return StatusCode(response.Status.ToHttp(), response.Errors);
 					}
 				}
 				catch(Exception ex)
 				{
-					return StatusCode(StatusCodes.Status500InternalServerError, new Error() { Status = Statuses.InternalError, MessageText = ex.Message, AdditionalInformation = ex.ToString()} );
+					var failure = _MapFailure( ex );
+					return StatusCode(failure.Status.ToHttp(), failure.Errors);
 				}
 			}
 		}

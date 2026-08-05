@@ -45,29 +45,24 @@ namespace Sales.OrderManagement
 				}
 				else if( response.Content != null )
 				{
-					var error = await response.Content.ReadFromJsonAsync<Error>();
-					return Response<IOrderIF_v2.OrderDTO>.Failure( error );
+					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+					return Response<IOrderIF_v2.OrderDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 				}
 				else
 				{
-					return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v2_getOrder'",
-					} );
+					return Response<IOrderIF_v2.OrderDTO>.Failure( response.StatusCode.FromHttp(), "Not handled reponse in REST client when calling 'OrderIF_v2_getOrder'" );
 				}
 			}
 			catch (HttpRequestException ex)
 			{
-				return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError,
+				return Response<IOrderIF_v2.OrderDTO>.Failure( ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<IOrderIF_v2.OrderDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -96,29 +91,24 @@ namespace Sales.OrderManagement
 				}
 				else if( response.Content != null )
 				{
-					var error = await response.Content.ReadFromJsonAsync<Error>();
-					return Response<IOrderIF_v2.OrderDTO>.Failure( error );
+					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+					return Response<IOrderIF_v2.OrderDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 				}
 				else
 				{
-					return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v2_placeOrder'",
-					} );
+					return Response<IOrderIF_v2.OrderDTO>.Failure( response.StatusCode.FromHttp(), "Not handled reponse in REST client when calling 'OrderIF_v2_placeOrder'" );
 				}
 			}
 			catch (HttpRequestException ex)
 			{
-				return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError,
+				return Response<IOrderIF_v2.OrderDTO>.Failure( ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<IOrderIF_v2.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<IOrderIF_v2.OrderDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -143,29 +133,24 @@ namespace Sales.OrderManagement
 				}
 				else if( response.Content != null )
 				{
-					var error = await response.Content.ReadFromJsonAsync<Error>();
-					return Response.Failure( error );
+					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+					return Response.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 				}
 				else
 				{
-					return Response.Failure( new ServiceKit.Net.Error() {
-						Status = response.StatusCode.FromHttp(),
-						MessageText = "Not handled reponse in REST client when calling 'OrderIF_v2_justOrder'",
-					} );
+					return Response.Failure( response.StatusCode.FromHttp(), "Not handled reponse in REST client when calling 'OrderIF_v2_justOrder'" );
 				}
 			}
 			catch (HttpRequestException ex)
 			{
-				return Response.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError,
+				return Response.Failure( ex.StatusCode.HasValue ? ex.StatusCode.Value.FromHttp() : Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );

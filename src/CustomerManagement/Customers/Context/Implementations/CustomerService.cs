@@ -17,7 +17,7 @@ namespace CustomerManagement.Customers.Context.Implementations
         {
             var customer = await _context.Customers.Find(customerId, customerId).ConfigureAwait(false);
             if (customer == null)
-                return new(new Error() { Status = Statuses.NotFound, MessageText = $"Customer {customerId} does not exist" });
+                return new(Statuses.NotFound, $"Customer {customerId} does not exist");
 
             return new(customer);
         }
@@ -34,18 +34,8 @@ namespace CustomerManagement.Customers.Context.Implementations
             };
 
             // The e-mail pattern and the name length are model rules, declared in the .d3 as validate
-            // expressions - this method only decides what to do when they are broken.
-            var errors = new List<PolyPersist.IValidationError>();
-            if (customer.Validate(errors) == false)
-            {
-                return new(new Error()
-                {
-                    Status = Statuses.BadRequest,
-                    MessageText = "The customer is not valid",
-                    AdditionalInformation = string.Join("; ", errors.Select(error => error.ErrorText)),
-                });
-            }
-
+            // expressions. The store enforces them before it writes and the generated controller turns
+            // the failure into a 400 with every broken field named - so this method does not repeat it.
             await _context.Customers.Insert(customer).ConfigureAwait(false);
             return new(customer);
         }

@@ -18,7 +18,7 @@ namespace Sales.OrderManagement.Context.Implementations
         {
             var found = await _service.getOrder(ctx, orderId).ConfigureAwait(false);
             if (found.IsFailed())
-                return new(found.Error);
+                return new(found);
 
             return new(ToDto(found.Value));
         }
@@ -27,7 +27,7 @@ namespace Sales.OrderManagement.Context.Implementations
         {
             var placed = await _service.placeOrder(ctx, FromDto(order)).ConfigureAwait(false);
             if (placed.IsFailed())
-                return new(placed.Error);
+                return new(placed);
 
             return new(ToDto(placed.Value));
         }

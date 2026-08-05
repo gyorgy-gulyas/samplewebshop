@@ -66,17 +66,20 @@ namespace Sales.OrderManagement.Order
 		public virtual bool Validate( IList<IValidationError> errors )
 		{
 			int before = errors.Count;
+			ValidateInto( errors, string.Empty );
+			return errors.Count == before;
+		}
 
+		public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
+		{
 			if (quantity <= 0)
-				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "quantity", ErrorText = "quantity must satisfy: value > 0" } );
+				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "quantity", Path = pathPrefix + "quantity", ErrorText = "quantity must satisfy: value > 0" } );
 
 			if (unitPrice < 0)
-				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "unitPrice", ErrorText = "unitPrice must satisfy: value >= 0" } );
+				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "unitPrice", Path = pathPrefix + "unitPrice", ErrorText = "unitPrice must satisfy: value >= 0" } );
 
 			if (subTotalPrice < 0)
-				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "subTotalPrice", ErrorText = "subTotalPrice must satisfy: value >= 0" } );
-
-			return errors.Count == before;
+				errors.Add( new ValidationError { TypeOfEntity = "OrderItem", MemberOfEntity = "subTotalPrice", Path = pathPrefix + "subTotalPrice", ErrorText = "subTotalPrice must satisfy: value >= 0" } );
 		}
 		#endregion Validation
 	}

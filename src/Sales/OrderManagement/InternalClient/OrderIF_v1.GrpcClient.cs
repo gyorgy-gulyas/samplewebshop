@@ -12,6 +12,7 @@ using Sales.OrderManagement;
 using Sales.OrderManagement.Protos.OrderIF_v1;
 using ServiceKit.Net;
 using System.Globalization;
+using System.Linq;
 
 namespace Sales.OrderManagement
 {
@@ -40,40 +41,28 @@ namespace Sales.OrderManagement
 				var grpc_response = await _client.getOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "getOrder" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response<IOrderIF_v1.OrderDTO>.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
+
+				if( grpc_response.ResultCase == OrderIF_v1_getOrderResponse.ResultOneofCase.Value )
 				{
-					case OrderIF_v1_getOrderResponse.ResultOneofCase.Value:
-						IOrderIF_v1.OrderDTO value;
-						value = grpc_response.Value != null ? IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
-						return Response<IOrderIF_v1.OrderDTO>.Success( value );
-
-					case OrderIF_v1_getOrderResponse.ResultOneofCase.Error:
-						return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case OrderIF_v1_getOrderResponse.ResultOneofCase.None:
-					default:
-						return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_getOrder'",
-						} );
+					IOrderIF_v1.OrderDTO value;
+					value = grpc_response.Value != null ? IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+					return Response<IOrderIF_v1.OrderDTO>.Success( value );
 				}
+
+				return Response<IOrderIF_v1.OrderDTO>.Failure( Statuses.NotImplemented, "Not handled reponse in GRPC client when calling 'OrderIF_v1_getOrder'" );
 			}
 			catch (RpcException ex)
 			{
-				return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response<IOrderIF_v1.OrderDTO>.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<IOrderIF_v1.OrderDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -93,40 +82,28 @@ namespace Sales.OrderManagement
 				var grpc_response = await _client.placeOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "placeOrder" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response<IOrderIF_v1.OrderDTO>.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
+
+				if( grpc_response.ResultCase == OrderIF_v1_placeOrderResponse.ResultOneofCase.Value )
 				{
-					case OrderIF_v1_placeOrderResponse.ResultOneofCase.Value:
-						IOrderIF_v1.OrderDTO value;
-						value = grpc_response.Value != null ? IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
-						return Response<IOrderIF_v1.OrderDTO>.Success( value );
-
-					case OrderIF_v1_placeOrderResponse.ResultOneofCase.Error:
-						return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case OrderIF_v1_placeOrderResponse.ResultOneofCase.None:
-					default:
-						return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_placeOrder'",
-						} );
+					IOrderIF_v1.OrderDTO value;
+					value = grpc_response.Value != null ? IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+					return Response<IOrderIF_v1.OrderDTO>.Success( value );
 				}
+
+				return Response<IOrderIF_v1.OrderDTO>.Failure( Statuses.NotImplemented, "Not handled reponse in GRPC client when calling 'OrderIF_v1_placeOrder'" );
 			}
 			catch (RpcException ex)
 			{
-				return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response<IOrderIF_v1.OrderDTO>.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<IOrderIF_v1.OrderDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<IOrderIF_v1.OrderDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -147,40 +124,28 @@ namespace Sales.OrderManagement
 				var grpc_response = await _client.setPriceAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "setPrice" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response<IOrderIF_v1.OrderItemDTO>.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
+
+				if( grpc_response.ResultCase == OrderIF_v1_setPriceResponse.ResultOneofCase.Value )
 				{
-					case OrderIF_v1_setPriceResponse.ResultOneofCase.Value:
-						IOrderIF_v1.OrderItemDTO value;
-						value = grpc_response.Value != null ? IOrderIF_v1.OrderItemDTO.FromGrpc( grpc_response.Value ) : null;
-						return Response<IOrderIF_v1.OrderItemDTO>.Success( value );
-
-					case OrderIF_v1_setPriceResponse.ResultOneofCase.Error:
-						return Response<IOrderIF_v1.OrderItemDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case OrderIF_v1_setPriceResponse.ResultOneofCase.None:
-					default:
-						return Response<IOrderIF_v1.OrderItemDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_setPrice'",
-						} );
+					IOrderIF_v1.OrderItemDTO value;
+					value = grpc_response.Value != null ? IOrderIF_v1.OrderItemDTO.FromGrpc( grpc_response.Value ) : null;
+					return Response<IOrderIF_v1.OrderItemDTO>.Success( value );
 				}
+
+				return Response<IOrderIF_v1.OrderItemDTO>.Failure( Statuses.NotImplemented, "Not handled reponse in GRPC client when calling 'OrderIF_v1_setPrice'" );
 			}
 			catch (RpcException ex)
 			{
-				return Response<IOrderIF_v1.OrderItemDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response<IOrderIF_v1.OrderItemDTO>.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<IOrderIF_v1.OrderItemDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<IOrderIF_v1.OrderItemDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -200,43 +165,35 @@ namespace Sales.OrderManagement
 				var grpc_response = await _client.justOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v1", "justOrder" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
-				{
-					case OrderIF_v1_justOrderResponse.ResultOneofCase.Success:
-						return Response.Success();
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
 
-					case OrderIF_v1_justOrderResponse.ResultOneofCase.Error:
-						return Response.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case OrderIF_v1_justOrderResponse.ResultOneofCase.None:
-					default:
-						return Response.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'OrderIF_v1_justOrder'",
-						} );
-				}
+				return Response.Success();
 			}
 			catch (RpcException ex)
 			{
-				return Response.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 		}
 
+
+		private static ServiceKit.Net.Error[] _FromGrpcErrors( IEnumerable<ServiceKit.Protos.Error> errors )
+		{
+			return errors.Select( error => new ServiceKit.Net.Error() {
+				Path = error.Path,
+				MessageText = error.MessageText,
+				AdditionalInformation = error.AdditionalInformation,
+			} ).ToArray();
+		}
 	}
 }

@@ -11,6 +11,7 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.Client;
 using ServiceKit.Net;
+using System.Linq;
 
 namespace CustomerManagement.Customers
 {
@@ -38,40 +39,28 @@ namespace CustomerManagement.Customers
 				var grpc_response = await _client.getCustomerAsync( request, new CallOptions(ctx.ToGrpcMetadata( "CustomerManagement.CustomersCustomerIF_v1", "getCustomer" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response<ICustomerIF_v1.CustomerDTO>.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
+
+				if( grpc_response.ResultCase == CustomerIF_v1_getCustomerResponse.ResultOneofCase.Value )
 				{
-					case CustomerIF_v1_getCustomerResponse.ResultOneofCase.Value:
-						ICustomerIF_v1.CustomerDTO value;
-						value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
-						return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
-
-					case CustomerIF_v1_getCustomerResponse.ResultOneofCase.Error:
-						return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case CustomerIF_v1_getCustomerResponse.ResultOneofCase.None:
-					default:
-						return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'CustomerIF_v1_getCustomer'",
-						} );
+					ICustomerIF_v1.CustomerDTO value;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
+
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.NotImplemented, "Not handled reponse in GRPC client when calling 'CustomerIF_v1_getCustomer'" );
 			}
 			catch (RpcException ex)
 			{
-				return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
@@ -92,45 +81,42 @@ namespace CustomerManagement.Customers
 				var grpc_response = await _client.registerCustomerAsync( request, new CallOptions(ctx.ToGrpcMetadata( "CustomerManagement.CustomersCustomerIF_v1", "registerCustomer" ))).ResponseAsync;
 
 				// fill response
-				switch( grpc_response.ResultCase )
+				if( grpc_response.Status != ServiceKit.Protos.Statuses.Ok )
+					return Response<ICustomerIF_v1.CustomerDTO>.Failure( grpc_response.Status.FromGrpc(), _FromGrpcErrors( grpc_response.Errors ) );
+
+				if( grpc_response.ResultCase == CustomerIF_v1_registerCustomerResponse.ResultOneofCase.Value )
 				{
-					case CustomerIF_v1_registerCustomerResponse.ResultOneofCase.Value:
-						ICustomerIF_v1.CustomerDTO value;
-						value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
-						return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
-
-					case CustomerIF_v1_registerCustomerResponse.ResultOneofCase.Error:
-						return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = grpc_response.Error.MessageText,
-							AdditionalInformation = grpc_response.Error.AdditionalInformation,
-						} );
-
-					case CustomerIF_v1_registerCustomerResponse.ResultOneofCase.None:
-					default:
-						return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-							Status = grpc_response.Error.Status.FromGrpc(),
-							MessageText = "Not handled reponse in GRPC client when calling 'CustomerIF_v1_registerCustomer'",
-						} );
+					ICustomerIF_v1.CustomerDTO value;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
+
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.NotImplemented, "Not handled reponse in GRPC client when calling 'CustomerIF_v1_registerCustomer'" );
 			}
 			catch (RpcException ex)
 			{
-				return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = ex.StatusCode.FromGrpc(),
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( ex.StatusCode.FromGrpc(), new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 			catch (Exception ex)
 			{
-				return Response<ICustomerIF_v1.CustomerDTO>.Failure( new ServiceKit.Net.Error() {
-					Status = Statuses.InternalError,
+				return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, new ServiceKit.Net.Error() {
 					MessageText = ex.Message,
 					AdditionalInformation = ex.ToString(),
 				} );
 			}
 		}
 
+
+		private static ServiceKit.Net.Error[] _FromGrpcErrors( IEnumerable<ServiceKit.Protos.Error> errors )
+		{
+			return errors.Select( error => new ServiceKit.Net.Error() {
+				Path = error.Path,
+				MessageText = error.MessageText,
+				AdditionalInformation = error.AdditionalInformation,
+			} ).ToArray();
+		}
 	}
 }

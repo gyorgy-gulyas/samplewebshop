@@ -10,6 +10,11 @@ import Decimal from "decimal.js";
 export interface ValidationError {
 	typeOfEntity: string;
 	memberOfEntity: string;
+	// where the failure is, relative to the object handed to validate:
+	// "quantity", "items[1].quantity", "billingAddress.country". A form binds to
+	// this instead of parsing a sentence, which is why two bad rows are now
+	// two different errors and not the same one twice.
+	path: string;
 	errorText: string;
 }
 
@@ -40,11 +45,15 @@ export namespace OrderItemDTO {
 
 export function validateOrderItemDTO( dto: OrderItemDTO ): ValidationError[] {
 	const errors: ValidationError[] = [];
-	if (dto.quantity <= 0)
-		errors.push({ typeOfEntity: "OrderItemDTO", memberOfEntity: "quantity", errorText: "quantity must satisfy: value > 0" });
-	if (dto.unitPrice < 0)
-		errors.push({ typeOfEntity: "OrderItemDTO", memberOfEntity: "unitPrice", errorText: "unitPrice must satisfy: value >= 0" });
+	validateOrderItemDTOInto( dto, "", errors );
 	return errors;
+}
+
+export function validateOrderItemDTOInto( dto: OrderItemDTO, pathPrefix: string, errors: ValidationError[] ): void {
+	if (Number(dto.quantity) <= 0)
+		errors.push({ typeOfEntity: "OrderItemDTO", memberOfEntity: "quantity", path: pathPrefix + "quantity", errorText: "quantity must satisfy: value > 0" });
+	if (Number(dto.unitPrice) < 0)
+		errors.push({ typeOfEntity: "OrderItemDTO", memberOfEntity: "unitPrice", path: pathPrefix + "unitPrice", errorText: "unitPrice must satisfy: value >= 0" });
 }
 export interface OrderDTO {
 	id:string;
@@ -63,4 +72,15 @@ export namespace OrderDTO {
 		customerName:string;
 	}
 
+}
+
+export function validateOrderDTO( dto: OrderDTO ): ValidationError[] {
+	const errors: ValidationError[] = [];
+	validateOrderDTOInto( dto, "", errors );
+	return errors;
+}
+
+export function validateOrderDTOInto( dto: OrderDTO, pathPrefix: string, errors: ValidationError[] ): void {
+	if (dto.items != null)
+		dto.items.forEach( (item, index) => { if (item != null) validateOrderItemDTOInto( item, `${pathPrefix}items[${index}].`, errors ); } );
 }

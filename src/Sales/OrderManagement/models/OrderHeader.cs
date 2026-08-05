@@ -121,11 +121,20 @@ namespace Sales.OrderManagement.Order
 		public virtual bool Validate( IList<IValidationError> errors )
 		{
 			int before = errors.Count;
-
-			if (totalPrice < 0)
-				errors.Add( new ValidationError { TypeOfEntity = "OrderHeader", MemberOfEntity = "totalPrice", ErrorText = "totalPrice must satisfy: value >= 0" } );
-
+			ValidateInto( errors, string.Empty );
 			return errors.Count == before;
+		}
+
+		public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
+		{
+			if (totalPrice < 0)
+				errors.Add( new ValidationError { TypeOfEntity = "OrderHeader", MemberOfEntity = "totalPrice", Path = pathPrefix + "totalPrice", ErrorText = "totalPrice must satisfy: value >= 0" } );
+
+			if (items != null)
+			{
+				for (int index = 0; index < items.Count; index++)
+					items[index]?.ValidateInto( errors, $"{pathPrefix}items[{index}]." );
+			}
 		}
 		#endregion Validation
 	}

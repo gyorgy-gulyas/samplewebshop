@@ -12,6 +12,7 @@ using Sales.OrderManagement;
 using Sales.OrderManagement.Protos.OrderIF_v2;
 using Serilog.Context;
 using ServiceKit.Net;
+using System.Linq;
 
 namespace Sales.OrderManagement
 {
@@ -26,6 +27,28 @@ namespace Sales.OrderManagement
 		{
 			_logger = logger; 
 			_service = service; 
+		}
+
+		private static (Statuses Status, IList<ServiceKit.Net.Error> Errors) _MapFailure( Exception ex )
+		{
+			// a broken field is the caller's to fix, and every rule that failed is worth reporting
+			if( ex is PolyPersist.Net.Common.ValidationExeption validationExeption )
+				return (Statuses.BadRequest, validationExeption.ValidationErrors.Select( validationError => new ServiceKit.Net.Error() {
+					Path = validationError.Path,
+					MessageText = validationError.ErrorText,
+					AdditionalInformation = $"{validationError.TypeOfEntity}.{validationError.MemberOfEntity}",
+				} ).ToList<ServiceKit.Net.Error>());
+
+			if( ex is PolyPersist.Net.Common.NotFoundException )
+				return (Statuses.NotFound, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			if( ex is PolyPersist.Net.Common.DuplicateKeyException
+				|| ex is PolyPersist.Net.Common.ConcurrencyConflictException
+				|| ex is PolyPersist.Net.Common.InvalidRequestException )
+				return (Statuses.BadRequest, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message } });
+
+			// anything else really is ours: the caller can do nothing about it, so say so plainly
+			return (Statuses.InternalError, new List<ServiceKit.Net.Error>() { new() { MessageText = ex.Message, AdditionalInformation = ex.ToString() } });
 		}
 
 		public override async Task<OrderIF_v2_getOrderResponse> getOrder( OrderIF_v2_getOrderRequest request, ServerCallContext grpcContext)
@@ -45,42 +68,38 @@ namespace Sales.OrderManagement
 					{
 						if( response.HasValue() == true )
 						{
-							var result = new OrderIF_v2_getOrderResponse();
+							var result = new OrderIF_v2_getOrderResponse() { Status = ServiceKit.Protos.Statuses.Ok };
 							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
 						{
-							return new OrderIF_v2_getOrderResponse {
-								Error = new () {
-									Status = ServiceKit.Protos.Statuses.NotImplemented,
-									MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.getOrder'",
-								}
-							};
+							return _GrpcFailure_getOrder( Statuses.NotImplemented, new [] { new ServiceKit.Net.Error() { MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.getOrder'" } } );
 						}
 					}
 					else
 					{
-						return new OrderIF_v2_getOrderResponse {
-							Error = new () {
-								Status = response.Error.Status.ToGrpc(),
-								MessageText = response.Error.MessageText,
-								AdditionalInformation = response.Error.AdditionalInformation
-							}
-						};
+						return _GrpcFailure_getOrder( response.Status, response.Errors );
 					}
 				}
 				catch(Exception ex)
 				{
-					return new OrderIF_v2_getOrderResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.InternalError,
-							MessageText = ex.Message,
-							AdditionalInformation = ex.ToString()
-						}
-					};
+					var failure = _MapFailure( ex );
+					return _GrpcFailure_getOrder( failure.Status, failure.Errors );
 				}
 			}
+		}
+
+		private static OrderIF_v2_getOrderResponse _GrpcFailure_getOrder( Statuses status, IEnumerable<ServiceKit.Net.Error> errors )
+		{
+			var failure = new OrderIF_v2_getOrderResponse() { Status = status.ToGrpc() };
+			foreach( var error in errors )
+				failure.Errors.Add( new ServiceKit.Protos.Error() {
+					Path = error.Path ?? string.Empty,
+					MessageText = error.MessageText ?? string.Empty,
+					AdditionalInformation = error.AdditionalInformation ?? string.Empty,
+				} );
+			return failure;
 		}
 
 		public override async Task<OrderIF_v2_placeOrderResponse> placeOrder( OrderIF_v2_placeOrderRequest request, ServerCallContext grpcContext)
@@ -100,42 +119,38 @@ namespace Sales.OrderManagement
 					{
 						if( response.HasValue() == true )
 						{
-							var result = new OrderIF_v2_placeOrderResponse();
+							var result = new OrderIF_v2_placeOrderResponse() { Status = ServiceKit.Protos.Statuses.Ok };
 							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
 							return result;
 						}
 						else
 						{
-							return new OrderIF_v2_placeOrderResponse {
-								Error = new () {
-									Status = ServiceKit.Protos.Statuses.NotImplemented,
-									MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.placeOrder'",
-								}
-							};
+							return _GrpcFailure_placeOrder( Statuses.NotImplemented, new [] { new ServiceKit.Net.Error() { MessageText = "Not handled reponse in GRPC Controller when calling 'OrderIF_v2.placeOrder'" } } );
 						}
 					}
 					else
 					{
-						return new OrderIF_v2_placeOrderResponse {
-							Error = new () {
-								Status = response.Error.Status.ToGrpc(),
-								MessageText = response.Error.MessageText,
-								AdditionalInformation = response.Error.AdditionalInformation
-							}
-						};
+						return _GrpcFailure_placeOrder( response.Status, response.Errors );
 					}
 				}
 				catch(Exception ex)
 				{
-					return new OrderIF_v2_placeOrderResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.InternalError,
-							MessageText = ex.Message,
-							AdditionalInformation = ex.ToString()
-						}
-					};
+					var failure = _MapFailure( ex );
+					return _GrpcFailure_placeOrder( failure.Status, failure.Errors );
 				}
 			}
+		}
+
+		private static OrderIF_v2_placeOrderResponse _GrpcFailure_placeOrder( Statuses status, IEnumerable<ServiceKit.Net.Error> errors )
+		{
+			var failure = new OrderIF_v2_placeOrderResponse() { Status = status.ToGrpc() };
+			foreach( var error in errors )
+				failure.Errors.Add( new ServiceKit.Protos.Error() {
+					Path = error.Path ?? string.Empty,
+					MessageText = error.MessageText ?? string.Empty,
+					AdditionalInformation = error.AdditionalInformation ?? string.Empty,
+				} );
+			return failure;
 		}
 
 		public override async Task<OrderIF_v2_justOrderResponse> justOrder( OrderIF_v2_justOrderRequest request, ServerCallContext grpcContext)
@@ -153,33 +168,32 @@ namespace Sales.OrderManagement
 
 					if( response.IsSuccess() == true )
 					{
-						return new OrderIF_v2_justOrderResponse {
-							Success = new Empty()
-						};
+						return new OrderIF_v2_justOrderResponse() { Status = ServiceKit.Protos.Statuses.Ok };
 					}
 					else
 					{
-						return new OrderIF_v2_justOrderResponse {
-							Error = new () {
-								Status = response.Error.Status.ToGrpc(),
-								MessageText = response.Error.MessageText,
-								AdditionalInformation = response.Error.AdditionalInformation
-							}
-						};
+						return _GrpcFailure_justOrder( response.Status, response.Errors );
 					}
 					
 				}
 				catch(Exception ex)
 				{
-					return new OrderIF_v2_justOrderResponse {
-						Error = new () {
-							Status = ServiceKit.Protos.Statuses.InternalError,
-							MessageText = ex.Message,
-							AdditionalInformation = ex.ToString()
-						}
-					};
+					var failure = _MapFailure( ex );
+					return _GrpcFailure_justOrder( failure.Status, failure.Errors );
 				}
 			}
+		}
+
+		private static OrderIF_v2_justOrderResponse _GrpcFailure_justOrder( Statuses status, IEnumerable<ServiceKit.Net.Error> errors )
+		{
+			var failure = new OrderIF_v2_justOrderResponse() { Status = status.ToGrpc() };
+			foreach( var error in errors )
+				failure.Errors.Add( new ServiceKit.Protos.Error() {
+					Path = error.Path ?? string.Empty,
+					MessageText = error.MessageText ?? string.Empty,
+					AdditionalInformation = error.AdditionalInformation ?? string.Empty,
+				} );
+			return failure;
 		}
 	}
 }

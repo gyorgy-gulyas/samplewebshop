@@ -25,9 +25,10 @@ message CustomerIF_v1_getCustomerRequest {
 }
 
 message CustomerIF_v1_getCustomerResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		CustomerDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		CustomerDTO Value = 3;
 	}
 }
 
@@ -37,9 +38,10 @@ message CustomerIF_v1_registerCustomerRequest {
 }
 
 message CustomerIF_v1_registerCustomerResponse {
+	ServiceKit.Protos.Statuses Status = 1;
+	repeated ServiceKit.Protos.Error Errors = 2;
 	oneof result {
-		CustomerDTO Value = 1;
-		ServiceKit.Protos.Error Error = 2;
+		CustomerDTO Value = 3;
 	}
 }
 
