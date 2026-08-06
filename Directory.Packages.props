@@ -11,10 +11,10 @@
     <PackageVersion Include="PolyPersist.Net.DocumentStore.MongoDB" Version="1.0.19" />
     <PackageVersion Include="PolyPersist.Net.BlobStore.Memory" Version="1.0.19" />
     <PackageVersion Include="PolyPersist.Net.ColumnStore.Memory" Version="1.0.19" />
-    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.10" />
-    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.10" />
-    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.10" />
-    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.10" />
+    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.11" />
   </ItemGroup>
 
   <ItemGroup>
