@@ -70,16 +70,16 @@ namespace CustomerManagement.Customers.Customer
 
 		public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
 		{
-			if (country.Length != 2)
+			if ((country?.Length ?? 0) != 2)
 				errors.Add( new ValidationError { TypeOfEntity = "PostalAddress", MemberOfEntity = "country", Path = pathPrefix + "country", ErrorText = "country must satisfy: len(value) == 2" } );
 
-			if (postalCode.Length <= 0)
+			if ((postalCode?.Length ?? 0) <= 0)
 				errors.Add( new ValidationError { TypeOfEntity = "PostalAddress", MemberOfEntity = "postalCode", Path = pathPrefix + "postalCode", ErrorText = "postalCode must satisfy: len(value) > 0" } );
 
-			if (city.Length <= 0)
+			if ((city?.Length ?? 0) <= 0)
 				errors.Add( new ValidationError { TypeOfEntity = "PostalAddress", MemberOfEntity = "city", Path = pathPrefix + "city", ErrorText = "city must satisfy: len(value) > 0" } );
 
-			if (street.Length <= 0)
+			if ((street?.Length ?? 0) <= 0)
 				errors.Add( new ValidationError { TypeOfEntity = "PostalAddress", MemberOfEntity = "street", Path = pathPrefix + "street", ErrorText = "street must satisfy: len(value) > 0" } );
 		}
 		#endregion Validation

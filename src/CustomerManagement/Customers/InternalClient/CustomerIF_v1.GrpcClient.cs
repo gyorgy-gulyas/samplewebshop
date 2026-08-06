@@ -20,7 +20,7 @@ namespace CustomerManagement.Customers
 		private readonly GrpcChannel _channel;
 		private readonly CustomerIF_v1.CustomerIF_v1Client _client;
 
-		CustomerIF_v1_GrpcClient( string serverAddress )
+		public CustomerIF_v1_GrpcClient( string serverAddress )
 		{
 			_channel = GrpcChannel.ForAddress(serverAddress);
 			_client = new CustomerIF_v1.CustomerIF_v1Client(_channel);
@@ -33,7 +33,7 @@ namespace CustomerManagement.Customers
 			{
 				// fill grpc request
 				var request = new CustomerIF_v1_getCustomerRequest();
-				request.CustomerId = customerId;
+				request.CustomerId = customerId ?? string.Empty;
 
 				// calling grpc client
 				var grpc_response = await _client.getCustomerAsync( request, new CallOptions(ctx.ToGrpcMetadata( "CustomerManagement.CustomersCustomerIF_v1", "getCustomer" ))).ResponseAsync;
@@ -74,8 +74,8 @@ namespace CustomerManagement.Customers
 			{
 				// fill grpc request
 				var request = new CustomerIF_v1_registerCustomerRequest();
-				request.Name = name;
-				request.Email = email;
+				request.Name = name ?? string.Empty;
+				request.Email = email ?? string.Empty;
 
 				// calling grpc client
 				var grpc_response = await _client.registerCustomerAsync( request, new CallOptions(ctx.ToGrpcMetadata( "CustomerManagement.CustomersCustomerIF_v1", "registerCustomer" ))).ResponseAsync;

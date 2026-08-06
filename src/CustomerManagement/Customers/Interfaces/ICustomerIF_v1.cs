@@ -92,7 +92,6 @@ namespace CustomerManagement.Customers
 			public override int GetHashCode()
 			{
 				var hash = new HashCode();
-				hash.Add(id);
 				hash.Add(name);
 				hash.Add(email);
 				hash.Add(status);
@@ -106,9 +105,9 @@ namespace CustomerManagement.Customers
 			{
 				Protos.CustomerIF_v1.CustomerDTO result = new();
 
-				result.Id = @this.id;
-				result.Name = @this.name;
-				result.Email = @this.email;
+				result.Id = @this.id ?? string.Empty;
+				result.Name = @this.name ?? string.Empty;
+				result.Email = @this.email ?? string.Empty;
 				result.Status = ICustomerIF_v1.CustomerStatusesMappings.ToGrpc( @this.status );
 
 				return result;

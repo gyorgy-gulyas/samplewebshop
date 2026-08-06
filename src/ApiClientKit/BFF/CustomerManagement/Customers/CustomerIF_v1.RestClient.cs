@@ -9,6 +9,8 @@ using CustomerManagement.Customers;
 using ServiceKit.Net;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BFF.ApiClientKit
 {
@@ -18,24 +20,29 @@ namespace BFF.ApiClientKit
 		{
 			static class V1 
 			{
+				// the same options the host is configured with: web defaults, and enums by name
+				private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions( JsonSerializerDefaults.Web )
+				{
+					Converters = { new JsonStringEnumConverter() },
+				};
 				public static async Task<Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>> getCustomer(string customerId)
 				{
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, WebUtility.UrlEncode( $"/customermanagement/customers/customerif/v1/getcustomer/{customerId}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, $"/customermanagement/customers/customerif/v1/getcustomer/{Uri.EscapeDataString(customerId)}" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "CustomerManagement.Customers.CustomerIF.V1.getCustomer" );
 
 						if (response.IsSuccessStatusCode)
 						{
-							var value = await response.Content.ReadFromJsonAsync<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>();
+							var value = await response.Content.ReadFromJsonAsync<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>( _jsonOptions );
 							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Success( value );
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
@@ -64,19 +71,19 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/customermanagement/customers/customerif/v1/registercustomer/{name}/{email}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, $"/customermanagement/customers/customerif/v1/registercustomer/{Uri.EscapeDataString(name)}/{Uri.EscapeDataString(email)}" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "CustomerManagement.Customers.CustomerIF.V1.registerCustomer" );
 
 						if (response.IsSuccessStatusCode)
 						{
-							var value = await response.Content.ReadFromJsonAsync<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>();
+							var value = await response.Content.ReadFromJsonAsync<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>( _jsonOptions );
 							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Success( value );
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response<CustomerManagement.Customers.ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else

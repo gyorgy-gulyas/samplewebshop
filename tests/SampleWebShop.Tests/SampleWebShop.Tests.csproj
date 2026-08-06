@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- the REST contract test starts the real host in process, so it needs the web framework -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="PolyPersist.Net" />
+    <PackageReference Include="PolyPersist.Net.DocumentStore.Memory" />
+    <PackageReference Include="ServiceKit.Net.General" />
+    <PackageReference Include="ServiceKit.Net.Service" />
+    <PackageReference Include="ServiceKit.Net.Workflow" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Base\Models\Core.Base.Models.csproj" />
+    <ProjectReference Include="..\..\src\CustomerManagement\Customers\Context\CustomerManagement.Customers.Context.csproj" />
+    <ProjectReference Include="..\..\src\CustomerManagement\Customers\Interfaces\CustomerManagement.Customers.Interfaces.csproj" />
+    <ProjectReference Include="..\..\src\CustomerManagement\Customers\Models\CustomerManagement.Customers.Models.csproj" />
+    <ProjectReference Include="..\..\src\Sales\OrderManagement\Context\Sales.OrderManagement.Context.csproj" />
+    <ProjectReference Include="..\..\src\Sales\OrderManagement\Interfaces\Sales.OrderManagement.Interfaces.csproj" />
+    <ProjectReference Include="..\..\src\Sales\OrderManagement\InternalClient\Sales.OrderManagement.InternalClient.csproj" />
+    <ProjectReference Include="..\..\src\Sales\OrderManagement\Models\Sales.OrderManagement.Models.csproj" />
+    <ProjectReference Include="..\..\src\Sales\Service\Sales.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+</Project>

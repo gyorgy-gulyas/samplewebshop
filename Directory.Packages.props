@@ -11,10 +11,10 @@
     <PackageVersion Include="PolyPersist.Net.DocumentStore.MongoDB" Version="1.0.19" />
     <PackageVersion Include="PolyPersist.Net.BlobStore.Memory" Version="1.0.19" />
     <PackageVersion Include="PolyPersist.Net.ColumnStore.Memory" Version="1.0.19" />
-    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.8" />
-    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.8" />
-    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.8" />
-    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.8" />
+    <PackageVersion Include="ServiceKit.Net.General" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.Service" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.ServiceHost" Version="1.1.11" />
+    <PackageVersion Include="ServiceKit.Net.Workflow" Version="1.1.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +26,14 @@
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- test only -->
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
   </ItemGroup>
 
 </Project>

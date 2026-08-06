@@ -24,7 +24,12 @@ namespace CustomerManagement.Customers.Customer
 		public string email { get; set; }
 		public string? phone { get; set; }
 		public CustomerStatuses status { get; set; }
-		public PostalAddress billingAddress { get; set; }
+		/// Optional, and that is a business statement rather than a convenience: at
+		/// registration there is a name and an e-mail address and nothing else - the billing
+		/// address arrives with the first order. Declaring it mandatory made a customer that
+		/// could not be registered at all, because the only way to satisfy the rule was to
+		/// invent an empty address that then broke every rule PostalAddress has.
+		public PostalAddress? billingAddress { get; set; }
 		public PostalAddress? shippingAddress { get; set; }
 
 		#region Clone 
@@ -80,9 +85,6 @@ namespace CustomerManagement.Customers.Customer
 		{
 			var hash = new HashCode();
 			// begin: BaseEntity
-			hash.Add(id);
-			hash.Add(etag);
-			hash.Add(LastUpdate);
 			// end: BaseEntity
 
 			hash.Add(name);
@@ -110,10 +112,10 @@ namespace CustomerManagement.Customers.Customer
 
 		public virtual void ValidateInto( IList<IValidationError> errors, string pathPrefix )
 		{
-			if (name.Length <= 1)
+			if ((name?.Length ?? 0) <= 1)
 				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "name", Path = pathPrefix + "name", ErrorText = "name must satisfy: len(name) > 1" } );
 
-			if (!Regex.IsMatch(email, "[^@ ]+@[^@ ]+\\.[^@ ]+"))
+			if (!Regex.IsMatch(email ?? string.Empty, "[^@ ]+@[^@ ]+\\.[^@ ]+"))
 				errors.Add( new ValidationError { TypeOfEntity = "CustomerAccount", MemberOfEntity = "email", Path = pathPrefix + "email", ErrorText = "email must satisfy: matches(email, \"[^@ ]+@[^@ ]+\\\\.[^@ ]+\")" } );
 
 			billingAddress?.ValidateInto( errors, pathPrefix + "billingAddress." );
