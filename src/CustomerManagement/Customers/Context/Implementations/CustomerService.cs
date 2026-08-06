@@ -30,7 +30,8 @@ namespace CustomerManagement.Customers.Context.Implementations
                 name = name,
                 email = email,
                 status = CustomerStatuses.Pending,
-                billingAddress = new PostalAddress(),
+                // No empty address is invented here: an address the customer has not given yet is
+                // absent, and every rule PostalAddress declares would be broken by a blank one.
             };
 
             // The e-mail pattern and the name length are model rules, declared in the .d3 as validate

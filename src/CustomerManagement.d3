@@ -37,7 +37,13 @@ domain CustomerManagement {
 
                 status:CustomerStatuses
 
+                # Optional, and that is a business statement rather than a convenience: at
+                # registration there is a name and an e-mail address and nothing else - the billing
+                # address arrives with the first order. Declaring it mandatory made a customer that
+                # could not be registered at all, because the only way to satisfy the rule was to
+                # invent an empty address that then broke every rule PostalAddress has.
                 @gdpr
+                @optional
                 billingAddress:PostalAddress
 
                 @gdpr

@@ -9,14 +9,21 @@ using CustomerManagement.Customers;
 using ServiceKit.Net;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CustomerManagement.Customers
 {
 	public class CustomerIF_v1_RestClient : ICustomerIF_v1 
 	{
 		private readonly HttpClient _httpClient;
+		// the same options the host is configured with: web defaults, and enums by name
+		private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions( JsonSerializerDefaults.Web )
+		{
+			Converters = { new JsonStringEnumConverter() },
+		};
 
-		CustomerIF_v1_RestClient( string serverAddress )
+		public CustomerIF_v1_RestClient( string serverAddress )
 		{
 			_httpClient = new HttpClient();
 			_httpClient.BaseAddress = new Uri( serverAddress );
@@ -29,7 +36,7 @@ namespace CustomerManagement.Customers
 			try
 			{
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, WebUtility.UrlEncode( $"/customermanagement/customers/customerif/v1/getcustomer/{customerId}" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, $"/customermanagement/customers/customerif/v1/getcustomer/{Uri.EscapeDataString(customerId)}" );
 				ctx.FillHttpRequest( request, "CustomerManagementCustomersCustomerIF_v1", "getCustomer" );
 
 				// call http client 
@@ -37,12 +44,12 @@ namespace CustomerManagement.Customers
 
 				if (response.IsSuccessStatusCode)
 				{
-					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>();
+					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )
 				{
-					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 					return Response<ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 				}
 				else
@@ -72,7 +79,7 @@ namespace CustomerManagement.Customers
 			try
 			{
 				// build request
-				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/customermanagement/customers/customerif/v1/registercustomer/{name}/{email}" ) );
+				HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, $"/customermanagement/customers/customerif/v1/registercustomer/{Uri.EscapeDataString(name)}/{Uri.EscapeDataString(email)}" );
 				ctx.FillHttpRequest( request, "CustomerManagementCustomersCustomerIF_v1", "registerCustomer" );
 
 				// call http client 
@@ -80,12 +87,12 @@ namespace CustomerManagement.Customers
 
 				if (response.IsSuccessStatusCode)
 				{
-					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>();
+					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )
 				{
-					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+					var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 					return Response<ICustomerIF_v1.CustomerDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 				}
 				else

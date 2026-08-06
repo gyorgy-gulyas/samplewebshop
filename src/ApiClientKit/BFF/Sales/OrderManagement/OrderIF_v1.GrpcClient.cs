@@ -30,7 +30,7 @@ namespace BFF.ApiClientKit
 					{
 						// fill grpc request
 						var request = new OrderIF_v1_getOrderRequest();
-						request.OrderId = orderId;
+						request.OrderId = orderId ?? string.Empty;
 
 						// calling grpc client
 						_client ??= new OrderIF_v1.OrderIF_v1Client(GrpClient._channel);
@@ -154,7 +154,7 @@ namespace BFF.ApiClientKit
 					{
 						// fill grpc request
 						var request = new OrderIF_v1_justOrderRequest();
-						request.OrderId = orderId;
+						request.OrderId = orderId ?? string.Empty;
 
 						// calling grpc client
 						_client ??= new OrderIF_v1.OrderIF_v1Client(GrpClient._channel);

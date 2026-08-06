@@ -10,7 +10,9 @@ using ServiceKit.Net;
 using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BFF.ApiClientKit
 {
@@ -22,24 +24,29 @@ namespace BFF.ApiClientKit
 		{
 			static class V1 
 			{
+				// the same options the host is configured with: web defaults, and enums by name
+				private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions( JsonSerializerDefaults.Web )
+				{
+					Converters = { new JsonStringEnumConverter() },
+				};
 				public static async Task<Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>> getOrder(string orderId)
 				{
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/getorder/{orderId}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Get, $"/sales/ordermanagement/orderif/v1/getorder/{Uri.EscapeDataString(orderId)}" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "Sales.OrderManagement.OrderIF.V1.getOrder" );
 
 						if (response.IsSuccessStatusCode)
 						{
-							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderDTO>();
+							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Success( value );
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
@@ -68,22 +75,22 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/placeorder" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, $"/sales/ordermanagement/orderif/v1/placeorder" );
 
 						// build content
-						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( order ));
+						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( order, _jsonOptions ), Encoding.UTF8, "application/json" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "Sales.OrderManagement.OrderIF.V1.placeOrder" );
 
 						if (response.IsSuccessStatusCode)
 						{
-							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderDTO>();
+							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderDTO>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Success( value );
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
@@ -112,22 +119,22 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/setprice?price={price.ToString(CultureInfo.InvariantCulture)}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, $"/sales/ordermanagement/orderif/v1/setprice?price={Uri.EscapeDataString(price.ToString(CultureInfo.InvariantCulture))}" );
 
 						// build content
-						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>( orderItem ));
+						request.Content = new StringContent( JsonSerializer.Serialize<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>( orderItem, _jsonOptions ), Encoding.UTF8, "application/json" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "Sales.OrderManagement.OrderIF.V1.setPrice" );
 
 						if (response.IsSuccessStatusCode)
 						{
-							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>();
+							var value = await response.Content.ReadFromJsonAsync<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>.Success( value );
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else
@@ -156,7 +163,7 @@ namespace BFF.ApiClientKit
 					try
 					{
 						// build request
-						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, WebUtility.UrlEncode( $"/sales/ordermanagement/orderif/v1/justorder/{orderId}" ) );
+						HttpRequestMessage request = new HttpRequestMessage( HttpMethod.Post, $"/sales/ordermanagement/orderif/v1/justorder/{Uri.EscapeDataString(orderId)}" );
 
 						// call rest client 
 						HttpResponseMessage response = await RestClient.Request( request, "Sales.OrderManagement.OrderIF.V1.justOrder" );
@@ -167,7 +174,7 @@ namespace BFF.ApiClientKit
 						}
 						else if( response.Content != null )
 						{
-							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>();
+							var errors = await response.Content.ReadFromJsonAsync<List<ServiceKit.Net.Error>>( _jsonOptions );
 							return Response.Failure( response.StatusCode.FromHttp(), errors?.ToArray() ?? Array.Empty<ServiceKit.Net.Error>() );
 						}
 						else

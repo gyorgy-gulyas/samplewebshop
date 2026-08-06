@@ -216,8 +216,8 @@ namespace Sales.OrderManagement
 			{
 				Protos.OrderIF_v2.OrderItemDTO result = new();
 
-				result.ProductId = @this.productId;
-				result.ProductName = @this.productName;
+				result.ProductId = @this.productId ?? string.Empty;
+				result.ProductName = @this.productName ?? string.Empty;
 				result.Quantity = @this.quantity.ToString(CultureInfo.InvariantCulture);
 				result.UnitPrice = @this.unitPrice.ToString(CultureInfo.InvariantCulture);
 				result.SubTotalPrice = @this.subTotalPrice.ToString(CultureInfo.InvariantCulture);
@@ -288,8 +288,8 @@ namespace Sales.OrderManagement
 				{
 					Protos.OrderIF_v2.OrderDTO.Types.CustomerDataDTO result = new();
 
-					result.CustomerId = @this.customerId;
-					result.CustomerName = @this.customerName;
+					result.CustomerId = @this.customerId ?? string.Empty;
+					result.CustomerName = @this.customerName ?? string.Empty;
 
 					return result;
 				}
@@ -359,7 +359,6 @@ namespace Sales.OrderManagement
 			public override int GetHashCode()
 			{
 				var hash = new HashCode();
-				hash.Add(id);
 				hash.Add(orderingDate);
 				hash.Add(orderStatus);
 				hash.Add(totalPrice);
@@ -399,13 +398,13 @@ namespace Sales.OrderManagement
 			{
 				Protos.OrderIF_v2.OrderDTO result = new();
 
-				result.Id = @this.id;
-				result.OrderingDate = @this.orderingDate;
+				result.Id = @this.id ?? string.Empty;
+				result.OrderingDate = @this.orderingDate ?? string.Empty;
 				result.OrderStatus = IOrderIF_v2.OrderStatusesMappings.ToGrpc( @this.orderStatus );
 				result.TotalPrice = @this.totalPrice.ToString(CultureInfo.InvariantCulture);
 				result.CustomerData = @this.customerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.ToGrpc( @this.customerData ) : null;
 				result.Items.AddRange( @this.items.Select( v => IOrderIF_v2.OrderItemDTO.ToGrpc( v ) ));
-				result.ShippingCity = @this.shippingCity;
+				result.ShippingCity = @this.shippingCity ?? string.Empty;
 
 				return result;
 			}

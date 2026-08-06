@@ -7,19 +7,25 @@ using Sales.OrderManagement.Context.Implementations;
 using Sales.Service;
 using ServiceKit.Net;
 
-BaseServiceHost.Create<SalesServiceHost>(args, new BaseServiceHost.Options()
-{
-    // Off for now: the sample has no identity provider yet. Turn it on and the platform maps the
-    // REST controllers behind RequireAuthorization on its own.
-    WithAuthentication = false,
-    WithGrpc = true,
-    WithRest = true,
-    WithReponseCompression = false,
-    PathBase = "/sales"
-}).Run();
+BaseServiceHost.Create<SalesServiceHost>(args, SalesServiceHost.DefaultOptions).Run();
 
 public class SalesServiceHost : BaseServiceHost
 {
+    // The host options live here rather than inline in the startup line so that a test can stand
+    // the service up exactly as production does. A test that re-declares them tests a host nobody
+    // runs.
+    public static BaseServiceHost.Options DefaultOptions => new()
+    {
+        // Off for now: the sample has no identity provider yet. Turn it on and the platform maps the
+        // REST controllers behind RequireAuthorization on its own.
+        WithAuthentication = false,
+        WithGrpc = true,
+        WithRest = true,
+        WithReponseCompression = false,
+        PathBase = "/sales"
+    };
+
+
     protected override void _BeforeAddServices(IServiceCollection services, Options options)
     {
     }

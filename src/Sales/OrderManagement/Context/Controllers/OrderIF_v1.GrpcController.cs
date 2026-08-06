@@ -18,6 +18,7 @@ using System.Linq;
 namespace Sales.OrderManagement
 {
 	/// The published surface of orders: DTOs only, no domain type ever reaches the wire.
+	[AutoRegisterGrpc]
 	public class OrderIF_v1_GrpcController : Sales.OrderManagement.Protos.OrderIF_v1.OrderIF_v1.OrderIF_v1Base 
 	{
 		private readonly ILogger<OrderIF_v1_GrpcController> _logger;

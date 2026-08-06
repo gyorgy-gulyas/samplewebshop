@@ -15,6 +15,7 @@ using System.Linq;
 
 namespace CustomerManagement.Customers
 {
+	[AutoRegisterGrpc]
 	public class CustomerIF_v1_GrpcController : CustomerManagement.Customers.Protos.CustomerIF_v1.CustomerIF_v1.CustomerIF_v1Base 
 	{
 		private readonly ILogger<CustomerIF_v1_GrpcController> _logger;

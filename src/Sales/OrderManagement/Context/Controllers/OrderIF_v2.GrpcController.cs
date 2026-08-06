@@ -18,6 +18,7 @@ namespace Sales.OrderManagement
 {
 	/// The second version lives next to the first on purpose: this is how a published interface is
 	/// carried forward without breaking the callers still on v1.
+	[AutoRegisterGrpc]
 	public class OrderIF_v2_GrpcController : Sales.OrderManagement.Protos.OrderIF_v2.OrderIF_v2.OrderIF_v2Base 
 	{
 		private readonly ILogger<OrderIF_v2_GrpcController> _logger;

@@ -62,9 +62,6 @@ namespace Sales.Tracking.OrderTrackingEntry
 		{
 			var hash = new HashCode();
 			// begin: BaseEntity
-			hash.Add(id);
-			hash.Add(etag);
-			hash.Add(LastUpdate);
 			// end: BaseEntity
 
 

@@ -22,7 +22,7 @@ namespace Sales.OrderManagement
 		private readonly GrpcChannel _channel;
 		private readonly OrderIF_v2.OrderIF_v2Client _client;
 
-		OrderIF_v2_GrpcClient( string serverAddress )
+		public OrderIF_v2_GrpcClient( string serverAddress )
 		{
 			_channel = GrpcChannel.ForAddress(serverAddress);
 			_client = new OrderIF_v2.OrderIF_v2Client(_channel);
@@ -35,7 +35,7 @@ namespace Sales.OrderManagement
 			{
 				// fill grpc request
 				var request = new OrderIF_v2_getOrderRequest();
-				request.OrderId = orderId;
+				request.OrderId = orderId ?? string.Empty;
 
 				// calling grpc client
 				var grpc_response = await _client.getOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v2", "getOrder" ))).ResponseAsync;
@@ -117,7 +117,7 @@ namespace Sales.OrderManagement
 			{
 				// fill grpc request
 				var request = new OrderIF_v2_justOrderRequest();
-				request.OrderId = orderId;
+				request.OrderId = orderId ?? string.Empty;
 
 				// calling grpc client
 				var grpc_response = await _client.justOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v2", "justOrder" ))).ResponseAsync;
