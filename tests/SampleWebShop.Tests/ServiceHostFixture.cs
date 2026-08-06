@@ -42,6 +42,9 @@ namespace SampleWebShop.Tests
                     "--Kestrel:Endpoints:Rest:Protocols=Http1",
                     $"--Kestrel:Endpoints:Grpc:Url=http://127.0.0.1:{grpcPort}",
                     "--Kestrel:Endpoints:Grpc:Protocols=Http2",
+                    // no scrape cache: the observability tests ask "was that order counted", and a
+                    // cached answer is one taken before it happened
+                    "--Metrics:ScrapeCacheMilliseconds=0",
                 },
                 SalesServiceHost.DefaultOptions);
 
