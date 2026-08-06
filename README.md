@@ -16,6 +16,7 @@ platform capability cannot be demonstrated on this sample, that is a finding abo
 | REST + gRPC + BFF client | generated controllers, `InternalClient`, `ApiClientKit`, `src/BFF` TypeScript |
 | PolyPersist | `OrderStoreContext`, `CustomerStoreContext`, document collections |
 | Service host | `BaseServiceHost` with health probes, CORS and Swagger |
+| Observability | structured logs, spans and business metrics — see [Following one order afterwards](#following-one-order-afterwards) |
 
 ## Running it
 
@@ -78,6 +79,47 @@ The test host listens on two ports, and that is not a test convenience: without 
 ALPN, so one cleartext port cannot serve both HTTP/1.1 (REST) and HTTP/2 (gRPC). The running sample
 has a single cleartext port, so its gRPC surface is reachable only when TLS is configured or a
 second HTTP/2 endpoint is added.
+
+## Following one order afterwards
+
+The platform gives every request an identity and hands it to the log and to the trace alike; the
+sample's job is to put something worth reading under it.
+
+**Logs.** Every line of a request carries `CorrelationId`, and the correlation id a request is given
+is the **trace id** of its span — so one value finds the log lines and the trace. It is answered in
+the `correlation-id` response header too, which is what a support call can quote:
+
+    curl -si -X POST http://localhost:5000/sales/ordermanagement/orderif/v1/placeorder ... | grep correlation-id
+    # correlation-id: 10ef74c1f0917cc97b5b9790426879ec
+
+    # every line of that one call, and nothing else:
+    dotnet run --project src/Sales/Service | grep 10ef74c1f0917cc97b5b9790426879ec
+
+`appsettings.json` sets the levels and the sink; `appsettings.Development.json` swaps the JSON for
+something a person reads. Neither is required — with no configuration at all the host still logs
+one JSON object per line.
+
+**Traces.** The service opens spans of its own around the work that varies: `place order`, `load
+order`, and one per saga step, with the compensations named as such. The tags are diagnosis — order
+id, item count, reservation and charge ids — and deliberately not a copy of the customer's data: a
+shipping address is where somebody lives, and a trace store is not the place for it.
+
+**Metrics.** `/metrics` is served by the host. Beside the platform's request rate and duration, this
+context counts what somebody actually watches:
+
+| | |
+|---|---|
+| `sales_orders_placed_total` | orders accepted and stored |
+| `sales_orders_rejected_total{reason="validation"}` | a form filled in wrong — which says *fix the form*, not *fix the service* |
+| `sales_order_value_HUF` | what an order is worth, as a distribution rather than an average |
+
+**None of this needs anything installed.** The spans are created and never exported, their trace id
+still reaches every log line, and the scrape endpoint is the service's own. To *look* at them:
+
+    docker compose -f deploy/observability/docker-compose.yml up -d
+    OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 dotnet run --project src/Sales/Service
+
+Traces at <http://localhost:16686>, metrics at <http://localhost:9090>.
 
 ## What is still missing
 

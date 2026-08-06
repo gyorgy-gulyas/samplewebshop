@@ -11,6 +11,10 @@ namespace Sales.OrderManagement.Context.Implementations
     // Every one of them must be idempotent enough to survive a retry, because the platform WILL
     // retry them: @retry( 3 ) on the workflow, and @retry( 1 ) on the card charge exactly because
     // that one is not.
+    //
+    // Each opens a span of its own. That is what makes a fulfilment READABLE afterwards: the
+    // workflow's own history says which steps ran, but only the trace says how long each took and
+    // which of them was the slow one - and a compensation shows up beside the step it undid.
     public class FulfilOrderActivities : IFulfilOrderActivities
     {
         private readonly ILogger<FulfilOrderActivities> _logger;
@@ -22,7 +26,13 @@ namespace Sales.OrderManagement.Context.Implementations
 
         Task<string> IFulfilOrderActivities.reserveStock(EntityId<OrderHeader> order, string sku, decimal quantity)
         {
+            using var activity = SalesTelemetry.StartActivity("reserve stock");
+            activity?.SetTag("sales.order.id", (string)order);
+            activity?.SetTag("sales.sku", sku);
+
             var reservationId = Guid.NewGuid().ToString();
+            activity?.SetTag("sales.reservation.id", reservationId);
+
             _logger?.LogInformation("Reserved {Quantity} of {Sku} for order {OrderId}, reservation {ReservationId}", quantity, sku, (string)order, reservationId);
             return Task.FromResult(reservationId);
         }
@@ -32,27 +42,50 @@ namespace Sales.OrderManagement.Context.Implementations
             // The reservation id was not passed in by hand: the model says reserveStock is
             // compensated by releaseStock, and the generated facade bound the argument from what
             // reserveStock returned.
+            using var activity = SalesTelemetry.StartActivity("release stock (compensation)");
+            activity?.SetTag("sales.order.id", (string)order);
+            activity?.SetTag("sales.reservation.id", reservationId);
+            activity?.SetTag("sales.compensation", true);
+
             _logger?.LogWarning("Releasing reservation {ReservationId} of {Sku} for order {OrderId}", reservationId, sku, (string)order);
             return Task.CompletedTask;
         }
 
         Task<string> IFulfilOrderActivities.chargeCard(EntityId<OrderHeader> order, decimal amount)
         {
+            using var activity = SalesTelemetry.StartActivity("charge card");
+            activity?.SetTag("sales.order.id", (string)order);
+            activity?.SetTag("sales.charge.amount", (double)amount);
+
             var chargeId = Guid.NewGuid().ToString();
+            activity?.SetTag("sales.charge.id", chargeId);
+
             _logger?.LogInformation("Charged {Amount} for order {OrderId}, charge {ChargeId}", amount, (string)order, chargeId);
             return Task.FromResult(chargeId);
         }
 
         Task IFulfilOrderActivities.refundCard(EntityId<OrderHeader> order, string chargeId)
         {
+            using var activity = SalesTelemetry.StartActivity("refund card (compensation)");
+            activity?.SetTag("sales.order.id", (string)order);
+            activity?.SetTag("sales.charge.id", chargeId);
+            activity?.SetTag("sales.compensation", true);
+
             _logger?.LogWarning("Refunding charge {ChargeId} for order {OrderId}", chargeId, (string)order);
             return Task.CompletedTask;
         }
 
         Task<string> IFulfilOrderActivities.shipOrder(EntityId<OrderHeader> order, string shippingAddress)
         {
+            using var activity = SalesTelemetry.StartActivity("ship order");
+            activity?.SetTag("sales.order.id", (string)order);
+
             var trackingNumber = $"TRK-{Guid.NewGuid().ToString("N").Substring(0, 10).ToUpperInvariant()}";
-            _logger?.LogInformation("Shipped order {OrderId} to {Address}, tracking {TrackingNumber}", (string)order, shippingAddress, trackingNumber);
+            activity?.SetTag("sales.tracking.number", trackingNumber);
+
+            // The address is where somebody lives, so it stays out of the span and out of the log;
+            // the tracking number is what a support call is about anyway.
+            _logger?.LogInformation("Shipped order {OrderId}, tracking {TrackingNumber}", (string)order, trackingNumber);
             return Task.FromResult(trackingNumber);
         }
     }
