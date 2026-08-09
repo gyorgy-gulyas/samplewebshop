@@ -15,6 +15,19 @@ namespace Sales.OrderManagement.Order
 {
 	public partial class OrderHeader : Core.Base.IBaseEntity, ISalesDocument, IEquatable<OrderHeader>, IEventRecordingRoot, IValidable
 	{
+		#region declared behaviour
+
+		/// The root records the fact, because the root is what enforces the invariant that
+		/// makes it true. It does not publish it: the repository moves it into the outbox
+		/// with the save, and delivery is the platform's problem from there.
+		/// <summary>
+		/// Declared by the model; the body is yours. Without it this does not compile - it does
+		/// not quietly become a command that is merely never there.
+		/// </summary>
+		public partial void place(string customerId);
+
+		#endregion declared behaviour
+
 		#region recorded facts
 
 		private readonly List<RecordedEvent> _recordedEvents = new();

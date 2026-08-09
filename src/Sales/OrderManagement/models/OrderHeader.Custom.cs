@@ -19,13 +19,13 @@ namespace Sales.OrderManagement.Order
         /// <summary>
         /// The model's <c>command place( customerId ) emits OrderPlaced</c>.
         ///
-        /// The root is what enforces the invariant that makes the fact true, so the root is what
-        /// writes it down. Nothing is sent from here: Record only remembers, and the repository
-        /// moves the fact into the outbox inside the same save. The Record overload exists because
-        /// the model said this command emits OrderPlaced - recording anything else would not
-        /// compile.
+        /// The generated half declares it; without this body the project does not compile. The root
+        /// is what enforces the invariant that makes the fact true, so the root is what writes it
+        /// down. Nothing is sent from here: Record only remembers, and the repository moves the fact
+        /// into the outbox inside the same save. The Record overload exists because the model said
+        /// this command emits OrderPlaced - recording anything else would not compile either.
         /// </summary>
-        public void place(string customerId)
+        public partial void place(string customerId)
         {
             // A placement that is not a change of state is not a placement. Saying so here rather
             // than in the service is the point of having a root at all: there is no path to

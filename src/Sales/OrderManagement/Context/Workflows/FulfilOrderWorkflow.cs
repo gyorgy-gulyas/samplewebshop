@@ -47,17 +47,16 @@ namespace Sales.OrderManagement
 
 		/// No return value, so the caller cannot be answered: this is a signal.
 		[WorkflowSignal]
-		public Task cancel(string reason) => OnCancel(reason);
+		public partial Task cancel(string reason);
 
 		/// A query is read-only and synchronous - it may not await anything.
 		[WorkflowQuery]
-		public string status() => OnStatus();
+		public partial string status();
 
-		// The other half of the partial: this is what you write. The model declares which steps
-		// exist, not in what order - so the body is yours, and the compiler will not let you forget it.
+		// The entry point is the one place with a hook of its own, because it is the one place
+		// the generated half wraps you: it rolls the saga back. Everywhere else the declaration
+		// above IS the method, and its body is yours.
 		private partial Task<string> OnFulfil(EntityId<Order.OrderHeader> order, string sku, decimal quantity, decimal amount, string shippingAddress);
-		private partial Task OnCancel(string reason);
-		private partial string OnStatus();
 	}
 
 	/// <summary>
