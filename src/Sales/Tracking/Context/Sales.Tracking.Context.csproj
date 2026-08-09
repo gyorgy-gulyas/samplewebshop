@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="PolyPersist.Net" />
+    <PackageReference Include="ServiceKit.Net.Eventing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Sales.Tracking.Models.csproj" />
+    <!--
+      Tracking references OrderManagement's INTERFACES and not its Context: it reacts to what that
+      context published, and nothing else. Add a reference to the Context project here and the two
+      microservices stop being two.
+    -->
+    <ProjectReference Include="..\..\OrderManagement\Interfaces\Sales.OrderManagement.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

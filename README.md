@@ -17,6 +17,7 @@ platform capability cannot be demonstrated on this sample, that is a finding abo
 | PolyPersist | `OrderStoreContext`, `CustomerStoreContext`, document collections |
 | Service host | `BaseServiceHost` with health probes, CORS and Swagger |
 | Observability | structured logs, spans and business metrics — see [Following one order afterwards](#following-one-order-afterwards) |
+| Eventing | `OrderHeader.place` records `OrderPlaced`, the commit queues it, and the **Tracking** context reacts to the published `OrderIF.v1.OrderPlaced.v1` — outbox, relay, broker, inbox, all from the model |
 
 ## Running it
 
@@ -68,12 +69,21 @@ either. This is also where the sample shows how a MicronIQ application is tested
 | `ValidationPathTests` | the DTO validator and the domain validator name the same field the same way, so a form can bind what it is shown |
 | `FulfilOrderTests` | the saga: the rollback order, the compensation arguments, and the retry and deadline the model declared |
 | `OrderRestContractTests`, `OrderGrpcContractTests` | the real host, started in process, called through the **generated** clients over both transports |
+| `EventingChainTests` | the whole chain in the real host: place an order in one context, wait for another to react — root, outbox, relay, broker, dispatcher, generated publisher, generated handler |
 
 The contract tests are the ones that earn their keep. Everything they touch between the client call
 and the service — routing, the JSON body, the status mapping, the error list — is code nobody wrote
 by hand, and until a test sent a request over it none of it had ever run. The first run found that
 the generated .NET REST client could not be constructed, addressed, or understood by its own server,
 and that the gRPC surface was never mapped at all.
+
+`EventingChainTests` earns its keep the same way, one layer further in. Every piece of the eventing
+path already had unit tests of its own, and every one of them would still pass with the chain broken
+in the middle — a translation nobody runs, a handler nobody registers, an outbox nobody drains all
+look exactly like working code from the inside. So the test places an order through the published
+surface and then waits for a **different context** to have reacted, touching nothing in between.
+Writing it is what showed that the emitter's `Events/` output belonged to no project at all: the
+generated domain event did not compile into anything.
 
 The test host listens on two ports, and that is not a test convenience: without TLS there is no
 ALPN, so one cleartext port cannot serve both HTTP/1.1 (REST) and HTTP/2 (gRPC). The running sample

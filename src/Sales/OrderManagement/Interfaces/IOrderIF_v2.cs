@@ -10,6 +10,7 @@ using PolyPersist;
 using PolyPersist.Net.Common;
 using Sales.OrderManagement;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
 using System.Globalization;
 
 namespace Sales.OrderManagement
@@ -27,8 +28,18 @@ namespace Sales.OrderManagement
 		public Task<Response> justOrder(CallingContext ctx, string orderId);
 
 
-		public partial class OrderPlaced_v2 : IEquatable<OrderPlaced_v2>
+		/// The same internal fact, restated for a second audience. Two published contracts
+		/// translated from one domain event is what carrying an interface forward actually
+		/// means: v1 keeps its promise unchanged while v2 says something different about the
+		/// very same thing.
+		public partial class OrderPlaced_v2 : IEquatable<OrderPlaced_v2>, IDomainEvent
 		{
+			/// <summary>How the platform recognises this shape. Generated; never hand-written.</summary>
+			public string SchemaId => "Sales.OrderManagement.OrderIF.v2.OrderPlaced.v2";
+
+			/// <summary>The logical channel this fact travels on. Deployment maps it to a topic or queue.</summary>
+			public string Channel => "Sales.OrderManagement";
+
 			public string orderId { get; set; }
 			public string customerId { get; set; }
 

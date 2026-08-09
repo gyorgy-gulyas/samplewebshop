@@ -25,6 +25,11 @@ namespace SampleWebShop.Tests
         public static string RestAddress { get; private set; }
         public static string GrpcAddress { get; private set; }
 
+        // The running host's container. What the eventing chain test needs: the outbox, the relay and
+        // the subscriber are hosted services inside THIS host, so a test that built its own would be
+        // watching a pipeline nobody runs.
+        public static IServiceProvider Services => _host.Services;
+
         [AssemblyInitialize]
         public static async Task Start(TestContext context)
         {

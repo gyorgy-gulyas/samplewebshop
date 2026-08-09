@@ -18,6 +18,10 @@ import "google/protobuf/timestamp.proto";
 /// PolyPersist needs them on IEntity, so they are marked @system_field and the emitter keeps
 /// them out of the business surface.
 message BaseEntity {
+	/// The identity is also the ordering scope: facts an aggregate records travel under the
+	/// aggregate's own id, so the outside world sees one order's facts in the order they
+	/// happened - and sees nothing about the order between two different orders, because no
+	/// such order exists.
 	string id = 1;
 	string etag = 2;
 	google.protobuf.Timestamp LastUpdate = 3;

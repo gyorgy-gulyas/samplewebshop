@@ -2,9 +2,12 @@
 
   <ItemGroup>
     <PackageReference Include="PolyPersist.Net" />
+    <!-- the aggregate root records facts, so the model assembly knows what a fact is -->
+    <PackageReference Include="ServiceKit.Net.Eventing" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Events\Sales.OrderManagement.Events.csproj" />
     <ProjectReference Include="..\..\..\Core\Base\Models\Core.Base.Models.csproj" />
     <ProjectReference Include="..\..\..\CustomerManagement\Customers\Models\CustomerManagement.Customers.Models.csproj" />
   </ItemGroup>

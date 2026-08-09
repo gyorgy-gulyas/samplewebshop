@@ -19,6 +19,8 @@
     <PackageReference Include="PolyPersist.Net.DocumentStore.Memory" />
     <PackageReference Include="ServiceKit.Net.General" />
     <PackageReference Include="ServiceKit.Net.Service" />
+    <PackageReference Include="ServiceKit.Net.Eventing" />
+    <PackageReference Include="ServiceKit.Net.Eventing.PolyPersist" />
     <PackageReference Include="ServiceKit.Net.Workflow" />
   </ItemGroup>
 
@@ -30,8 +32,11 @@
     <ProjectReference Include="..\..\src\Sales\OrderManagement\Context\Sales.OrderManagement.Context.csproj" />
     <ProjectReference Include="..\..\src\Sales\OrderManagement\Interfaces\Sales.OrderManagement.Interfaces.csproj" />
     <ProjectReference Include="..\..\src\Sales\OrderManagement\InternalClient\Sales.OrderManagement.InternalClient.csproj" />
+    <ProjectReference Include="..\..\src\Sales\OrderManagement\Events\Sales.OrderManagement.Events.csproj" />
     <ProjectReference Include="..\..\src\Sales\OrderManagement\Models\Sales.OrderManagement.Models.csproj" />
     <ProjectReference Include="..\..\src\Sales\Service\Sales.Service.csproj" />
+    <ProjectReference Include="..\..\src\Sales\Tracking\Context\Sales.Tracking.Context.csproj" />
+    <ProjectReference Include="..\..\src\Sales\Tracking\Models\Sales.Tracking.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

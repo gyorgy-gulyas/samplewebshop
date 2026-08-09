@@ -15,6 +15,10 @@ namespace CustomerManagement.Customers.Customer
 	public partial class CustomerAccount : Core.Base.IBaseEntity, IEquatable<CustomerAccount>, IValidable
 	{
 		#region IBaseEntity
+		/// The identity is also the ordering scope: facts an aggregate records travel under the
+		/// aggregate's own id, so the outside world sees one order's facts in the order they
+		/// happened - and sees nothing about the order between two different orders, because no
+		/// such order exists.
 		public string id { get; set; }
 		public string etag { get; set; }
 		public DateTime LastUpdate { get; set; }

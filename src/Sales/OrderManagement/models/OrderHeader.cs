@@ -9,12 +9,41 @@ using PolyPersist;
 using PolyPersist.Net.Common;
 using PolyPersist.Net.Core;
 using Sales.OrderManagement;
+using ServiceKit.Net.Eventing;
 
 namespace Sales.OrderManagement.Order
 {
-	public partial class OrderHeader : Core.Base.IBaseEntity, ISalesDocument, IEquatable<OrderHeader>, IValidable
+	public partial class OrderHeader : Core.Base.IBaseEntity, ISalesDocument, IEquatable<OrderHeader>, IEventRecordingRoot, IValidable
 	{
+		#region recorded facts
+
+		private readonly List<RecordedEvent> _recordedEvents = new();
+
+		/// <summary>
+		/// Takes the recorded facts and forgets them. The repository calls this inside the save, so
+		/// a root that was loaded, changed and then NOT saved leaves nothing behind for the next one.
+		/// </summary>
+		IReadOnlyList<RecordedEvent> IEventRecordingRoot.DrainRecordedEvents()
+		{
+			var drained = _recordedEvents.ToArray();
+			_recordedEvents.Clear();
+			return drained;
+		}
+
+		/// <summary>
+		/// Writes down that 'OrderPlaced' happened. It is NOT sent here: the repository moves it
+		/// into the outbox inside the same save, and delivery is the platform's problem from there.
+		/// </summary>
+		protected void Record( OrderPlaced @event )
+			=> _recordedEvents.Add( new RecordedEvent( @event, id ) );
+
+		#endregion recorded facts
+
 		#region IBaseEntity
+		/// The identity is also the ordering scope: facts an aggregate records travel under the
+		/// aggregate's own id, so the outside world sees one order's facts in the order they
+		/// happened - and sees nothing about the order between two different orders, because no
+		/// such order exists.
 		public string id { get; set; }
 		public string etag { get; set; }
 		public DateTime LastUpdate { get; set; }

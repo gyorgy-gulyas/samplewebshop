@@ -1,11 +1,15 @@
 using PolyPersist;
+using PolyPersist.Net.Context;
 using PolyPersist.Net.Core;
 using PolyPersist.Net.DocumentStore.Memory;
 using PolyPersist.Net.DocumentStore.MongoDB;
 using Sales.OrderManagement;
 using Sales.OrderManagement.Context.Implementations;
 using Sales.Service;
+using Sales.Tracking.Context.Implementations;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
+using ServiceKit.Net.Eventing.PolyPersistStores;
 
 BaseServiceHost.Create<SalesServiceHost>(args, SalesServiceHost.DefaultOptions).Run();
 
@@ -34,14 +38,51 @@ public class SalesServiceHost : BaseServiceHost
     {
         services.AddSingleton<IStoreProvider>(provider => new SalesStoreProvider(provider.GetRequiredService<IConfiguration>()));
         services.AddSingleton<OrderStoreContext>();
+        services.AddSingleton<TrackingStoreContext>();
 
-        // the published surfaces
-        services.AddSingleton<IOrderIF_v1, OrderIF_v1>();
-        services.AddSingleton<IOrderIF_v2, OrderIF_v2>();
-        // the application service behind them
-        services.AddSingleton<IOrderService, OrderService>();
+        // Scoped, not singleton, and the eventing is what forced it: the recorder a save drains is a
+        // unit of work's pending list, and two requests sharing one would hand each other's facts to
+        // whichever committed first. A request is the unit of work, so the service that runs it - and
+        // the surfaces in front of it - live exactly as long.
+        services.AddScoped<IOrderIF_v1, OrderIF_v1>();
+        services.AddScoped<IOrderIF_v2, OrderIF_v2>();
+        services.AddScoped<IOrderService, OrderService>();
 
+        _AddEventing(services);
         _AddWorkflows(services);
+    }
+
+    // Everything that carries a fact from the aggregate that recorded it to the context that reacts
+    // to it. Three lines of intent and one of storage - and NOT one line naming a handler, an event
+    // or a channel: those come from the model, and a host that had to list them would be a host that
+    // can be out of date with it.
+    private void _AddEventing(IServiceCollection services)
+    {
+        // Registered before AddServiceKitEventing, whose own registration is a TryAdd: this is where
+        // the sample says which service produced a fact. The correlation, causation and tenant on the
+        // envelope are filled by the platform.
+        services.AddScoped(_ => new EventRecordingContext() { Source = "Sales.OrderManagement" });
+
+        services.AddServiceKitEventing();
+
+        // The outbox and the inbox live in the SAME store the domain writes to, which is what makes
+        // "the order was saved" and "the fact was queued" one commit rather than two hopeful ones.
+        services.UseEventing_PolyPersist(
+            provider => provider.GetRequiredService<EventingStoreContext>().Outbox,
+            provider => provider.GetRequiredService<EventingStoreContext>().Inbox);
+        services.AddSingleton<EventingStoreContext>();
+
+        // Fills in what is still missing - the broker and the dead-letter sink - and leaves the two
+        // stores above alone, because every registration in it is a TryAdd. So the sample runs with
+        // nothing installed, on a durable outbox, and a deployment replaces the broker without
+        // touching a line above.
+        services.UseEventing_InMemory();
+
+        // No handler is named here. The generated ones carry [AutoRegisterEventHandler] and are found
+        // by looking - the publishers in OrderManagement and the reaction in Tracking alike.
+        services.AddEventHandlersFromAssemblies(
+            typeof(OrderIF_v1).Assembly,
+            typeof(Sales.Tracking.OnOrderPlacedHandler).Assembly);
     }
 
     // The order fulfilment saga needs a Temporal server, and the point of this sample is that it

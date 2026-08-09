@@ -13,6 +13,8 @@
     <PackageReference Include="PolyPersist.Net" />
     <PackageReference Include="ServiceKit.Net.General" />
     <PackageReference Include="ServiceKit.Net.Service" />
+    <!-- the published events are facts too, and the translations that produce them live here -->
+    <PackageReference Include="ServiceKit.Net.Eventing" />
   </ItemGroup>
 
   <ItemGroup>

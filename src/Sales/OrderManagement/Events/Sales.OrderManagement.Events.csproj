@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The context's internal facts, in their own assembly.
+
+    The emitter puts them in their own folder, and one folder is one project in this sample - but
+    there is a reason beyond convention. A fact is referenced by more than the model: the aggregate
+    root that records it, the generated publisher that translates it, and any test that asserts on
+    it. Keeping them here means none of those has to take the whole domain model to name a fact.
+  -->
+  <ItemGroup>
+    <PackageReference Include="ServiceKit.Net.Eventing" />
+  </ItemGroup>
+
+</Project>

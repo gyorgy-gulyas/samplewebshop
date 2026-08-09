@@ -18,6 +18,6 @@ namespace Sales.OrderManagement
 		/// <return>Order.OrderHeader</return>
 		public Task<Response<Order.OrderHeader>> placeOrder(CallingContext ctx, Order.OrderHeader order);
 
-		public Task<bool> handleOrderPlaced(CallingContext ctx, IOrderIF_v1.OrderPlaced_v1 @event );
+
 	}
 }

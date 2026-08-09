@@ -151,7 +151,11 @@ domain Sales {
         @internal_api(grpc, rest)
         @public_api(grpc, rest, collection="BFF")
         interface OrderIF version 2 {
-            event OrderPlaced version 2 {
+            # The same internal fact, restated for a second audience. Two published contracts
+            # translated from one domain event is what carrying an interface forward actually
+            # means: v1 keeps its promise unchanged while v2 says something different about the
+            # very same thing.
+            integration event OrderPlaced version 2 from Order.OrderPlaced {
                 orderId:string
                 customerId:string
             }

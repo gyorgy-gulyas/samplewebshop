@@ -13,6 +13,10 @@ namespace Sales.Tracking.OrderTrackingEntry
 	public partial class TrackingEntry : Core.Base.IBaseEntity, IEquatable<TrackingEntry>
 	{
 		#region IBaseEntity
+		/// The identity is also the ordering scope: facts an aggregate records travel under the
+		/// aggregate's own id, so the outside world sees one order's facts in the order they
+		/// happened - and sees nothing about the order between two different orders, because no
+		/// such order exists.
 		public string id { get; set; }
 		public string etag { get; set; }
 		public DateTime LastUpdate { get; set; }

@@ -10,6 +10,7 @@ using PolyPersist;
 using PolyPersist.Net.Common;
 using Sales.OrderManagement;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
 using System.Globalization;
 
 namespace Sales.OrderManagement
@@ -29,9 +30,19 @@ namespace Sales.OrderManagement
 		public Task<Response> justOrder(CallingContext ctx, string orderId);
 
 
-		public partial class OrderPlaced_v1 : IEquatable<OrderPlaced_v1>
+		/// The PUBLISHED restatement of the internal fact. Versioned, because another team reads
+		/// it; translated by hand, because the published language is not the internal one -
+		/// customerId stays inside, and the amount is named the way the outside world names it.
+		public partial class OrderPlaced_v1 : IEquatable<OrderPlaced_v1>, IDomainEvent
 		{
+			/// <summary>How the platform recognises this shape. Generated; never hand-written.</summary>
+			public string SchemaId => "Sales.OrderManagement.OrderIF.v1.OrderPlaced.v1";
+
+			/// <summary>The logical channel this fact travels on. Deployment maps it to a topic or queue.</summary>
+			public string Channel => "Sales.OrderManagement";
+
 			public string orderId { get; set; }
+			public decimal totalAmount { get; set; }
 
 			#region Clone 
 			public virtual OrderPlaced_v1 Clone()
@@ -39,6 +50,7 @@ namespace Sales.OrderManagement
 				OrderPlaced_v1 clone = new();
 
 				clone.orderId = new string(orderId.ToCharArray());
+				clone.totalAmount = totalAmount;
 
 				return clone;
 			}
@@ -50,6 +62,7 @@ namespace Sales.OrderManagement
 				if (other is null) return false;
 
 				if(orderId != other.orderId) return false;
+				if(totalAmount != other.totalAmount) return false;
 
 				return true;
 			}
@@ -60,6 +73,7 @@ namespace Sales.OrderManagement
 			{
 				var hash = new HashCode();
 				hash.Add(orderId);
+				hash.Add(totalAmount);
 
 				return hash.ToHashCode();
 			}
