@@ -48,6 +48,13 @@ public class SalesServiceHost : BaseServiceHost
         services.AddScoped<IOrderIF_v2, OrderIF_v2>();
         services.AddScoped<IOrderService, OrderService>();
 
+        // Where a client to another service comes from. The generated internal clients take this
+        // and nothing else - no address, because which host a service answers on is a deployment
+        // decision and a generated file is the last place it should appear. The sample has one
+        // service and therefore calls nobody, but the registration belongs here anyway: the moment
+        // a second context exists, the client for it is already constructible.
+        services.AddServiceKitClients();
+
         _AddEventing(services);
         _AddWorkflows(services);
     }

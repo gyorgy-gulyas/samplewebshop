@@ -16,7 +16,7 @@ namespace SampleWebShop.Tests
         [TestInitialize]
         public void Setup()
         {
-            _client = new OrderIF_v1_RestClient(ServiceHostFixture.RestAddress);
+            _client = new OrderIF_v1_RestClient(ServiceHostFixture.Clients);
         }
 
         private static IOrderIF_v1.OrderDTO AnOrder(params decimal[] quantities)

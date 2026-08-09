@@ -19,6 +19,12 @@ namespace Sales.OrderManagement
 	/// The published surface of orders: DTOs only, no domain type ever reaches the wire.
 	public class OrderIF_v1_RestClient : IOrderIF_v1 
 	{
+		/// <summary>
+		/// The service this client calls. Its address is configuration:
+		/// Services:Sales.OrderManagement:BaseAddress (and :GrpcAddress when cleartext needs a second port).
+		/// </summary>
+		public const string ServiceName = "Sales.OrderManagement";
+
 		private readonly HttpClient _httpClient;
 		// the same options the host is configured with: web defaults, and enums by name
 		private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions( JsonSerializerDefaults.Web )
@@ -26,10 +32,12 @@ namespace Sales.OrderManagement
 			Converters = { new JsonStringEnumConverter() },
 		};
 
-		public OrderIF_v1_RestClient( string serverAddress )
+		public OrderIF_v1_RestClient( IServiceClientFactory clients )
 		{
-			_httpClient = new HttpClient();
-			_httpClient.BaseAddress = new Uri( serverAddress );
+			// From the factory, not from 'new HttpClient()'. A hand-made one holds its connections
+			// open and never notices DNS changing - which is the kind of bug that works perfectly
+			// until there is traffic. The factory's client also carries the house retry policy.
+			_httpClient = clients.CreateHttpClient( ServiceName );
 			_httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 		}
 

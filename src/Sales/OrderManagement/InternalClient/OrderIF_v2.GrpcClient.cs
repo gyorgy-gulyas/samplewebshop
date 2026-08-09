@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Grpc.Net.Client;
 using Sales.OrderManagement;
 using Sales.OrderManagement.Protos.OrderIF_v2;
 using ServiceKit.Net;
@@ -19,13 +18,20 @@ namespace Sales.OrderManagement
 	/// carried forward without breaking the callers still on v1.
 	public class OrderIF_v2_GrpcClient : IOrderIF_v2 
 	{
-		private readonly GrpcChannel _channel;
+		/// <summary>
+		/// The service this client calls. Its address is configuration:
+		/// Services:Sales.OrderManagement:BaseAddress (and :GrpcAddress when cleartext needs a second port).
+		/// </summary>
+		public const string ServiceName = "Sales.OrderManagement";
+
 		private readonly OrderIF_v2.OrderIF_v2Client _client;
 
-		public OrderIF_v2_GrpcClient( string serverAddress )
+		public OrderIF_v2_GrpcClient( IServiceClientFactory clients )
 		{
-			_channel = GrpcChannel.ForAddress(serverAddress);
-			_client = new OrderIF_v2.OrderIF_v2Client(_channel);
+			// The channel comes from the factory and is NOT held or disposed here. A channel owns the
+			// connection, the HTTP/2 session and the load balancing state, so one per call site is a
+			// connection storm; the factory keeps one per address and everybody shares it.
+			_client = new OrderIF_v2.OrderIF_v2Client( clients.GetChannel( ServiceName ) );
 		}
 
 		/// <inheritdoc />

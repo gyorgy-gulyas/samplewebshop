@@ -46,7 +46,7 @@ namespace SampleWebShop.Tests
         [TestInitialize]
         public void Setup()
         {
-            _client = new OrderIF_v1_RestClient(ServiceHostFixture.RestAddress);
+            _client = new OrderIF_v1_RestClient(ServiceHostFixture.Clients);
             _http = new HttpClient() { BaseAddress = new Uri(ServiceHostFixture.RestAddress) };
 
             lock (_lock)

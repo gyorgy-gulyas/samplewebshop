@@ -1,6 +1,9 @@
 using System.Net;
 using System.Net.Sockets;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sales.OrderManagement;
 using ServiceKit.Net;
 
 namespace SampleWebShop.Tests
@@ -30,6 +33,15 @@ namespace SampleWebShop.Tests
         // watching a pipeline nobody runs.
         public static IServiceProvider Services => _host.Services;
 
+        // Where the generated clients come from.
+        //
+        // A caller does not hand a client an address any more; it hands it the factory, and the
+        // factory looks the address up under the name the client asks for. So this is not test
+        // scaffolding around the real construction path - it IS the real path, with the ports the
+        // fixture happened to get. The name comes from the generated constant, which is what makes
+        // "the client asks for X" and "the configuration answers to X" one fact instead of two.
+        public static IServiceClientFactory Clients { get; private set; }
+
         [AssemblyInitialize]
         public static async Task Start(TestContext context)
         {
@@ -57,6 +69,28 @@ namespace SampleWebShop.Tests
 
             RestAddress = $"http://127.0.0.1:{restPort}";
             GrpcAddress = $"http://127.0.0.1:{grpcPort}";
+
+            Clients = _BuildClientFactory();
+        }
+
+        private static IServiceClientFactory _BuildClientFactory()
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    // Two entries because this deployment is cleartext: without TLS there is no
+                    // ALPN, so REST and gRPC cannot share a port. With TLS the second one is
+                    // unnecessary and the factory falls back to the first.
+                    [$"Services:{OrderIF_v1_RestClient.ServiceName}:BaseAddress"] = RestAddress,
+                    [$"Services:{OrderIF_v1_GrpcClient.ServiceName}:GrpcAddress"] = GrpcAddress,
+                })
+                .Build();
+
+            var services = new ServiceCollection();
+            services.AddSingleton<IConfiguration>(configuration);
+            services.AddServiceKitClients();
+
+            return services.BuildServiceProvider().GetRequiredService<IServiceClientFactory>();
         }
 
         [AssemblyCleanup]

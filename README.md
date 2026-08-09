@@ -77,6 +77,13 @@ by hand, and until a test sent a request over it none of it had ever run. The fi
 the generated .NET REST client could not be constructed, addressed, or understood by its own server,
 and that the gRPC surface was never mapped at all.
 
+A generated client no longer takes an address at all: it takes the client factory and asks it for
+the service it calls, by name. So the contract tests construct their clients exactly the way the
+running service would — the fixture puts the ports it happened to get under `Services:<name>` and
+hands over a real factory. The addresses left the generated code, and with them went the hand-made
+`HttpClient` that holds its connections open through a DNS change and the per-call-site gRPC channel
+that turns into a connection storm — both of which work perfectly until there is traffic.
+
 `EventingChainTests` earns its keep the same way, one layer further in. Every piece of the eventing
 path already had unit tests of its own, and every one of them would still pass with the chain broken
 in the middle — a translation nobody runs, a handler nobody registers, an outbox nobody drains all
