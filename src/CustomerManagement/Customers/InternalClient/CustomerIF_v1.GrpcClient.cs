@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
@@ -51,7 +53,7 @@ namespace CustomerManagement.Customers
 				if( grpc_response.ResultCase == CustomerIF_v1_getCustomerResponse.ResultOneofCase.Value )
 				{
 					ICustomerIF_v1.CustomerDTO value;
-					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 
@@ -93,7 +95,7 @@ namespace CustomerManagement.Customers
 				if( grpc_response.ResultCase == CustomerIF_v1_registerCustomerResponse.ResultOneofCase.Value )
 				{
 					ICustomerIF_v1.CustomerDTO value;
-					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 

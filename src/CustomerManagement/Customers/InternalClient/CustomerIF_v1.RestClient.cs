@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
@@ -53,6 +55,9 @@ namespace CustomerManagement.Customers
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
+					if (value is null)
+						return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, "The server answered 'getCustomer' with a success status and an empty body." );
+
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )
@@ -96,6 +101,9 @@ namespace CustomerManagement.Customers
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
+					if (value is null)
+						return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, "The server answered 'registerCustomer' with a success status and an empty body." );
+
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )

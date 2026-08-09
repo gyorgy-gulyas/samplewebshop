@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Sales.OrderManagement;
@@ -56,6 +58,9 @@ namespace Sales.OrderManagement
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<IOrderIF_v2.OrderDTO>( _jsonOptions );
+					if (value is null)
+						return Response<IOrderIF_v2.OrderDTO>.Failure( Statuses.InternalError, "The server answered 'getOrder' with a success status and an empty body." );
+
 					return Response<IOrderIF_v2.OrderDTO>.Success( value );
 				}
 				else if( response.Content != null )
@@ -102,6 +107,9 @@ namespace Sales.OrderManagement
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<IOrderIF_v2.OrderDTO>( _jsonOptions );
+					if (value is null)
+						return Response<IOrderIF_v2.OrderDTO>.Failure( Statuses.InternalError, "The server answered 'placeOrder' with a success status and an empty body." );
+
 					return Response<IOrderIF_v2.OrderDTO>.Success( value );
 				}
 				else if( response.Content != null )

@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
@@ -53,7 +55,7 @@ namespace Sales.OrderManagement
 				if( grpc_response.ResultCase == OrderIF_v2_getOrderResponse.ResultOneofCase.Value )
 				{
 					IOrderIF_v2.OrderDTO value;
-					value = grpc_response.Value != null ? IOrderIF_v2.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? IOrderIF_v2.OrderDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<IOrderIF_v2.OrderDTO>.Success( value );
 				}
 
@@ -82,7 +84,7 @@ namespace Sales.OrderManagement
 			{
 				// fill grpc request
 				var request = new OrderIF_v2_placeOrderRequest();
-				request.Order = order != null ? IOrderIF_v2.OrderDTO.ToGrpc( order ) : null;
+				request.Order = order != null ? IOrderIF_v2.OrderDTO.ToGrpc( order ) : null!;
 
 				// calling grpc client
 				var grpc_response = await _client.placeOrderAsync( request, new CallOptions(ctx.ToGrpcMetadata( "Sales.OrderManagementOrderIF_v2", "placeOrder" ))).ResponseAsync;
@@ -94,7 +96,7 @@ namespace Sales.OrderManagement
 				if( grpc_response.ResultCase == OrderIF_v2_placeOrderResponse.ResultOneofCase.Value )
 				{
 					IOrderIF_v2.OrderDTO value;
-					value = grpc_response.Value != null ? IOrderIF_v2.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? IOrderIF_v2.OrderDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<IOrderIF_v2.OrderDTO>.Success( value );
 				}
 

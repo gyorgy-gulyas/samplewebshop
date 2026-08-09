@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
@@ -19,13 +21,13 @@ namespace CustomerManagement.Customers.Customer
 		/// aggregate's own id, so the outside world sees one order's facts in the order they
 		/// happened - and sees nothing about the order between two different orders, because no
 		/// such order exists.
-		public string id { get; set; }
-		public string etag { get; set; }
+		public string id { get; set; } = null!;
+		public string etag { get; set; } = null!;
 		public DateTime LastUpdate { get; set; }
 		#endregion IBaseEntity
 
-		public string name { get; set; }
-		public string email { get; set; }
+		public string name { get; set; } = null!;
+		public string email { get; set; } = null!;
 		public string? phone { get; set; }
 		public CustomerStatuses status { get; set; }
 		/// Optional, and that is a business statement rather than a convenience: at
@@ -44,9 +46,9 @@ namespace CustomerManagement.Customers.Customer
 			// begin: BaseEntity
 			// end: BaseEntity
 
-			clone.name = new string(name.ToCharArray());
-			clone.email = new string(email.ToCharArray());
-			clone.phone = new string(phone.ToCharArray());
+			clone.name = name;
+			clone.email = email;
+			clone.phone = phone;
 			clone.status = status;
 
 			// clone of billingAddress
@@ -60,7 +62,7 @@ namespace CustomerManagement.Customers.Customer
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( CustomerAccount other )
+		public bool Equals( CustomerAccount? other )
 		{
 			if (other is null) return false;
 
@@ -83,7 +85,7 @@ namespace CustomerManagement.Customers.Customer
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as CustomerAccount);
+		public override bool Equals(object? obj) => Equals(obj as CustomerAccount);
 
 		public override int GetHashCode()
 		{

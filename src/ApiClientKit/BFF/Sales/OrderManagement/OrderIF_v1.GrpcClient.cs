@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
@@ -43,7 +45,7 @@ namespace BFF.ApiClientKit
 						if( grpc_response.ResultCase == OrderIF_v1_getOrderResponse.ResultOneofCase.Value )
 						{
 							Sales.OrderManagement.IOrderIF_v1.OrderDTO value;
-							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null!;
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Success( value );
 						}
 
@@ -71,7 +73,7 @@ namespace BFF.ApiClientKit
 					{
 						// fill grpc request
 						var request = new OrderIF_v1_placeOrderRequest();
-						request.Order = order != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.ToGrpc( order ) : null;
+						request.Order = order != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.ToGrpc( order ) : null!;
 
 						// calling grpc client
 						_client ??= new OrderIF_v1.OrderIF_v1Client(GrpClient._channel);
@@ -84,7 +86,7 @@ namespace BFF.ApiClientKit
 						if( grpc_response.ResultCase == OrderIF_v1_placeOrderResponse.ResultOneofCase.Value )
 						{
 							Sales.OrderManagement.IOrderIF_v1.OrderDTO value;
-							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null;
+							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderDTO.FromGrpc( grpc_response.Value ) : null!;
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderDTO>.Success( value );
 						}
 
@@ -112,7 +114,7 @@ namespace BFF.ApiClientKit
 					{
 						// fill grpc request
 						var request = new OrderIF_v1_setPriceRequest();
-						request.OrderItem = orderItem != null ? Sales.OrderManagement.IOrderIF_v1.OrderItemDTO.ToGrpc( orderItem ) : null;
+						request.OrderItem = orderItem != null ? Sales.OrderManagement.IOrderIF_v1.OrderItemDTO.ToGrpc( orderItem ) : null!;
 						request.Price = price.ToString(CultureInfo.InvariantCulture);
 
 						// calling grpc client
@@ -126,7 +128,7 @@ namespace BFF.ApiClientKit
 						if( grpc_response.ResultCase == OrderIF_v1_setPriceResponse.ResultOneofCase.Value )
 						{
 							Sales.OrderManagement.IOrderIF_v1.OrderItemDTO value;
-							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderItemDTO.FromGrpc( grpc_response.Value ) : null;
+							value = grpc_response.Value != null ? Sales.OrderManagement.IOrderIF_v1.OrderItemDTO.FromGrpc( grpc_response.Value ) : null!;
 							return Response<Sales.OrderManagement.IOrderIF_v1.OrderItemDTO>.Success( value );
 						}
 

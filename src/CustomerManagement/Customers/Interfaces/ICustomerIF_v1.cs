@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
@@ -57,9 +59,9 @@ namespace CustomerManagement.Customers
 		#endregion GrpcMapping
 		public partial class CustomerDTO : IEquatable<CustomerDTO>
 		{
-			public string id { get; set; }
-			public string name { get; set; }
-			public string email { get; set; }
+			public string id { get; set; } = null!;
+			public string name { get; set; } = null!;
+			public string email { get; set; } = null!;
 			public ICustomerIF_v1.CustomerStatuses status { get; set; }
 
 			#region Clone 
@@ -67,8 +69,8 @@ namespace CustomerManagement.Customers
 			{
 				CustomerDTO clone = new();
 
-				clone.name = new string(name.ToCharArray());
-				clone.email = new string(email.ToCharArray());
+				clone.name = name;
+				clone.email = email;
 				clone.status = status;
 
 				return clone;
@@ -76,7 +78,7 @@ namespace CustomerManagement.Customers
 			#endregion Clone 
 
 			#region Equals & HashCode 
-			public bool Equals( CustomerDTO other )
+			public bool Equals( CustomerDTO? other )
 			{
 				if (other is null) return false;
 
@@ -87,7 +89,7 @@ namespace CustomerManagement.Customers
 				return true;
 			}
 
-			public override bool Equals(object obj) => Equals(obj as CustomerDTO);
+			public override bool Equals(object? obj) => Equals(obj as CustomerDTO);
 
 			public override int GetHashCode()
 			{

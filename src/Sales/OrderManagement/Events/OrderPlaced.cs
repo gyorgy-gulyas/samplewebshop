@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using ServiceKit.Net.Eventing;
@@ -20,8 +22,8 @@ namespace Sales.OrderManagement.Order
 		/// <summary>The logical channel this fact travels on. Deployment maps it to a topic or queue.</summary>
 		public string Channel => "Sales.OrderManagement";
 
-		public string orderId { get; set; }
-		public string customerId { get; set; }
+		public string orderId { get; set; } = null!;
+		public string customerId { get; set; } = null!;
 		public decimal totalPrice { get; set; }
 
 		#region Clone 
@@ -29,8 +31,8 @@ namespace Sales.OrderManagement.Order
 		{
 			OrderPlaced clone = new();
 
-			clone.orderId = new string(orderId.ToCharArray());
-			clone.customerId = new string(customerId.ToCharArray());
+			clone.orderId = orderId;
+			clone.customerId = customerId;
 			clone.totalPrice = totalPrice;
 
 			return clone;
@@ -38,7 +40,7 @@ namespace Sales.OrderManagement.Order
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( OrderPlaced other )
+		public bool Equals( OrderPlaced? other )
 		{
 			if (other is null) return false;
 
@@ -49,7 +51,7 @@ namespace Sales.OrderManagement.Order
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as OrderPlaced);
+		public override bool Equals(object? obj) => Equals(obj as OrderPlaced);
 
 		public override int GetHashCode()
 		{

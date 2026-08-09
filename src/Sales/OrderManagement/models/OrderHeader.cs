@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using PolyPersist;
@@ -57,14 +59,14 @@ namespace Sales.OrderManagement.Order
 		/// aggregate's own id, so the outside world sees one order's facts in the order they
 		/// happened - and sees nothing about the order between two different orders, because no
 		/// such order exists.
-		public string id { get; set; }
-		public string etag { get; set; }
+		public string id { get; set; } = null!;
+		public string etag { get; set; } = null!;
 		public DateTime LastUpdate { get; set; }
 		#endregion IBaseEntity
 
 		#region ISalesDocument
-		public string humanKey { get; set; }
-		public string partnerData { get; set; }
+		public string humanKey { get; set; } = null!;
+		public string partnerData { get; set; } = null!;
 		#endregion ISalesDocument
 
 		/// Another aggregate is referenced by identity, never embedded. The .NET emitter turns
@@ -85,8 +87,8 @@ namespace Sales.OrderManagement.Order
 			// end: BaseEntity
 
 			// begin: SalesDocument
-			clone.humanKey = new string(humanKey.ToCharArray());
-			clone.partnerData = new string(partnerData.ToCharArray());
+			clone.humanKey = humanKey;
+			clone.partnerData = partnerData;
 			// end: SalesDocument
 
 			clone.customer = customer;
@@ -102,7 +104,7 @@ namespace Sales.OrderManagement.Order
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( OrderHeader other )
+		public bool Equals( OrderHeader? other )
 		{
 			if (other is null) return false;
 
@@ -114,10 +116,7 @@ namespace Sales.OrderManagement.Order
 			if(partnerData != other.partnerData) return false;
 			// end: SalesDocument
 
-
-			// equals of customer
-			if(customer == null && other.customer != null ) return false;
-			if(customer != null && customer.Equals(other.customer) == false ) return false;
+			if(customer != other.customer) return false;
 			if(orderingDate != other.orderingDate) return false;
 			if(status != other.status) return false;
 			if(totalPrice != other.totalPrice) return false;
@@ -128,7 +127,7 @@ namespace Sales.OrderManagement.Order
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as OrderHeader);
+		public override bool Equals(object? obj) => Equals(obj as OrderHeader);
 
 		public override int GetHashCode()
 		{
@@ -141,9 +140,7 @@ namespace Sales.OrderManagement.Order
 			hash.Add(partnerData);
 			// end: SalesDocument
 
-
-			// hash of customer
-			if(customer != null ) hash.Add(customer);
+			hash.Add(customer);
 			hash.Add(orderingDate);
 			hash.Add(status);
 			hash.Add(totalPrice);
