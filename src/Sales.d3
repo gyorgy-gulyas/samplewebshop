@@ -153,10 +153,15 @@ domain Sales {
         interface OrderIF version 2 {
             # The same internal fact, restated for a second audience. Two published contracts
             # translated from one domain event is what carrying an interface forward actually
-            # means: v1 keeps its promise unchanged while v2 says something different about the
-            # very same thing.
+            # means: v1 keeps its promise unchanged while v2 says MORE about the very same thing.
+            #
+            # It says more and not something else, and that is not a stylistic choice - the linter
+            # holds a version to it. v2 first tried to drop totalAmount and publish customerId
+            # instead, and the evolution lint refused: a reader moving from v1 to v2 would have
+            # lost what it used to be told, and then the number 2 promised nothing.
             integration event OrderPlaced version 2 from Order.OrderPlaced {
                 orderId:string
+                totalAmount:number
                 customerId:string
             }
 

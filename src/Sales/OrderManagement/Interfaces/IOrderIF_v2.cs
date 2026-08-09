@@ -30,8 +30,12 @@ namespace Sales.OrderManagement
 
 		/// The same internal fact, restated for a second audience. Two published contracts
 		/// translated from one domain event is what carrying an interface forward actually
-		/// means: v1 keeps its promise unchanged while v2 says something different about the
-		/// very same thing.
+		/// means: v1 keeps its promise unchanged while v2 says MORE about the very same thing.
+		///
+		/// It says more and not something else, and that is not a stylistic choice - the linter
+		/// holds a version to it. v2 first tried to drop totalAmount and publish customerId
+		/// instead, and the evolution lint refused: a reader moving from v1 to v2 would have
+		/// lost what it used to be told, and then the number 2 promised nothing.
 		public partial class OrderPlaced_v2 : IEquatable<OrderPlaced_v2>, IDomainEvent
 		{
 			/// <summary>How the platform recognises this shape. Generated; never hand-written.</summary>
@@ -41,6 +45,7 @@ namespace Sales.OrderManagement
 			public string Channel => "Sales.OrderManagement";
 
 			public string orderId { get; set; }
+			public decimal totalAmount { get; set; }
 			public string customerId { get; set; }
 
 			#region Clone 
@@ -49,6 +54,7 @@ namespace Sales.OrderManagement
 				OrderPlaced_v2 clone = new();
 
 				clone.orderId = new string(orderId.ToCharArray());
+				clone.totalAmount = totalAmount;
 				clone.customerId = new string(customerId.ToCharArray());
 
 				return clone;
@@ -61,6 +67,7 @@ namespace Sales.OrderManagement
 				if (other is null) return false;
 
 				if(orderId != other.orderId) return false;
+				if(totalAmount != other.totalAmount) return false;
 				if(customerId != other.customerId) return false;
 
 				return true;
@@ -72,6 +79,7 @@ namespace Sales.OrderManagement
 			{
 				var hash = new HashCode();
 				hash.Add(orderId);
+				hash.Add(totalAmount);
 				hash.Add(customerId);
 
 				return hash.ToHashCode();
