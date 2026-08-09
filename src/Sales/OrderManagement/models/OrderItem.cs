@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using PolyPersist;
@@ -12,8 +14,8 @@ namespace Sales.OrderManagement.Order
 {
 	public partial class OrderItem : IEquatable<OrderItem>, IValidable
 	{
-		public string productId { get; set; }
-		public string productName { get; set; }
+		public string productId { get; set; } = null!;
+		public string productName { get; set; } = null!;
 		public decimal quantity { get; set; }
 		public decimal unitPrice { get; set; }
 		public decimal subTotalPrice { get; set; }
@@ -23,8 +25,8 @@ namespace Sales.OrderManagement.Order
 		{
 			OrderItem clone = new();
 
-			clone.productId = new string(productId.ToCharArray());
-			clone.productName = new string(productName.ToCharArray());
+			clone.productId = productId;
+			clone.productName = productName;
 			clone.quantity = quantity;
 			clone.unitPrice = unitPrice;
 			clone.subTotalPrice = subTotalPrice;
@@ -34,7 +36,7 @@ namespace Sales.OrderManagement.Order
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( OrderItem other )
+		public bool Equals( OrderItem? other )
 		{
 			if (other is null) return false;
 
@@ -47,7 +49,7 @@ namespace Sales.OrderManagement.Order
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as OrderItem);
+		public override bool Equals(object? obj) => Equals(obj as OrderItem);
 
 		public override int GetHashCode()
 		{

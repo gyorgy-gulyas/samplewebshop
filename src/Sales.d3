@@ -36,12 +36,24 @@ domain Sales {
                 status:OrderStatuses
                 totalPrice:number validate value >= 0
                 items:list[OrderItem]
+
+                # The root records the fact, because the root is what enforces the invariant that
+                # makes it true. It does not publish it: the repository moves it into the outbox
+                # with the save, and delivery is the platform's problem from there.
+                command place( customerId:string ) emits OrderPlaced
+            }
+
+            # The context's PRIVATE language. No version, and that is a statement: the consumers of
+            # this fact ship in the same deployment unit and move with it, so breaking its shape is
+            # a compile error rather than a wire incident.
+            domain event OrderPlaced {
+                orderId:string
+                customerId:string
+                totalPrice:number
             }
         }
 
         service OrderService {
-            eventhandler handleOrderPlaced for event OrderIF.v1.OrderPlaced.v1
-
             query getOrder( orderId:string ) : Order.OrderHeader
             command placeOrder( order:Order.OrderHeader ) : Order.OrderHeader
         }
@@ -83,8 +95,12 @@ domain Sales {
         @internal_api(grpc, rest)
         @public_api(grpc, rest, collection="BFF")
         interface OrderIF version 1 {
-            event OrderPlaced version 1 {
+            # The PUBLISHED restatement of the internal fact. Versioned, because another team reads
+            # it; translated by hand, because the published language is not the internal one -
+            # customerId stays inside, and the amount is named the way the outside world names it.
+            integration event OrderPlaced version 1 from Order.OrderPlaced {
                 orderId:string
+                totalAmount:number
             }
 
             enum OrderStatuses {
@@ -135,8 +151,17 @@ domain Sales {
         @internal_api(grpc, rest)
         @public_api(grpc, rest, collection="BFF")
         interface OrderIF version 2 {
-            event OrderPlaced version 2 {
+            # The same internal fact, restated for a second audience. Two published contracts
+            # translated from one domain event is what carrying an interface forward actually
+            # means: v1 keeps its promise unchanged while v2 says MORE about the very same thing.
+            #
+            # It says more and not something else, and that is not a stylistic choice - the linter
+            # holds a version to it. v2 first tried to drop totalAmount and publish customerId
+            # instead, and the evolution lint refused: a reader moving from v1 to v2 would have
+            # lost what it used to be told, and then the number 2 promised nothing.
+            integration event OrderPlaced version 2 from Order.OrderPlaced {
                 orderId:string
+                totalAmount:number
                 customerId:string
             }
 
@@ -188,6 +213,11 @@ domain Sales {
     }
 
     context Tracking {
+
+        # Tracking reacts to what OrderManagement PUBLISHES, never to its internal facts. That is
+        # the whole point of the published contract: OrderManagement can rename a private field
+        # tomorrow without this context noticing.
+        eventhandler onOrderPlaced for integration event OrderManagement.OrderIF#1.OrderPlaced#1
 
         enum TrackingStatuses
         {

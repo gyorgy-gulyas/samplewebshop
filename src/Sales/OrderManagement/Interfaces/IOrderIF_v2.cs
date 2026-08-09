@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Google.Protobuf.Collections;
@@ -10,6 +12,7 @@ using PolyPersist;
 using PolyPersist.Net.Common;
 using Sales.OrderManagement;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
 using System.Globalization;
 
 namespace Sales.OrderManagement
@@ -27,40 +30,58 @@ namespace Sales.OrderManagement
 		public Task<Response> justOrder(CallingContext ctx, string orderId);
 
 
-		public partial class OrderPlaced_v2 : IEquatable<OrderPlaced_v2>
+		/// The same internal fact, restated for a second audience. Two published contracts
+		/// translated from one domain event is what carrying an interface forward actually
+		/// means: v1 keeps its promise unchanged while v2 says MORE about the very same thing.
+		///
+		/// It says more and not something else, and that is not a stylistic choice - the linter
+		/// holds a version to it. v2 first tried to drop totalAmount and publish customerId
+		/// instead, and the evolution lint refused: a reader moving from v1 to v2 would have
+		/// lost what it used to be told, and then the number 2 promised nothing.
+		public partial class OrderPlaced_v2 : IEquatable<OrderPlaced_v2>, IDomainEvent
 		{
-			public string orderId { get; set; }
-			public string customerId { get; set; }
+			/// <summary>How the platform recognises this shape. Generated; never hand-written.</summary>
+			public string SchemaId => "Sales.OrderManagement.OrderIF.v2.OrderPlaced.v2";
+
+			/// <summary>The logical channel this fact travels on. Deployment maps it to a topic or queue.</summary>
+			public string Channel => "Sales.OrderManagement";
+
+			public string orderId { get; set; } = null!;
+			public decimal totalAmount { get; set; }
+			public string customerId { get; set; } = null!;
 
 			#region Clone 
 			public virtual OrderPlaced_v2 Clone()
 			{
 				OrderPlaced_v2 clone = new();
 
-				clone.orderId = new string(orderId.ToCharArray());
-				clone.customerId = new string(customerId.ToCharArray());
+				clone.orderId = orderId;
+				clone.totalAmount = totalAmount;
+				clone.customerId = customerId;
 
 				return clone;
 			}
 			#endregion Clone 
 
 			#region Equals & HashCode 
-			public bool Equals( OrderPlaced_v2 other )
+			public bool Equals( OrderPlaced_v2? other )
 			{
 				if (other is null) return false;
 
 				if(orderId != other.orderId) return false;
+				if(totalAmount != other.totalAmount) return false;
 				if(customerId != other.customerId) return false;
 
 				return true;
 			}
 
-			public override bool Equals(object obj) => Equals(obj as OrderPlaced_v2);
+			public override bool Equals(object? obj) => Equals(obj as OrderPlaced_v2);
 
 			public override int GetHashCode()
 			{
 				var hash = new HashCode();
 				hash.Add(orderId);
+				hash.Add(totalAmount);
 				hash.Add(customerId);
 
 				return hash.ToHashCode();
@@ -139,8 +160,8 @@ namespace Sales.OrderManagement
 
 			}
 			#endregion GrpcMapping
-			public string productId { get; set; }
-			public string productName { get; set; }
+			public string productId { get; set; } = null!;
+			public string productName { get; set; } = null!;
 			public decimal quantity { get; set; }
 			public decimal unitPrice { get; set; }
 			public decimal subTotalPrice { get; set; }
@@ -151,8 +172,8 @@ namespace Sales.OrderManagement
 			{
 				OrderItemDTO clone = new();
 
-				clone.productId = new string(productId.ToCharArray());
-				clone.productName = new string(productName.ToCharArray());
+				clone.productId = productId;
+				clone.productName = productName;
 				clone.quantity = quantity;
 				clone.unitPrice = unitPrice;
 				clone.subTotalPrice = subTotalPrice;
@@ -163,7 +184,7 @@ namespace Sales.OrderManagement
 			#endregion Clone 
 
 			#region Equals & HashCode 
-			public bool Equals( OrderItemDTO other )
+			public bool Equals( OrderItemDTO? other )
 			{
 				if (other is null) return false;
 
@@ -177,7 +198,7 @@ namespace Sales.OrderManagement
 				return true;
 			}
 
-			public override bool Equals(object obj) => Equals(obj as OrderItemDTO);
+			public override bool Equals(object? obj) => Equals(obj as OrderItemDTO);
 
 			public override int GetHashCode()
 			{
@@ -245,23 +266,23 @@ namespace Sales.OrderManagement
 		{
 			public partial class CustomerDataDTO : IEquatable<CustomerDataDTO>
 			{
-				public string customerId { get; set; }
-				public string customerName { get; set; }
+				public string customerId { get; set; } = null!;
+				public string customerName { get; set; } = null!;
 
 				#region Clone 
 				public virtual CustomerDataDTO Clone()
 				{
 					CustomerDataDTO clone = new();
 
-					clone.customerId = new string(customerId.ToCharArray());
-					clone.customerName = new string(customerName.ToCharArray());
+					clone.customerId = customerId;
+					clone.customerName = customerName;
 
 					return clone;
 				}
 				#endregion Clone 
 
 				#region Equals & HashCode 
-				public bool Equals( CustomerDataDTO other )
+				public bool Equals( CustomerDataDTO? other )
 				{
 					if (other is null) return false;
 
@@ -271,7 +292,7 @@ namespace Sales.OrderManagement
 					return true;
 				}
 
-				public override bool Equals(object obj) => Equals(obj as CustomerDataDTO);
+				public override bool Equals(object? obj) => Equals(obj as CustomerDataDTO);
 
 				public override int GetHashCode()
 				{
@@ -305,11 +326,11 @@ namespace Sales.OrderManagement
 				#endregion GrpcMapping
 			}
 
-			public string id { get; set; }
-			public string orderingDate { get; set; }
+			public string id { get; set; } = null!;
+			public string orderingDate { get; set; } = null!;
 			public IOrderIF_v2.OrderStatuses orderStatus { get; set; }
 			public decimal totalPrice { get; set; }
-			public IOrderIF_v2.OrderDTO.CustomerDataDTO customerData { get; set; }
+			public IOrderIF_v2.OrderDTO.CustomerDataDTO customerData { get; set; } = null!;
 			public List<IOrderIF_v2.OrderItemDTO> items { get; set; } = new();
 			/// v2 addition: where the parcel is going
 			public string? shippingCity { get; set; }
@@ -319,23 +340,23 @@ namespace Sales.OrderManagement
 			{
 				OrderDTO clone = new();
 
-				clone.orderingDate = new string(orderingDate.ToCharArray());
+				clone.orderingDate = orderingDate;
 				clone.orderStatus = orderStatus;
 				clone.totalPrice = totalPrice;
 
 				// clone of customerData
-				clone.customerData = customerData?.Clone();
+				clone.customerData = customerData?.Clone()!;
 
 				// clone of items
 				clone.items.AddRange( items.Select( v => v.Clone() ));
-				clone.shippingCity = new string(shippingCity.ToCharArray());
+				clone.shippingCity = shippingCity;
 
 				return clone;
 			}
 			#endregion Clone 
 
 			#region Equals & HashCode 
-			public bool Equals( OrderDTO other )
+			public bool Equals( OrderDTO? other )
 			{
 				if (other is null) return false;
 
@@ -354,7 +375,7 @@ namespace Sales.OrderManagement
 				return true;
 			}
 
-			public override bool Equals(object obj) => Equals(obj as OrderDTO);
+			public override bool Equals(object? obj) => Equals(obj as OrderDTO);
 
 			public override int GetHashCode()
 			{
@@ -402,7 +423,7 @@ namespace Sales.OrderManagement
 				result.OrderingDate = @this.orderingDate ?? string.Empty;
 				result.OrderStatus = IOrderIF_v2.OrderStatusesMappings.ToGrpc( @this.orderStatus );
 				result.TotalPrice = @this.totalPrice.ToString(CultureInfo.InvariantCulture);
-				result.CustomerData = @this.customerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.ToGrpc( @this.customerData ) : null;
+				result.CustomerData = @this.customerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.ToGrpc( @this.customerData ) : null!;
 				result.Items.AddRange( @this.items.Select( v => IOrderIF_v2.OrderItemDTO.ToGrpc( v ) ));
 				result.ShippingCity = @this.shippingCity ?? string.Empty;
 
@@ -416,7 +437,7 @@ namespace Sales.OrderManagement
 				result.orderingDate = @from.OrderingDate;
 				result.orderStatus = IOrderIF_v2.OrderStatusesMappings.FromGrpc( @from.OrderStatus) ;
 				result.totalPrice = decimal.Parse(@from.TotalPrice, CultureInfo.InvariantCulture);
-				result.customerData = @from.CustomerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.FromGrpc( @from.CustomerData ) : null;
+				result.customerData = @from.CustomerData != null ? IOrderIF_v2.OrderDTO.CustomerDataDTO.FromGrpc( @from.CustomerData ) : null!;
 				result.items.AddRange( @from.Items.Select( v => IOrderIF_v2.OrderItemDTO.FromGrpc(v) ));
 				result.shippingCity = @from.ShippingCity;
 

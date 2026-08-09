@@ -9,6 +9,8 @@
     <PackageReference Include="ServiceKit.Net.General" />
     <PackageReference Include="ServiceKit.Net.Service" />
     <PackageReference Include="ServiceKit.Net.ServiceHost" />
+    <PackageReference Include="ServiceKit.Net.Eventing" />
+    <PackageReference Include="ServiceKit.Net.Eventing.PolyPersist" />
     <PackageReference Include="ServiceKit.Net.Workflow" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
@@ -18,6 +20,7 @@
     <ProjectReference Include="..\OrderManagement\Context\Sales.OrderManagement.Context.csproj" />
     <ProjectReference Include="..\OrderManagement\Interfaces\Sales.OrderManagement.Interfaces.csproj" />
     <ProjectReference Include="..\OrderManagement\Models\Sales.OrderManagement.Models.csproj" />
+    <ProjectReference Include="..\Tracking\Context\Sales.Tracking.Context.csproj" />
     <ProjectReference Include="..\Tracking\Models\Sales.Tracking.Models.csproj" />
   </ItemGroup>
 

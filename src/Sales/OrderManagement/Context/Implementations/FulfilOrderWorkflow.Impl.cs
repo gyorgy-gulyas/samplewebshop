@@ -31,7 +31,11 @@ namespace Sales.OrderManagement
             return trackingNumber;
         }
 
-        private partial Task OnCancel(string reason)
+        // The signal and the query are the methods themselves - the generated half declares them and
+        // wraps nothing around them, so there is no hook to route through. [WorkflowSignal] and
+        // [WorkflowQuery] sit on the declaration and apply here too: a partial method's two halves
+        // share their attributes.
+        public partial Task cancel(string reason)
         {
             // A signal only records the intent; the run body decides what to do with it, because a
             // step that is already running cannot be interrupted halfway.
@@ -39,6 +43,6 @@ namespace Sales.OrderManagement
             return Task.CompletedTask;
         }
 
-        private partial string OnStatus() => _status;
+        public partial string status() => _status;
     }
 }

@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers.Protos.CustomerIF_v1;
@@ -67,7 +69,7 @@ namespace CustomerManagement.Customers
 						if( response.HasValue() == true )
 						{
 							var result = new CustomerIF_v1_getCustomerResponse() { Status = ServiceKit.Protos.Statuses.Ok };
-							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null;
+							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null!;
 							return result;
 						}
 						else
@@ -120,7 +122,7 @@ namespace CustomerManagement.Customers
 						if( response.HasValue() == true )
 						{
 							var result = new CustomerIF_v1_registerCustomerResponse() { Status = ServiceKit.Protos.Statuses.Ok };
-							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null;
+							result.Value = response.Value != null ? ICustomerIF_v1.CustomerDTO.ToGrpc( response.Value ) : null!;
 							return result;
 						}
 						else

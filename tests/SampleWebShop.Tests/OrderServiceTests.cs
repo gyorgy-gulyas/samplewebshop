@@ -3,6 +3,8 @@ using Sales.OrderManagement;
 using Sales.OrderManagement.Context.Implementations;
 using Sales.OrderManagement.Order;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
+using ServiceKit.Net.Eventing.InMemory;
 
 namespace SampleWebShop.Tests
 {
@@ -13,11 +15,19 @@ namespace SampleWebShop.Tests
     public class OrderServiceTests
     {
         private IOrderService _service;
+        private InMemoryOutboxStore _outbox;
 
         [TestInitialize]
         public void Setup()
         {
-            _service = new OrderService(new OrderStoreContext(new TestStoreProvider()), null);
+            // A real outbox and a real recorder, not stubs: placing an order now records a fact, and
+            // a test that took a null recorder would be testing a service nobody runs.
+            _outbox = new InMemoryOutboxStore();
+            _service = new OrderService(
+                new OrderStoreContext(new TestStoreProvider()),
+                _outbox,
+                new EventRecorder(new JsonEventSerializer()),
+                null);
         }
 
         private static OrderHeader AnOrder(params decimal[] quantities)
@@ -100,6 +110,42 @@ namespace SampleWebShop.Tests
             CollectionAssert.AreEquivalent(
                 new[] { "totalPrice", "items[0].quantity", "items[1].quantity" },
                 failure.ValidationErrors.Select(error => error.Path).ToArray());
+        }
+
+        [TestMethod]
+        public async Task Placing_an_order_queues_the_internal_fact()
+        {
+            var placed = await _service.placeOrder(new CallingContext(), AnOrder(1));
+
+            var recorded = _outbox.All;
+            Assert.AreEqual(1, recorded.Count);
+            Assert.AreEqual("Sales.OrderManagement.Order.OrderPlaced", recorded[0].SchemaId);
+            // The ordering scope is the order's own identity, so one order's facts keep their order
+            // and nothing is promised between two different orders.
+            Assert.AreEqual(placed.Value.id, recorded[0].PartitionKey);
+        }
+
+        [TestMethod]
+        public async Task A_refused_order_tells_nobody_anything()
+        {
+            // The failure mode the outbox exists to prevent, from the other side: the state was not
+            // saved, so the fact must not be waiting to go out either.
+            await Assert.ThrowsExceptionAsync<ValidationExeption>(
+                () => _service.placeOrder(new CallingContext(), AnOrder(0)));
+
+            Assert.AreEqual(0, _outbox.All.Count);
+        }
+
+        [TestMethod]
+        public async Task An_order_cannot_be_placed_twice()
+        {
+            var order = AnOrder(1);
+            await _service.placeOrder(new CallingContext(), order);
+
+            // The invariant is the root's, not the service's: there is no path to Released that
+            // skips it.
+            await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+                () => _service.placeOrder(new CallingContext(), order));
         }
 
         [TestMethod]

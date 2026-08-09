@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Sales.OrderManagement;
@@ -18,6 +20,6 @@ namespace Sales.OrderManagement
 		/// <return>Order.OrderHeader</return>
 		public Task<Response<Order.OrderHeader>> placeOrder(CallingContext ctx, Order.OrderHeader order);
 
-		public Task<bool> handleOrderPlaced(CallingContext ctx, IOrderIF_v1.OrderPlaced_v1 @event );
+
 	}
 }

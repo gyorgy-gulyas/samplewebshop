@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
@@ -16,6 +18,12 @@ namespace CustomerManagement.Customers
 {
 	public class CustomerIF_v1_RestClient : ICustomerIF_v1 
 	{
+		/// <summary>
+		/// The service this client calls. Its address is configuration:
+		/// Services:CustomerManagement.Customers:BaseAddress (and :GrpcAddress when cleartext needs a second port).
+		/// </summary>
+		public const string ServiceName = "CustomerManagement.Customers";
+
 		private readonly HttpClient _httpClient;
 		// the same options the host is configured with: web defaults, and enums by name
 		private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions( JsonSerializerDefaults.Web )
@@ -23,10 +31,12 @@ namespace CustomerManagement.Customers
 			Converters = { new JsonStringEnumConverter() },
 		};
 
-		public CustomerIF_v1_RestClient( string serverAddress )
+		public CustomerIF_v1_RestClient( IServiceClientFactory clients )
 		{
-			_httpClient = new HttpClient();
-			_httpClient.BaseAddress = new Uri( serverAddress );
+			// From the factory, not from 'new HttpClient()'. A hand-made one holds its connections
+			// open and never notices DNS changing - which is the kind of bug that works perfectly
+			// until there is traffic. The factory's client also carries the house retry policy.
+			_httpClient = clients.CreateHttpClient( ServiceName );
 			_httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 		}
 
@@ -45,6 +55,9 @@ namespace CustomerManagement.Customers
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
+					if (value is null)
+						return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, "The server answered 'getCustomer' with a success status and an empty body." );
+
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )
@@ -88,6 +101,9 @@ namespace CustomerManagement.Customers
 				if (response.IsSuccessStatusCode)
 				{
 					var value = await response.Content.ReadFromJsonAsync<ICustomerIF_v1.CustomerDTO>( _jsonOptions );
+					if (value is null)
+						return Response<ICustomerIF_v1.CustomerDTO>.Failure( Statuses.InternalError, "The server answered 'registerCustomer' with a success status and an empty body." );
+
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 				else if( response.Content != null )

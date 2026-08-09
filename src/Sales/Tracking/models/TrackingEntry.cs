@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using PolyPersist.Net.Core;
@@ -13,8 +15,12 @@ namespace Sales.Tracking.OrderTrackingEntry
 	public partial class TrackingEntry : Core.Base.IBaseEntity, IEquatable<TrackingEntry>
 	{
 		#region IBaseEntity
-		public string id { get; set; }
-		public string etag { get; set; }
+		/// The identity is also the ordering scope: facts an aggregate records travel under the
+		/// aggregate's own id, so the outside world sees one order's facts in the order they
+		/// happened - and sees nothing about the order between two different orders, because no
+		/// such order exists.
+		public string id { get; set; } = null!;
+		public string etag { get; set; } = null!;
 		public DateTime LastUpdate { get; set; }
 		#endregion IBaseEntity
 
@@ -39,24 +45,21 @@ namespace Sales.Tracking.OrderTrackingEntry
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( TrackingEntry other )
+		public bool Equals( TrackingEntry? other )
 		{
 			if (other is null) return false;
 
 			// begin: BaseEntity
 			// end: BaseEntity
 
-
-			// equals of order
-			if(order == null && other.order != null ) return false;
-			if(order != null && order.Equals(other.order) == false ) return false;
+			if(order != other.order) return false;
 			if(trackingStatus != other.trackingStatus) return false;
 			if(statusDate != other.statusDate) return false;
 
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as TrackingEntry);
+		public override bool Equals(object? obj) => Equals(obj as TrackingEntry);
 
 		public override int GetHashCode()
 		{
@@ -64,9 +67,7 @@ namespace Sales.Tracking.OrderTrackingEntry
 			// begin: BaseEntity
 			// end: BaseEntity
 
-
-			// hash of order
-			if(order != null ) hash.Add(order);
+			hash.Add(order);
 			hash.Add(trackingStatus);
 			hash.Add(statusDate);
 

@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
@@ -70,7 +72,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v2_getOrderResponse() { Status = ServiceKit.Protos.Statuses.Ok };
-							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
+							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null!;
 							return result;
 						}
 						else
@@ -111,7 +113,7 @@ namespace Sales.OrderManagement
 				try
 				{
 					IOrderIF_v2.OrderDTO order;
-					order = request.Order != null ? IOrderIF_v2.OrderDTO.FromGrpc( request.Order ) : null;
+					order = request.Order != null ? IOrderIF_v2.OrderDTO.FromGrpc( request.Order ) : null!;
 
 					// calling the service function itself
 					var response = await _service.placeOrder( ctx , order );
@@ -121,7 +123,7 @@ namespace Sales.OrderManagement
 						if( response.HasValue() == true )
 						{
 							var result = new OrderIF_v2_placeOrderResponse() { Status = ServiceKit.Protos.Statuses.Ok };
-							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null;
+							result.Value = response.Value != null ? IOrderIF_v2.OrderDTO.ToGrpc( response.Value ) : null!;
 							return result;
 						}
 						else

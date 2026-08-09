@@ -16,7 +16,7 @@ namespace SampleWebShop.Tests
         [TestInitialize]
         public void Setup()
         {
-            _client = new OrderIF_v1_GrpcClient(ServiceHostFixture.GrpcAddress);
+            _client = new OrderIF_v1_GrpcClient(ServiceHostFixture.Clients);
         }
 
         private static IOrderIF_v1.OrderDTO AnOrder(params decimal[] quantities)
@@ -55,7 +55,7 @@ namespace SampleWebShop.Tests
             // One model behind two transports: what goes in through gRPC comes out through REST.
             var placed = await _client.placeOrder(new CallingContext(), AnOrder(1));
 
-            IOrderIF_v1 rest = new OrderIF_v1_RestClient(ServiceHostFixture.RestAddress);
+            IOrderIF_v1 rest = new OrderIF_v1_RestClient(ServiceHostFixture.Clients);
             var overRest = await rest.getOrder(new CallingContext(), placed.Value.id);
 
             Assert.IsTrue(overRest.IsSuccess());

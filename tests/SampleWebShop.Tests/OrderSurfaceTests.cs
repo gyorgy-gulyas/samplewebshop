@@ -2,6 +2,8 @@ using Sales.OrderManagement;
 using Sales.OrderManagement.Context.Implementations;
 using Sales.OrderManagement.Order;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
+using ServiceKit.Net.Eventing.InMemory;
 
 namespace SampleWebShop.Tests
 {
@@ -18,7 +20,11 @@ namespace SampleWebShop.Tests
         [TestInitialize]
         public void Setup()
         {
-            _service = new OrderService(new OrderStoreContext(new TestStoreProvider()), null);
+            _service = new OrderService(
+                new OrderStoreContext(new TestStoreProvider()),
+                new InMemoryOutboxStore(),
+                new EventRecorder(new JsonEventSerializer()),
+                null);
             _v1 = new OrderIF_v1(_service);
             _v2 = new OrderIF_v2(_service);
         }

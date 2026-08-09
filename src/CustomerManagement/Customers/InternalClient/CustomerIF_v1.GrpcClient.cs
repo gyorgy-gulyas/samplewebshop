@@ -3,13 +3,14 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using CustomerManagement.Customers;
 using CustomerManagement.Customers.Protos.CustomerIF_v1;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Grpc.Net.Client;
 using ServiceKit.Net;
 using System.Linq;
 
@@ -17,13 +18,20 @@ namespace CustomerManagement.Customers
 {
 	public class CustomerIF_v1_GrpcClient : ICustomerIF_v1 
 	{
-		private readonly GrpcChannel _channel;
+		/// <summary>
+		/// The service this client calls. Its address is configuration:
+		/// Services:CustomerManagement.Customers:BaseAddress (and :GrpcAddress when cleartext needs a second port).
+		/// </summary>
+		public const string ServiceName = "CustomerManagement.Customers";
+
 		private readonly CustomerIF_v1.CustomerIF_v1Client _client;
 
-		public CustomerIF_v1_GrpcClient( string serverAddress )
+		public CustomerIF_v1_GrpcClient( IServiceClientFactory clients )
 		{
-			_channel = GrpcChannel.ForAddress(serverAddress);
-			_client = new CustomerIF_v1.CustomerIF_v1Client(_channel);
+			// The channel comes from the factory and is NOT held or disposed here. A channel owns the
+			// connection, the HTTP/2 session and the load balancing state, so one per call site is a
+			// connection storm; the factory keeps one per address and everybody shares it.
+			_client = new CustomerIF_v1.CustomerIF_v1Client( clients.GetChannel( ServiceName ) );
 		}
 
 		/// <inheritdoc />
@@ -45,7 +53,7 @@ namespace CustomerManagement.Customers
 				if( grpc_response.ResultCase == CustomerIF_v1_getCustomerResponse.ResultOneofCase.Value )
 				{
 					ICustomerIF_v1.CustomerDTO value;
-					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 
@@ -87,7 +95,7 @@ namespace CustomerManagement.Customers
 				if( grpc_response.ResultCase == CustomerIF_v1_registerCustomerResponse.ResultOneofCase.Value )
 				{
 					ICustomerIF_v1.CustomerDTO value;
-					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null;
+					value = grpc_response.Value != null ? ICustomerIF_v1.CustomerDTO.FromGrpc( grpc_response.Value ) : null!;
 					return Response<ICustomerIF_v1.CustomerDTO>.Success( value );
 				}
 

@@ -3,6 +3,8 @@
 //
 //     Changes to this file may cause incorrect behavior and will be lost if the code is regenerated.
 // </auto-generated>
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using PolyPersist;
@@ -14,27 +16,27 @@ namespace CustomerManagement.Customers.Customer
 	/// so it has no identity of its own and is embedded rather than referenced.
 	public partial class PostalAddress : IEquatable<PostalAddress>, IValidable
 	{
-		public string country { get; set; }
-		public string postalCode { get; set; }
-		public string city { get; set; }
-		public string street { get; set; }
+		public string country { get; set; } = null!;
+		public string postalCode { get; set; } = null!;
+		public string city { get; set; } = null!;
+		public string street { get; set; } = null!;
 
 		#region Clone 
 		public virtual PostalAddress Clone()
 		{
 			PostalAddress clone = new();
 
-			clone.country = new string(country.ToCharArray());
-			clone.postalCode = new string(postalCode.ToCharArray());
-			clone.city = new string(city.ToCharArray());
-			clone.street = new string(street.ToCharArray());
+			clone.country = country;
+			clone.postalCode = postalCode;
+			clone.city = city;
+			clone.street = street;
 
 			return clone;
 		}
 		#endregion Clone 
 
 		#region Equals & HashCode 
-		public bool Equals( PostalAddress other )
+		public bool Equals( PostalAddress? other )
 		{
 			if (other is null) return false;
 
@@ -46,7 +48,7 @@ namespace CustomerManagement.Customers.Customer
 			return true;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as PostalAddress);
+		public override bool Equals(object? obj) => Equals(obj as PostalAddress);
 
 		public override int GetHashCode()
 		{

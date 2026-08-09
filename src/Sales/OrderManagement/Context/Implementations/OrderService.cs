@@ -1,8 +1,11 @@
 using Microsoft.Extensions.Logging;
 using PolyPersist.Net.Common;
 using PolyPersist.Net.Extensions;
+using PolyPersist.Net.Transactions;
 using Sales.OrderManagement.Order;
 using ServiceKit.Net;
+using ServiceKit.Net.Eventing;
+using ServiceKit.Net.Eventing.PolyPersistStores;
 
 namespace Sales.OrderManagement.Context.Implementations
 {
@@ -12,11 +15,15 @@ namespace Sales.OrderManagement.Context.Implementations
     public class OrderService : IOrderService
     {
         private readonly OrderStoreContext _context;
+        private readonly IOutboxStore _outbox;
+        private readonly IEventRecorder _recorder;
         private readonly ILogger<OrderService> _logger;
 
-        public OrderService(OrderStoreContext context, ILogger<OrderService> logger)
+        public OrderService(OrderStoreContext context, IOutboxStore outbox, IEventRecorder recorder, ILogger<OrderService> logger)
         {
             _context = context;
+            _outbox = outbox;
+            _recorder = recorder;
             _logger = logger;
         }
 
@@ -51,14 +58,26 @@ namespace Sales.OrderManagement.Context.Implementations
                 // every broken field with its path. Checking it here as well would only produce a
                 // second, poorer answer - one sentence instead of a list a form can bind to.
                 order.id = string.IsNullOrEmpty(order.id) ? Guid.NewGuid().ToString() : order.id;
-                order.status = OrderStatuses.Released;
+
+                // The service does not decide that this is a placement and it does not announce it.
+                // The root changes its own state and writes the fact down; nothing has left the
+                // process yet.
+                order.place(order.customer);
 
                 activity?.SetTag("sales.order.id", order.id);
                 activity?.SetTag("sales.order.items", order.items?.Count ?? 0);
 
+                // One unit of work for the state AND the fact. WithOutbox is the whole difference:
+                // the transaction drains what the root recorded and queues it into the outbox as
+                // part of this same commit, so there is no window where the order exists and
+                // nobody was told - or where the world reacts to an order that was rolled back.
+                var unitOfWork = new Transaction();
+                var transaction = unitOfWork.WithOutbox(_outbox, _recorder);
+
                 try
                 {
-                    await _context.Orders.Insert(order).ConfigureAwait(false);
+                    await transaction.Insert(_context.Orders, order).ConfigureAwait(false);
+                    await transaction.Commit().ConfigureAwait(false);
                 }
                 catch (ValidationExeption validation)
                 {
@@ -93,10 +112,8 @@ namespace Sales.OrderManagement.Context.Implementations
             }
         }
 
-        Task<bool> IOrderService.handleOrderPlaced(CallingContext ctx, IOrderIF_v1.OrderPlaced_v1 @event)
-        {
-            _logger?.LogInformation("OrderPlaced handled for {OrderId}", @event?.orderId);
-            return Task.FromResult(true);
-        }
+        // The reaction to OrderPlaced used to live here, as a method on this service that nothing
+        // ever called. It is now where the model puts it: on the Tracking context, in a generated
+        // handler the platform registers and delivers to - see Sales.Tracking.OnOrderPlacedHandler.
     }
 }
