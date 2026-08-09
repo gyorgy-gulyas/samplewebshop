@@ -212,7 +212,7 @@ domain Sales {
         # Tracking reacts to what OrderManagement PUBLISHES, never to its internal facts. That is
         # the whole point of the published contract: OrderManagement can rename a private field
         # tomorrow without this context noticing.
-        eventhandler onOrderPlaced for integration event OrderManagement.OrderIF.v1.OrderPlaced.v1
+        eventhandler onOrderPlaced for integration event OrderManagement.OrderIF#1.OrderPlaced#1
 
         enum TrackingStatuses
         {
